@@ -1,0 +1,426 @@
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000dfff0000-0x00000000dfffffff] ACPI data
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: Early table checksum verification disabled
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: XSDT 0x00000000DFFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: FACP 0x00000000DFFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: DSDT 0x00000000DFFF0480 0021FF (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: APIC 0x00000000DFFF0240 000064 (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: SSDT 0x00000000DFFF02B0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: PM-Timer IO Port: 0x4008
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ0 used by override.
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ9 used by override.
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] Using ACPI (MADT) for SMP configuration information
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.004000] ACPI: Core revision 20170831
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.004000] ACPI: 2 ACPI AML tables successfully acquired and loaded
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.040748] ACPI: bus type PCI registered
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.040748] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044146] ACPI: Added _OSI(Module Device)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044147] ACPI: Added _OSI(Processor Device)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044149] ACPI: Added _OSI(3.0 _SCP Extensions)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044150] ACPI: Added _OSI(Processor Aggregator Device)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044152] ACPI: Added _OSI(Linux-Dell-Video)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044154] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044155] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044737] ACPI: Executed 1 blocks of module-level executable AML code
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054069] ACPI: Interpreter enabled
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054087] ACPI: (supports S0 S5)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054089] ACPI: Using IOAPIC for interrupt routing
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054638] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054969] ACPI: Enabled 2 GPEs in block 00 to 07
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.078424] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.181805] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.218658] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.219502] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.219780] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.220101] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.220774] ACPI: bus type USB registered
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.220774] PCI: Using ACPI for IRQ routing
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.384463] pnp: PnP ACPI init
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.384600] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.384756] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.386722] pnp: PnP ACPI: found 2 devices
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.134520] ACPI: AC Adapter [AC] (off-line)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.134678] ACPI: Power Button [PWRF]
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.134785] ACPI: Sleep Button [SLPF]
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.136548] ACPI: Battery Slot [BAT0] (battery present)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.891155] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000dfff0000-0x00000000dfffffff] ACPI data
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: Early table checksum verification disabled
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: XSDT 0x00000000DFFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: FACP 0x00000000DFFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: DSDT 0x00000000DFFF0480 0021FF (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: APIC 0x00000000DFFF0240 000064 (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: SSDT 0x00000000DFFF02B0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: PM-Timer IO Port: 0x4008
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ0 used by override.
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ9 used by override.
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] Using ACPI (MADT) for SMP configuration information
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.004000] ACPI: Core revision 20170831
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.004000] ACPI: 2 ACPI AML tables successfully acquired and loaded
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.024340] ACPI: bus type PCI registered
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.024340] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Module Device)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Processor Device)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(3.0 _SCP Extensions)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Processor Aggregator Device)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Linux-Dell-Video)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.028117] ACPI: Executed 1 blocks of module-level executable AML code
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032452] ACPI: Interpreter enabled
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032465] ACPI: (supports S0 S5)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032466] ACPI: Using IOAPIC for interrupt routing
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032782] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032965] ACPI: Enabled 2 GPEs in block 00 to 07
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.045955] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.153011] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.208259] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.208671] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.208818] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.208952] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.209456] ACPI: bus type USB registered
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.212084] PCI: Using ACPI for IRQ routing
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.236085] pnp: PnP ACPI init
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.236160] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.236235] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.237150] pnp: PnP ACPI: found 2 devices
+Oct  3 11:38:41 andrey-ubuntu kernel: [    1.350909] ACPI: AC Adapter [AC] (off-line)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    1.351055] ACPI: Power Button [PWRF]
+Oct  3 11:38:41 andrey-ubuntu kernel: [    1.351157] ACPI: Sleep Button [SLPF]
+Oct  3 11:38:41 andrey-ubuntu kernel: [    1.352573] ACPI: Battery Slot [BAT0] (battery present)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    2.334773] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000dfff0000-0x00000000dfffffff] ACPI data
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: Early table checksum verification disabled
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: XSDT 0x00000000DFFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: FACP 0x00000000DFFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: DSDT 0x00000000DFFF0480 0021FF (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: APIC 0x00000000DFFF0240 000064 (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: SSDT 0x00000000DFFF02B0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: PM-Timer IO Port: 0x4008
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ0 used by override.
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ9 used by override.
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] Using ACPI (MADT) for SMP configuration information
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.004000] ACPI: Core revision 20170831
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.004000] ACPI: 2 ACPI AML tables successfully acquired and loaded
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.032466] ACPI: bus type PCI registered
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.032466] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036082] ACPI: Added _OSI(Module Device)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036082] ACPI: Added _OSI(Processor Device)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036083] ACPI: Added _OSI(3.0 _SCP Extensions)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036084] ACPI: Added _OSI(Processor Aggregator Device)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036085] ACPI: Added _OSI(Linux-Dell-Video)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036085] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036086] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036398] ACPI: Executed 1 blocks of module-level executable AML code
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040000] ACPI: Interpreter enabled
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040000] ACPI: (supports S0 S5)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040000] ACPI: Using IOAPIC for interrupt routing
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040077] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040219] ACPI: Enabled 2 GPEs in block 00 to 07
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.052000] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.114420] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.139270] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140073] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140177] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140280] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140612] ACPI: bus type USB registered
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140612] PCI: Using ACPI for IRQ routing
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.199415] pnp: PnP ACPI init
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.199476] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.199590] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.200318] pnp: PnP ACPI: found 2 devices
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.201432] ACPI: AC Adapter [AC] (on-line)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.201516] ACPI: Power Button [PWRF]
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.201581] ACPI: Sleep Button [SLPF]
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.205184] ACPI: Battery Slot [BAT0] (battery present)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.499848] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000dfff0000-0x00000000dfffffff] ACPI data
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: Early table checksum verification disabled
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: XSDT 0x00000000DFFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: FACP 0x00000000DFFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: DSDT 0x00000000DFFF0480 0021FF (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: APIC 0x00000000DFFF0240 000064 (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: SSDT 0x00000000DFFF02B0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: PM-Timer IO Port: 0x4008
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ0 used by override.
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ9 used by override.
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.000000] Using ACPI (MADT) for SMP configuration information
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.004000] ACPI: Core revision 20170831
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.004000] ACPI: 2 ACPI AML tables successfully acquired and loaded
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.016549] ACPI: bus type PCI registered
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.016549] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.020116] ACPI: Added _OSI(Module Device)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.020117] ACPI: Added _OSI(Processor Device)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.020118] ACPI: Added _OSI(3.0 _SCP Extensions)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.020118] ACPI: Added _OSI(Processor Aggregator Device)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.020119] ACPI: Added _OSI(Linux-Dell-Video)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.020120] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.020121] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.020403] ACPI: Executed 1 blocks of module-level executable AML code
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.025902] ACPI: Interpreter enabled
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.025924] ACPI: (supports S0 S5)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.025925] ACPI: Using IOAPIC for interrupt routing
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.026180] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.026363] ACPI: Enabled 2 GPEs in block 00 to 07
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.034868] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.106729] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.136886] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.137245] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.137349] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.137452] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.137798] ACPI: bus type USB registered
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.137798] PCI: Using ACPI for IRQ routing
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.152251] pnp: PnP ACPI init
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.152319] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.152379] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.153112] pnp: PnP ACPI: found 2 devices
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.911772] ACPI: AC Adapter [AC] (off-line)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.911877] ACPI: Power Button [PWRF]
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.911942] ACPI: Sleep Button [SLPF]
+Sep 21 10:07:15 andrey-ubuntu kernel: [    0.912972] ACPI: Battery Slot [BAT0] (battery present)
+Sep 21 10:07:15 andrey-ubuntu kernel: [    1.239265] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000dfff0000-0x00000000dfffffff] ACPI data
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: Early table checksum verification disabled
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: XSDT 0x00000000DFFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: FACP 0x00000000DFFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: DSDT 0x00000000DFFF0480 0021FF (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: APIC 0x00000000DFFF0240 000064 (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: SSDT 0x00000000DFFF02B0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: PM-Timer IO Port: 0x4008
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ0 used by override.
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ9 used by override.
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.000000] Using ACPI (MADT) for SMP configuration information
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.004000] ACPI: Core revision 20170831
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.004000] ACPI: 2 ACPI AML tables successfully acquired and loaded
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012449] ACPI: bus type PCI registered
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012449] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012983] ACPI: Added _OSI(Module Device)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012983] ACPI: Added _OSI(Processor Device)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012983] ACPI: Added _OSI(3.0 _SCP Extensions)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012983] ACPI: Added _OSI(Processor Aggregator Device)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012983] ACPI: Added _OSI(Linux-Dell-Video)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012983] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012983] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.012983] ACPI: Executed 1 blocks of module-level executable AML code
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.018954] ACPI: Interpreter enabled
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.018963] ACPI: (supports S0 S5)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.018964] ACPI: Using IOAPIC for interrupt routing
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.019255] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.019402] ACPI: Enabled 2 GPEs in block 00 to 07
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.025746] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.105025] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.136627] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.136946] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.137058] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.137163] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.137484] ACPI: bus type USB registered
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.137484] PCI: Using ACPI for IRQ routing
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.149151] pnp: PnP ACPI init
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.149223] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.149285] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.150072] pnp: PnP ACPI: found 2 devices
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.726306] ACPI: AC Adapter [AC] (off-line)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.726383] ACPI: Power Button [PWRF]
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.726444] ACPI: Sleep Button [SLPF]
+Sep 25 12:59:47 andrey-ubuntu kernel: [    0.727446] ACPI: Battery Slot [BAT0] (battery present)
+Sep 25 12:59:47 andrey-ubuntu kernel: [    1.019322] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000dfff0000-0x00000000dfffffff] ACPI data
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: Early table checksum verification disabled
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: XSDT 0x00000000DFFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: FACP 0x00000000DFFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: DSDT 0x00000000DFFF0480 0021FF (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: APIC 0x00000000DFFF0240 000064 (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: SSDT 0x00000000DFFF02B0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: PM-Timer IO Port: 0x4008
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ0 used by override.
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ9 used by override.
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.000000] Using ACPI (MADT) for SMP configuration information
+Oct  3 11:38:41 andrey-ubuntu systemd[1]: Started ACPI Events Check.
+Oct  3 11:38:41 andrey-ubuntu systemd[1]: Listening on ACPID Listen Socket.
+Oct  3 11:38:41 andrey-ubuntu systemd[1]: Started ACPI event daemon.
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.004000] ACPI: Core revision 20170831
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.004000] ACPI: 2 ACPI AML tables successfully acquired and loaded
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.024340] ACPI: bus type PCI registered
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.024340] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Module Device)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Processor Device)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(3.0 _SCP Extensions)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Processor Aggregator Device)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Linux-Dell-Video)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.025504] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.028117] ACPI: Executed 1 blocks of module-level executable AML code
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032452] ACPI: Interpreter enabled
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032465] ACPI: (supports S0 S5)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032466] ACPI: Using IOAPIC for interrupt routing
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032782] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.032965] ACPI: Enabled 2 GPEs in block 00 to 07
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.045955] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.153011] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.208259] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.208671] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.208818] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.208952] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.209456] ACPI: bus type USB registered
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.212084] PCI: Using ACPI for IRQ routing
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.236085] pnp: PnP ACPI init
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.236160] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.236235] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    0.237150] pnp: PnP ACPI: found 2 devices
+Oct  3 11:38:41 andrey-ubuntu kernel: [    1.350909] ACPI: AC Adapter [AC] (off-line)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    1.351055] ACPI: Power Button [PWRF]
+Oct  3 11:38:41 andrey-ubuntu kernel: [    1.351157] ACPI: Sleep Button [SLPF]
+Oct  3 11:38:41 andrey-ubuntu kernel: [    1.352573] ACPI: Battery Slot [BAT0] (battery present)
+Oct  3 11:38:41 andrey-ubuntu kernel: [    2.334773] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000dfff0000-0x00000000dfffffff] ACPI data
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: Early table checksum verification disabled
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: XSDT 0x00000000DFFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: FACP 0x00000000DFFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: DSDT 0x00000000DFFF0480 0021FF (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: APIC 0x00000000DFFF0240 000064 (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: SSDT 0x00000000DFFF02B0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: PM-Timer IO Port: 0x4008
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ0 used by override.
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ9 used by override.
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.000000] Using ACPI (MADT) for SMP configuration information
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.004000] ACPI: Core revision 20170831
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.004000] ACPI: 2 ACPI AML tables successfully acquired and loaded
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.032466] ACPI: bus type PCI registered
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.032466] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036082] ACPI: Added _OSI(Module Device)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036082] ACPI: Added _OSI(Processor Device)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036083] ACPI: Added _OSI(3.0 _SCP Extensions)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036084] ACPI: Added _OSI(Processor Aggregator Device)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036085] ACPI: Added _OSI(Linux-Dell-Video)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036085] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036086] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.036398] ACPI: Executed 1 blocks of module-level executable AML code
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040000] ACPI: Interpreter enabled
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040000] ACPI: (supports S0 S5)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040000] ACPI: Using IOAPIC for interrupt routing
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040077] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.040219] ACPI: Enabled 2 GPEs in block 00 to 07
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.052000] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Oct  6 18:43:28 andrey-ubuntu systemd[1]: Started ACPI Events Check.
+Oct  6 18:43:28 andrey-ubuntu systemd[1]: Listening on ACPID Listen Socket.
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.114420] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.139270] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140073] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140177] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140280] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140612] ACPI: bus type USB registered
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.140612] PCI: Using ACPI for IRQ routing
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.199415] pnp: PnP ACPI init
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.199476] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.199590] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    0.200318] pnp: PnP ACPI: found 2 devices
+Oct  6 18:43:28 andrey-ubuntu systemd[1]: Started ACPI event daemon.
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.201432] ACPI: AC Adapter [AC] (on-line)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.201516] ACPI: Power Button [PWRF]
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.201581] ACPI: Sleep Button [SLPF]
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.205184] ACPI: Battery Slot [BAT0] (battery present)
+Oct  6 18:43:28 andrey-ubuntu kernel: [    1.499848] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+Sep 25 20:07:25 andrey-ubuntu systemd[1]: Stopping ACPI event daemon...
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000dfff0000-0x00000000dfffffff] ACPI data
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: Early table checksum verification disabled
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: RSDP 0x00000000000E0000 000024 (v02 VBOX  )
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: XSDT 0x00000000DFFF0030 00003C (v01 VBOX   VBOXXSDT 00000001 ASL  00000061)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: FACP 0x00000000DFFF00F0 0000F4 (v04 VBOX   VBOXFACP 00000001 ASL  00000061)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: DSDT 0x00000000DFFF0480 0021FF (v02 VBOX   VBOXBIOS 00000002 INTL 20100528)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: FACS 0x00000000DFFF0200 000040
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: APIC 0x00000000DFFF0240 000064 (v02 VBOX   VBOXAPIC 00000001 ASL  00000061)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: SSDT 0x00000000DFFF02B0 0001CC (v01 VBOX   VBOXCPUT 00000002 INTL 20100528)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: PM-Timer IO Port: 0x4008
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: Local APIC address 0xfee00000
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ0 used by override.
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] ACPI: IRQ9 used by override.
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.000000] Using ACPI (MADT) for SMP configuration information
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.004000] ACPI: Core revision 20170831
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.004000] ACPI: 2 ACPI AML tables successfully acquired and loaded
+Sep 26 14:12:03 andrey-ubuntu systemd[1]: Listening on ACPID Listen Socket.
+Sep 26 14:12:03 andrey-ubuntu systemd[1]: Started ACPI Events Check.
+Sep 26 14:12:03 andrey-ubuntu systemd[1]: Started ACPI event daemon.
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.040748] ACPI: bus type PCI registered
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.040748] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044146] ACPI: Added _OSI(Module Device)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044147] ACPI: Added _OSI(Processor Device)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044149] ACPI: Added _OSI(3.0 _SCP Extensions)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044150] ACPI: Added _OSI(Processor Aggregator Device)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044152] ACPI: Added _OSI(Linux-Dell-Video)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044154] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044155] ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.044737] ACPI: Executed 1 blocks of module-level executable AML code
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054069] ACPI: Interpreter enabled
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054087] ACPI: (supports S0 S5)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054089] ACPI: Using IOAPIC for interrupt routing
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054638] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.054969] ACPI: Enabled 2 GPEs in block 00 to 07
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.078424] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.181805] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.218658] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.219502] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 *10 11)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.219780] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 *9 10 11)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.220101] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 9 10 *11)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.220774] ACPI: bus type USB registered
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.220774] PCI: Using ACPI for IRQ routing
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.384463] pnp: PnP ACPI init
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.384600] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.384756] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    0.386722] pnp: PnP ACPI: found 2 devices
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.134520] ACPI: AC Adapter [AC] (off-line)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.134678] ACPI: Power Button [PWRF]
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.134785] ACPI: Sleep Button [SLPF]
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.136548] ACPI: Battery Slot [BAT0] (battery present)
+Sep 26 14:12:03 andrey-ubuntu kernel: [    3.891155] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
