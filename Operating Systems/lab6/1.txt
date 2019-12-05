@@ -1,0 +1,16 @@
+1.
+mkdir LAB6
+wmic os get Caption > LAB6\os_version.txt
+wmic os get FreePhysicalMemory,TotalVisibleMemorySize > LAB6\memory.txt
+wmic logicaldisk get name,description > LAB6\discs.txt
+
+2.
+# /y - supress overwrite message
+mkdir TEST
+copy /y LAB6\* TEST\*
+
+3.
+copy /y LAB6\* stats.txt
+
+4.
+rd /Q /S TEST LAB6

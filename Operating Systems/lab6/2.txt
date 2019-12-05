@@ -1,0 +1,44 @@
+1.
+echo %computername%
+
+2.
+# /Z - с возобновлением
+robocopy /Z "C:\cd" "\\%computername%\temp" /min:2097152
+
+3.
+# /a - treat as number
+# :~s,n - n chars from index s
+set /a curMinute=%time:~3,2%
+set /a curHour=%time:~0,2%
+
+if %curMinute% == 59 (
+	set curMinute=0
+	if %curHour% == 23 (
+		set curHour=0
+	) else (
+		set /a curHour=%curHour%+1
+	)
+) else (
+	set /a curMinute=%curMinute%+1
+)
+
+# LSS - <
+if %curHour% LSS 10 (
+	set curHour=0%curHour%
+)
+if %curMinute% LSS 10 (
+	set curMinute=0%curMinute%
+)
+
+# SC - частота, TN - имя, TR - скрипт, ST - когда
+schtasks /Create /SC ONCE /TN myScheduler /TR "D:\Documents\Education\OS\lab6\task2\script2.bat" /ST %curHour%:%curMinute%
+
+4.
+# f - принудительное завершение, im - имя
+tasklist | findstr "Robocopy.exe" & taskkill /f /im "Robocopy.exe"
+
+5.
+comp "C:\cd\*" "\\%computername%\temp\*"
+
+6.
+robocopy /Z "C:\cd" "\\%computername%\temp" /min:2097152

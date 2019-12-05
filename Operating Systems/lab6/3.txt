@@ -1,0 +1,9 @@
+1.
+net start > services.txt
+
+2.
+net stop dnscache
+sleep 1
+net start > servicesDelay.txt
+fc /A servicesDelay.txt services.txt > servicesDiff.txt
+net start dnscache
