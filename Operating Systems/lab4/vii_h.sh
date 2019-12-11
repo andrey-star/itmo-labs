@@ -35,5 +35,3 @@ while true; do
   echo $num
   sleep 1
 done
-
-killall signal regex - launch str matches regex - send signal
