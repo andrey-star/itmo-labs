@@ -201,12 +201,7 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 		return comparator == null ? ((Comparable<? super E>) e1).compareTo(e2)
 				: comparator.compare(e1, e2);
 	}
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-	
+	// unnecessary
 	private static class DescendingList<E> extends AbstractList<E> {
 		
 		private final List<E> elements;
