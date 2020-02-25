@@ -8,14 +8,14 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StudentDB implements StudentGroupQuery {
+public class StudentDB implements AdvancedStudentGroupQuery {
 	
 	private final Comparator<Student> STUDENT_NAME_COMPARATOR = Comparator.comparing(Student::getLastName)
 	                                                                      .thenComparing(Student::getFirstName)
 	                                                                      .thenComparingInt(Student::getId);
 	
 	
-	// StudentQuery
+	// StudentQuery //
 	
 	private <T, C extends Collection<T>, V> C mapToCollection(Collection<V> values, Function<V, T> mapper,
 	                                                          Supplier<C> collectionFactory) {
@@ -129,7 +129,7 @@ public class StudentDB implements StudentGroupQuery {
 	}
 	
 	
-	// StudentGroupQuery
+	// StudentGroupQuery //
 	
 	/**
 	 * * Returns a {@code Stream} of entries, produced by the specified {@code Collector}.
@@ -150,7 +150,7 @@ public class StudentDB implements StudentGroupQuery {
 	
 	/**
 	 * Returns a {@code List} of groups sorted by name
-	 * with students within a group sorted by the provided {@code Comparator}.
+	 * with students within a group ordered by the provided {@code Comparator}.
 	 */
 	private List<Group> getSortedGroups(Collection<Student> students, Comparator<Student> studentComparator) {
 		return toSortedList(getGroupEntriesFromStream(students.stream().sorted(studentComparator))
@@ -197,19 +197,44 @@ public class StudentDB implements StudentGroupQuery {
 	@Override
 	public String getLargestGroupFirstName(Collection<Student> students) {
 		return getLargestGroupBy(students,
-				Comparator.comparingInt(groupStudents -> mapToSet(groupStudents, Student::getFirstName).size()));
+				Comparator.comparingInt(groupStudents -> mapToSet(groupStudents, Student::getFirstName)
+						.size()));
 	}
 	
 	
-	// AdvancedStudentGroupQuery
+	// AdvancedStudentGroupQuery //
 	
+	@Override
 	public String getMostPopularName(Collection<Student> students) {
 		return maxKeyBy(getEntriesFromStream(students.stream(),
-				Collectors.groupingBy(this::fullName,
-						Collectors.mapping(Student::getGroup, Collectors.toSet()))),
+				Collectors.groupingBy(this::fullName, Collectors.mapping(Student::getGroup, Collectors.toSet()))),
 				Comparator.comparingInt(Set::size),
 				String::compareTo)
 				.orElse("");
+	}
+	
+	private List<String> indexedGet(List<Student> students, int[] indices, Function<Student, String> get) {
+		return Arrays.stream(indices).boxed().map(i -> get.apply(students.get(i))).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<String> getFirstNames(Collection<Student> students, int[] indices) {
+		return indexedGet(new ArrayList<>(students), indices, Student::getFirstName);
+	}
+	
+	@Override
+	public List<String> getLastNames(Collection<Student> students, int[] indices) {
+		return indexedGet(new ArrayList<>(students), indices, Student::getLastName);
+	}
+	
+	@Override
+	public List<String> getGroups(Collection<Student> students, int[] indices) {
+		return indexedGet(new ArrayList<>(students), indices, Student::getGroup);
+	}
+	
+	@Override
+	public List<String> getFullNames(Collection<Student> students, int[] indices) {
+		return indexedGet(new ArrayList<>(students), indices, this::fullName);
 	}
 	
 }

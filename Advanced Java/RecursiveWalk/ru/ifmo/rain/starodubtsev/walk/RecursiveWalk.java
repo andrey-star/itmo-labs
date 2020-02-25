@@ -15,7 +15,6 @@ import static ru.ifmo.rain.starodubtsev.walk.logger.Logger.error;
 public class RecursiveWalk {
 	
 	public static void main(String[] args) {
-		
 		if (args == null || args.length != 2 || args[0] == null || args[1] == null) {
 			System.out.println("Usage: java RecursiveWalk <input file> <output file>");
 			return;
@@ -25,11 +24,17 @@ public class RecursiveWalk {
 			Path inputFile = Paths.get(args[0]);
 			try {
 				Path outputFile = Paths.get(args[1]);
+				Path parent = outputFile.getParent();
+				if (parent != null) {
+					Files.createDirectory(parent);
+				}
 				run(inputFile, outputFile);
 			} catch (InvalidPathException e) {
 				error(e, "Invalid output file '" + args[1] + "'");
 			} catch (RecursiveWalkException e) {
 				error(e, e.getMessage());
+			} catch (IOException e) {
+				error(e, "Error when creating output file '" + args[1] + "'");
 			}
 		} catch (InvalidPathException e) {
 			error(e, "Invalid input file '" + args[0] + "'");
@@ -41,10 +46,9 @@ public class RecursiveWalk {
 			try (BufferedWriter out = Files.newBufferedWriter(outputFile)) {
 				try { // readline
 					FileVisitor fileVisitor = new FileVisitor(out);
-					
 					String pathStr;
 					while ((pathStr = in.readLine()) != null) {
-						try {
+						try { // out.write
 							try { // path
 								Path rootPath = Paths.get(pathStr);
 								try {
