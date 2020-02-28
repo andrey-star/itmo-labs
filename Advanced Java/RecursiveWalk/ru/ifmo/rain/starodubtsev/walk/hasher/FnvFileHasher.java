@@ -14,35 +14,34 @@ public class FnvFileHasher {
 	
 	private static final int FNV_PRIME = 0x01000193;
 	private static final int FNV_X0 = 0x811c9dc5;
+	
 	private static final int BUF_SIZE = 0xffff;
+	private static byte[] buffer = new byte[BUF_SIZE];
 	
 	public static int hash(Path path) {
-		int hash = FNV_X0;
 		try (InputStream inputStream = new BufferedInputStream(Files.newInputStream(path))) {
-			try {
-				byte[] b = new byte[BUF_SIZE];
-				int length = inputStream.read(b);
-				while (length != -1) {
-					for (int i = 0; i < length; i++) {
-						hash = (hash * FNV_PRIME) ^ (b[i] & 0xff);
+			int hash = FNV_X0;
+//			try {
+				int bytesRead = 0;
+				while (bytesRead != -1) {
+					for (int i = 0; i < bytesRead; i++) {
+						hash = (hash * FNV_PRIME) ^ (buffer[i] & 0xff);
 					}
-					length = inputStream.read(b);
+					bytesRead = inputStream.read(buffer);
 				}
-			} catch (IOException e) {
-				hasherError(e, "Error when reading input from file '" + path + "'.");
-				hash = 0;
-			}
+//			} catch (IOException e) {
+//				hasherError(e, "Error when reading input from file '" + path + "'.");
+//				hash = 0;
+//			}
+			return hash;
 		} catch (NoSuchFileException e) {
 			hasherError(e, "No such file found '" + path + "'.");
-			hash = 0;
 		} catch (SecurityException e) {
 			hasherError(e, "Unable to access file '" + path + "'.");
-			hash = 0;
 		} catch (IOException e) {
-			hasherError(e, "Error when opening file '" + path + "'.");
-			hash = 0;
+			hasherError(e, "Error when reading input from file '" + path + "'.");
 		}
-		return hash;
+		return 0;
 	}
 	
 	private static void hasherError(Exception e, String message) {

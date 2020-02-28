@@ -2,7 +2,7 @@ package ru.ifmo.rain.starodubtsev.walk;
 
 import ru.ifmo.rain.starodubtsev.walk.exception.RecursiveWalkException;
 import ru.ifmo.rain.starodubtsev.walk.hasher.FnvFileHasher;
-import ru.ifmo.rain.starodubtsev.walk.visitor.FileVisitor;
+import ru.ifmo.rain.starodubtsev.walk.visitor.HashingFileVisitor;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -45,7 +45,7 @@ public class RecursiveWalk {
 		try (BufferedReader in = Files.newBufferedReader(inputFile)) {
 			try (BufferedWriter out = Files.newBufferedWriter(outputFile)) {
 				try { // readline
-					FileVisitor fileVisitor = new FileVisitor(out);
+					HashingFileVisitor fileVisitor = new HashingFileVisitor(out);
 					String pathStr;
 					while ((pathStr = in.readLine()) != null) {
 						try { // out.write
