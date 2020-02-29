@@ -20,11 +20,6 @@ import java.util.stream.IntStream;
 
 public class Implementor implements Impler {
 	
-	public static void main(String[] args) throws ImplerException {
-		System.out.println("________________________________________________________");
-		System.out.println(new Implementor().generateClass(TestAbstract2.class));
-	}
-	
 	@Override
 	public void implement(Class<?> token, Path root) throws ImplerException {
 		if (token == null || root == null) {
