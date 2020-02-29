@@ -20,27 +20,34 @@ import java.util.stream.IntStream;
 
 public class Implementor implements Impler {
 	
+	private static final String EXT = ".java";
+	private static final String LINE_SEP = System.lineSeparator();
+	private static final String TAB = "\t";
+	private static final String COMMA = ",";
+	private static final String SPACE = " ";
+	private static final String CLASS_SUFFIX = "Impl";
+	
 	@Override
 	public void implement(Class<?> token, Path root) throws ImplerException {
 		if (token == null || root == null) {
 			throw new ImplerException("Invalid argument(s)");
 		}
 		if (unimplementable(token)) {
-			throw new ImplerException("Unable to implement");
+			throw new ImplerException("Unable to implement desired token");
 		}
 		
 		Path filePath;
 		try {
-			filePath = Path.of(root.toString(), getPackageDir(token), getClassName(token) + ".java");
+			filePath = Path.of(root.toString(), getPackageDir(token), getClassName(token) + EXT);
 		} catch (InvalidPathException e) {
-			throw new ImplerException(e);
+			throw new ImplerException("Invalid output path", e);
 		}
 		
 		ImplementorUtils.createDirectories(filePath);
 		try (BufferedWriter out = Files.newBufferedWriter(filePath)) {
 			out.write(generateClass(token));
 		} catch (IOException e) {
-			throw new ImplerException(e);
+			throw new ImplerException("Error when working with output file", e);
 		}
 	}
 	
@@ -56,7 +63,7 @@ public class Implementor implements Impler {
 	}
 	
 	private String getSource(Class<?> token) throws ImplerException {
-		return statement(getClassDeclaration(token), getBody(token));
+		return declAndBody(getClassDeclaration(token), getBody(token));
 	}
 	
 	private String joinBlocks(String... blocks) {
@@ -64,11 +71,11 @@ public class Implementor implements Impler {
 	}
 	
 	private <T> String joinBlocks(Collection<T> blocks, Function<T, String> toString) {
-		return blocks.stream().map(toString).collect(Collectors.joining("\n\n"));
+		return blocks.stream().map(toString).collect(Collectors.joining(LINE_SEP.repeat(2)));
 	}
 	
-	private String statement(String declaration, String body) {
-		return String.format("%s {\n%s\n}", declaration, tabbed(body, 1));
+	private String declAndBody(String declaration, String body) {
+		return String.format("%s {%s%s%s}", declaration, LINE_SEP, tabbed(body, 1), LINE_SEP);
 	}
 	
 	private String getClassDeclaration(Class<?> token) {
@@ -124,31 +131,25 @@ public class Implementor implements Impler {
 		String returnValue = getDefaultValue(returnType);
 		StringBuilder body = new StringBuilder("return");
 		if (!returnValue.isEmpty()) {
-			body.append(" ").append(returnValue);
+			body.append(SPACE).append(returnValue);
 		}
 		body.append(";");
 		return getFunction(
 				method.getParameterTypes(),
-				method.getExceptionTypes(),
+				new Class<?>[0],
 				body.toString(),
 				returnType.getCanonicalName(),
 				method.getName()
 		);
 	}
 	
-	private String getFunction(Class<?>[] parameterTypes,
-	                           Class<?>[] exceptionTypes,
-	                           String body,
-	                           String... args) {
-		String declaration = getFunctionDeclaration(parameterTypes, exceptionTypes, args);
-		return statement(declaration, body);
+	private String getFunction(Class<?>[] parameterTypes, Class<?>[] exceptionTypes, String body, String... tokens) {
+		String declaration = getFunctionDeclaration(parameterTypes, exceptionTypes, tokens);
+		return declAndBody(declaration, body);
 	}
 	
-	private String getFunctionDeclaration(Class<?>[] parameterTypes, Class<?>[] exceptionTypes, String... args) {
-		StringBuilder declaration = new StringBuilder(String.join(
-				" ",
-				"public",
-				String.join(" ", args)));
+	private String getFunctionDeclaration(Class<?>[] parameterTypes, Class<?>[] exceptionTypes, String... tokens) {
+		StringBuilder declaration = new StringBuilder(String.join(SPACE, "public", String.join(SPACE, tokens)));
 		declaration.append(String.format("(%s)", getParameters(parameterTypes, true)));
 		String exceptions = getExceptions(exceptionTypes);
 		if (!exceptions.isEmpty()) {
@@ -161,14 +162,14 @@ public class Implementor implements Impler {
 	private String getParameters(Class<?>[] parameters, boolean typed) {
 		return IntStream.range(0, parameters.length)
 		                .boxed()
-		                .map(i -> (typed ? parameters[i].getCanonicalName() + " " : "") + "param" + i)
+		                .map(i -> (typed ? parameters[i].getCanonicalName() + SPACE : "") + "param" + i)
 		                .collect(Collectors.joining(", "));
 	}
 	
 	private String getExceptions(Class<?>[] exceptionTypes) {
 		return Arrays.stream(exceptionTypes)
 		             .map(Class::getCanonicalName)
-		             .collect(Collectors.joining(", "));
+		             .collect(Collectors.joining(COMMA + SPACE));
 	}
 	
 	private void addMethods(Supplier<Method[]> methodSupplier, Set<MethodSignature> methods) {
@@ -183,7 +184,7 @@ public class Implementor implements Impler {
 	}
 	
 	private String getClassName(Class<?> token) {
-		return token.getSimpleName() + "Impl";
+		return token.getSimpleName() + CLASS_SUFFIX;
 	}
 	
 	private String getDefaultValue(Class<?> token) {
@@ -206,10 +207,10 @@ public class Implementor implements Impler {
 	}
 	
 	private String tabbed(String body, int i) {
-		String tabs = "\t".repeat(i);
+		String tabs = TAB.repeat(i);
 		return body.lines()
 		           .map(l -> tabs + l)
-		           .collect(Collectors.joining("\n"));
+		           .collect(Collectors.joining(LINE_SEP));
 	}
 	
 	private static class MethodSignature {
@@ -234,13 +235,12 @@ public class Implementor implements Impler {
 			}
 			MethodSignature other = (MethodSignature) o;
 			return method.getName().equals(other.method.getName())
-					&& method.getReturnType().equals(other.method.getReturnType())
 					&& Arrays.equals(method.getParameterTypes(), other.method.getParameterTypes());
 		}
 		
 		@Override
 		public int hashCode() {
-			return Objects.hash(Arrays.hashCode(method.getParameterTypes()), method.getName(), method.getReturnType());
+			return Objects.hash(method.getName(), Arrays.hashCode(method.getParameterTypes()));
 		}
 	}
 }
