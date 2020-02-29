@@ -13,10 +13,17 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Implementor implements Impler {
+	
+	public static void main(String[] args) throws ImplerException {
+		System.out.println("________________________________________________________");
+		System.out.println(new Implementor().generateClass(TestAbstract2.class));
+	}
 	
 	@Override
 	public void implement(Class<?> token, Path root) throws ImplerException {
@@ -45,7 +52,7 @@ public class Implementor implements Impler {
 	private String generateClass(Class<?> token) throws ImplerException {
 		String packaj = getPackage(token);
 		String source = getSource(token);
-		return getClass(packaj, source);
+		return joinBlocks(packaj, source);
 	}
 	
 	private String getPackage(Class<?> token) {
@@ -54,18 +61,22 @@ public class Implementor implements Impler {
 	}
 	
 	private String getSource(Class<?> token) throws ImplerException {
-		return statement(getDeclaration(token), getBody(token));
+		return statement(getClassDeclaration(token), getBody(token));
 	}
 	
-	private String getClass(String packaj, String source) {
-		return packaj.isEmpty() ? source : String.format("%s\n\n%s", packaj, source);
+	private String joinBlocks(String... blocks) {
+		return joinBlocks(Arrays.asList(blocks), Function.identity());
+	}
+	
+	private <T> String joinBlocks(Collection<T> blocks, Function<T, String> toString) {
+		return blocks.stream().map(toString).collect(Collectors.joining("\n\n"));
 	}
 	
 	private String statement(String declaration, String body) {
 		return String.format("%s {\n%s\n}", declaration, tabbed(body, 1));
 	}
 	
-	private String getDeclaration(Class<?> token) {
+	private String getClassDeclaration(Class<?> token) {
 		String qualifier = token.isInterface() ? "implements" : "extends";
 		return String.format("public class %s %s %s", getClassName(token), qualifier, token.getCanonicalName());
 	}
@@ -73,13 +84,7 @@ public class Implementor implements Impler {
 	private String getBody(Class<?> token) throws ImplerException {
 		String constructors = getConstructors(token);
 		String methods = getMethods(token);
-		if (constructors.isEmpty()) {
-			return methods;
-		}
-		if (methods.isEmpty()) {
-			return constructors;
-		}
-		return String.format("%s\n\n%s", getConstructors(token), getMethods(token));
+		return joinBlocks(constructors, methods);
 	}
 	
 	private String getConstructors(Class<?> token) throws ImplerException {
@@ -92,66 +97,71 @@ public class Implementor implements Impler {
 		if (publicConstructors.isEmpty()) {
 			throw new ImplerException("Cannot implement abstract class with no public constructors");
 		}
-		return publicConstructors.stream().map(this::getConstructor).collect(Collectors.joining("\n\n"));
-		
+		return joinBlocks(publicConstructors, this::getConstructor);
 	}
 	
 	private String getConstructor(Constructor<?> constructor) {
-		StringBuilder declaration = new StringBuilder();
-		declaration.append(String.format("public %s(%s)",
-				getClassName(constructor.getDeclaringClass()),
-				getParameters(constructor.getParameterTypes(), true)));
-		String exceptions = getExceptions(constructor.getExceptionTypes());
-		if (!exceptions.isEmpty()) {
-			declaration.append(" ").append(exceptions);
-		}
 		String body = String.format("super(%s);", getParameters(constructor.getParameterTypes(), false));
-		return statement(declaration.toString(), body);
+		return getFunction(
+				constructor.getParameterTypes(),
+				constructor.getExceptionTypes(),
+				body,
+				getClassName(constructor.getDeclaringClass()));
 	}
 	
 	private String getMethods(Class<?> token) {
 		List<Method> abstractMethods = getAbstractMethods(token);
-		return abstractMethods.stream().map(this::getMethod).collect(Collectors.joining("\n\n"));
+		return joinBlocks(abstractMethods, this::getMethod);
 	}
 	
 	private List<Method> getAbstractMethods(Class<?> token) {
-		Set<MyMethod> methods = new HashSet<>();
-		Arrays.stream(token.getMethods())
-		      .filter(m -> Modifier.isAbstract(m.getModifiers()))
-		      .map(MyMethod::new)
-		      .collect(Collectors.toCollection(() -> methods));
-		
+		Set<MethodSignature> methods = new HashSet<>();
+		addMethods(token::getMethods, methods);
 		while (token != null) {
-			Arrays.stream(token.getDeclaredMethods())
-			      .filter(m -> Modifier.isAbstract(m.getModifiers()))
-			      .map(MyMethod::new)
-			      .collect(Collectors.toCollection(() -> methods));
+			addMethods(token::getDeclaredMethods, methods);
 			token = token.getSuperclass();
 		}
-		return methods.stream().map(MyMethod::getMethod).collect(Collectors.toList());
+		return methods.stream().map(MethodSignature::getMethod).collect(Collectors.toList());
 	}
 	
 	private String getMethod(Method method) {
-		StringBuilder declaration = new StringBuilder();
 		Class<?> returnType = method.getReturnType();
-		declaration.append(String.format("public %s %s(%s)",
-				returnType.getCanonicalName(),
-				method.getName(),
-				getParameters(method.getParameterTypes(), true)));
-		
-		String exceptions = getExceptions(method.getExceptionTypes());
-		if (!exceptions.isEmpty()) {
-			declaration.append(" ").append(exceptions);
-		}
-		
 		String returnValue = getDefaultValue(returnType);
 		StringBuilder body = new StringBuilder("return");
 		if (!returnValue.isEmpty()) {
 			body.append(" ").append(returnValue);
 		}
 		body.append(";");
-		return statement(declaration.toString(), body.toString());
+		return getFunction(
+				method.getParameterTypes(),
+				method.getExceptionTypes(),
+				body.toString(),
+				returnType.getCanonicalName(),
+				method.getName()
+		);
 	}
+	
+	private String getFunction(Class<?>[] parameterTypes,
+	                           Class<?>[] exceptionTypes,
+	                           String body,
+	                           String... args) {
+		String declaration = getFunctionDeclaration(parameterTypes, exceptionTypes, args);
+		return statement(declaration, body);
+	}
+	
+	private String getFunctionDeclaration(Class<?>[] parameterTypes, Class<?>[] exceptionTypes, String... args) {
+		StringBuilder declaration = new StringBuilder(String.join(
+				" ",
+				"public",
+				String.join(" ", args)));
+		declaration.append(String.format("(%s)", getParameters(parameterTypes, true)));
+		String exceptions = getExceptions(exceptionTypes);
+		if (!exceptions.isEmpty()) {
+			declaration.append(" throws ").append(exceptions);
+		}
+		return declaration.toString();
+	}
+	
 	
 	private String getParameters(Class<?>[] parameters, boolean typed) {
 		return IntStream.range(0, parameters.length)
@@ -161,13 +171,16 @@ public class Implementor implements Impler {
 	}
 	
 	private String getExceptions(Class<?>[] exceptionTypes) {
-		String exceptions = Arrays.stream(exceptionTypes)
-		                          .map(Class::getCanonicalName)
-		                          .collect(Collectors.joining(", "));
-		if (exceptions.isEmpty()) {
-			return "";
-		}
-		return "throws " + exceptions;
+		return Arrays.stream(exceptionTypes)
+		             .map(Class::getCanonicalName)
+		             .collect(Collectors.joining(", "));
+	}
+	
+	private void addMethods(Supplier<Method[]> methodSupplier, Set<MethodSignature> methods) {
+		Arrays.stream(methodSupplier.get())
+		      .filter(m -> Modifier.isAbstract(m.getModifiers()))
+		      .map(MethodSignature::new)
+		      .collect(Collectors.toCollection(() -> methods));
 	}
 	
 	private String getPackageDir(Class<?> token) {
@@ -198,14 +211,17 @@ public class Implementor implements Impler {
 	}
 	
 	private String tabbed(String body, int i) {
-		return body.lines().map(l -> "\t".repeat(i) + l).collect(Collectors.joining("\n"));
+		String tabs = "\t".repeat(i);
+		return body.lines()
+		           .map(l -> tabs + l)
+		           .collect(Collectors.joining("\n"));
 	}
 	
-	private static class MyMethod {
+	private static class MethodSignature {
 		
 		private final Method method;
 		
-		public MyMethod(Method method) {
+		public MethodSignature(Method method) {
 			this.method = method;
 		}
 		
@@ -218,10 +234,10 @@ public class Implementor implements Impler {
 			if (this == o) {
 				return true;
 			}
-			if (!(o instanceof MyMethod)) {
+			if (!(o instanceof MethodSignature)) {
 				return false;
 			}
-			MyMethod other = (MyMethod) o;
+			MethodSignature other = (MethodSignature) o;
 			return method.getName().equals(other.method.getName())
 					&& method.getReturnType().equals(other.method.getReturnType())
 					&& Arrays.equals(method.getParameterTypes(), other.method.getParameterTypes());

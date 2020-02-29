@@ -135,7 +135,7 @@ public class StudentDB implements AdvancedStudentGroupQuery {
 	// StudentGroupQuery //
 	
 	/**
-	 * * Returns a {@code Stream} of entries, produced by the specified {@code Collector}.
+	 * Returns a {@code Stream} of entries, produced by the specified {@code Collector}.
 	 */
 	private <K, V> Stream<Map.Entry<K, V>>
 	getEntriesFromStream(Stream<Student> studentStream, Collector<Student, ?, Map<K, V>> collector) {
@@ -152,13 +152,12 @@ public class StudentDB implements AdvancedStudentGroupQuery {
 	}
 	
 	/**
-	 * Returns a {@code Stream} of entries with group name mapped to a {@code Set} of associated students
-	 * with distinct first names.
+	 * Returns a {@code Stream} of entries with group name mapped to a {@code Set} of distinct student first names.
 	 */
-	private Stream<Map.Entry<String, Set<Student>>>
+	private Stream<Map.Entry<String, Set<String>>>
 	getGroupEntriesDistinct(Stream<Student> studentStream) {
 		return getEntriesFromStream(studentStream, Collectors.groupingBy(Student::getGroup,
-				Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Student::getFirstName)))));
+				Collectors.mapping(Student::getFirstName, Collectors.toSet())));
 	}
 	
 	/**
@@ -192,11 +191,11 @@ public class StudentDB implements AdvancedStudentGroupQuery {
 	}
 	
 	/**
-	 * Returns the name of the largest group compared by associated {@code Collection<Student>},
+	 * Returns the name of the largest group compared by associated {@code Collection},
 	 * then by name.
 	 * If no largest group is present, an empty {@code String} is returned.
 	 */
-	private <C extends Collection<Student>> String getLargestGroupBy(
+	private <T, C extends Collection<T>> String getLargestGroupBy(
 			Collection<Student> students,
 			Function<Stream<Student>, Stream<Map.Entry<String, C>>> groupGetter,
 			Comparator<C> comparator) {
@@ -227,8 +226,8 @@ public class StudentDB implements AdvancedStudentGroupQuery {
 				.orElse("");
 	}
 	
-	private List<String> indexedGet(List<Student> students, int[] indices, Function<Student, String> get) {
-		return Arrays.stream(indices).boxed().map(i -> get.apply(students.get(i))).collect(Collectors.toList());
+	private List<String> indexedGet(List<Student> students, int[] indices, Function<Student, String> getter) {
+		return Arrays.stream(indices).boxed().map(i -> getter.apply(students.get(i))).collect(Collectors.toList());
 	}
 	
 	private List<String> indexedGet(Collection<Student> students, int[] indices, Function<Student, String> get) {
