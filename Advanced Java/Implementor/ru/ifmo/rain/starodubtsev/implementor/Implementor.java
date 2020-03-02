@@ -7,16 +7,15 @@ import java.util.*;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.InvalidPathException;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Implementor implements Impler {
 	
@@ -47,11 +46,11 @@ public class Implementor implements Impler {
 		try (BufferedWriter out = Files.newBufferedWriter(filePath)) {
 			out.write(getClass(token));
 		} catch (IOException e) {
-			throw new ImplerException("Error when working with output file", e);
+			throw new ImplerException("Error when working with output file: " + filePath, e);
 		}
 	}
 	
-	String getClass(Class<?> token) throws ImplerException {
+	private String getClass(Class<?> token) throws ImplerException {
 		String packaj = getPackage(token);
 		String source = getSource(token);
 		return joinBlocks(packaj, source);
@@ -64,14 +63,6 @@ public class Implementor implements Impler {
 	
 	private String getSource(Class<?> token) throws ImplerException {
 		return declAndBody(getClassDeclaration(token), getBody(token));
-	}
-	
-	private String joinBlocks(String... blocks) {
-		return joinBlocks(Arrays.asList(blocks), Function.identity());
-	}
-	
-	private <T> String joinBlocks(Collection<T> blocks, Function<T, String> toString) {
-		return blocks.stream().map(toString).collect(Collectors.joining(LINE_SEP.repeat(2)));
 	}
 	
 	private String declAndBody(String declaration, String body) {
@@ -103,10 +94,11 @@ public class Implementor implements Impler {
 	}
 	
 	private String getConstructor(Constructor<?> constructor) {
-		String body = String.format("super(%s);", getParameters(constructor.getParameterTypes(), false));
+		Parameter[] parameters = constructor.getParameters();
+		String body = String.format("super(%s);", getParameters(parameters, false));
 		return getFunction(
 				constructor.getModifiers(),
-				constructor.getParameterTypes(),
+				parameters,
 				constructor.getExceptionTypes(),
 				body,
 				getClassName(constructor.getDeclaringClass()));
@@ -120,9 +112,9 @@ public class Implementor implements Impler {
 	private List<Method> getAbstractMethods(Class<?> token) {
 		Set<MethodSignature> abstractMethods = new HashSet<>();
 		Set<MethodSignature> concreteMethods = new HashSet<>();
-		processMethods(token::getMethods, abstractMethods, concreteMethods);
+		processMethods(token.getMethods(), abstractMethods, concreteMethods);
 		while (token != null) {
-			processMethods(token::getDeclaredMethods, abstractMethods, concreteMethods);
+			processMethods(token.getDeclaredMethods(), abstractMethods, concreteMethods);
 			token = token.getSuperclass();
 		}
 		return abstractMethods.stream().map(MethodSignature::getMethod).collect(Collectors.toList());
@@ -138,29 +130,29 @@ public class Implementor implements Impler {
 		body.append(";");
 		return getFunction(
 				method.getModifiers(),
-				method.getParameterTypes(),
+				method.getParameters(),
 				body.toString(),
 				returnType.getCanonicalName(),
 				method.getName()
 		);
 	}
 	
-	private String getFunction(int modifiers, Class<?>[] parameterTypes, String body, String... tokens) {
-		return getFunction(modifiers, parameterTypes, new Class<?>[0], body, tokens);
+	private String getFunction(int modifiers, Parameter[] parameters, String body, String... tokens) {
+		return getFunction(modifiers, parameters, new Class<?>[0], body, tokens);
 	}
 	
-	private String getFunction(int modifiers, Class<?>[] parameterTypes, Class<?>[] exceptionTypes,
+	private String getFunction(int modifiers, Parameter[] parameters, Class<?>[] exceptionTypes,
 	                           String body, String... tokens) {
-		String declaration = getFunctionDeclaration(modifiers, parameterTypes, exceptionTypes, tokens);
+		String declaration = getFunctionDeclaration(modifiers, parameters, exceptionTypes, tokens);
 		return declAndBody(declaration, body);
 	}
 	
-	private String getFunctionDeclaration(int modifiers, Class<?>[] parameterTypes, Class<?>[] exceptionTypes,
+	private String getFunctionDeclaration(int modifiers, Parameter[] parameters, Class<?>[] exceptionTypes,
 	                                      String... tokens) {
 		int accessModifier = getAccessModifier(modifiers);
-		StringBuilder declaration = new StringBuilder(String.join(SPACE, Modifier.toString(accessModifier),
-				String.join(SPACE, tokens)));
-		declaration.append(String.format("(%s)", getParameters(parameterTypes, true)));
+		StringBuilder declaration = new StringBuilder(
+				String.join(SPACE, Modifier.toString(accessModifier), String.join(SPACE, tokens)));
+		declaration.append(String.format("(%s)", getParameters(parameters, true)));
 		String exceptions = getExceptions(exceptionTypes);
 		if (!exceptions.isEmpty()) {
 			declaration.append(" throws ").append(exceptions);
@@ -168,22 +160,19 @@ public class Implementor implements Impler {
 		return declaration.toString();
 	}
 	
-	private String getParameters(Class<?>[] parameters, boolean typed) {
-		return IntStream.range(0, parameters.length)
-		                .boxed()
-		                .map(i -> (typed ? parameters[i].getCanonicalName() + SPACE : "") + "param" + i)
-		                .collect(Collectors.joining(COMMA + SPACE));
+	private String getParameters(Parameter[] parameters, boolean typed) {
+		return join(parameters,
+				typed ? p -> String.join(SPACE, p.getType().getCanonicalName(), p.getName())
+						: Parameter::getName, COMMA + SPACE);
 	}
 	
 	private String getExceptions(Class<?>[] exceptionTypes) {
-		return Arrays.stream(exceptionTypes)
-		             .map(Class::getCanonicalName)
-		             .collect(Collectors.joining(COMMA + SPACE));
+		return join(exceptionTypes, Class::getCanonicalName, COMMA + SPACE);
 	}
 	
-	private void processMethods(Supplier<Method[]> methodSupplier, Set<MethodSignature> abstractMethods,
+	private void processMethods(Method[] methods, Set<MethodSignature> abstractMethods,
 	                            Set<MethodSignature> concreteMethods) {
-		for (Method method : methodSupplier.get()) {
+		for (Method method : methods) {
 			MethodSignature methodSignature = new MethodSignature(method);
 			if (!Modifier.isAbstract(method.getModifiers())) {
 				concreteMethods.add(methodSignature);
@@ -205,10 +194,11 @@ public class Implementor implements Impler {
 		if (!token.isPrimitive()) {
 			return "null";
 		}
+		if (token.equals(boolean.class)) {
+			return "false";
+		}
 		if (token.equals(void.class)) {
 			return "";
-		} else if (token.equals(boolean.class)) {
-			return "false";
 		}
 		return "0";
 	}
@@ -231,6 +221,26 @@ public class Implementor implements Impler {
 				|| token.isArray()
 				|| Modifier.isFinal(token.getModifiers())
 				|| token == Enum.class;
+	}
+	
+	private String joinBlocks(String... blocks) {
+		return joinBlocks(blocks, Function.identity());
+	}
+	
+	private <T> String joinBlocks(T[] blocks, Function<T, String> toString) {
+		return joinBlocks(Arrays.asList(blocks), toString);
+	}
+	
+	private <T> String joinBlocks(Collection<T> blocks, Function<T, String> toString) {
+		return join(blocks, toString, LINE_SEP.repeat(2));
+	}
+	
+	private <T> String join(T[] blocks, Function<T, String> toString, String separator) {
+		return join(Arrays.asList(blocks), toString, separator);
+	}
+	
+	private <T> String join(Collection<T> blocks, Function<T, String> toString, String separator) {
+		return blocks.stream().map(toString).collect(Collectors.joining(separator));
 	}
 	
 	private String tabbed(String body, int i) {

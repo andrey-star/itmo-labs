@@ -227,11 +227,11 @@ public class StudentDB implements AdvancedStudentGroupQuery {
 	}
 	
 	private List<String> indexedGet(List<Student> students, int[] indices, Function<Student, String> getter) {
-		return Arrays.stream(indices).boxed().map(i -> getter.apply(students.get(i))).collect(Collectors.toList());
+		return Arrays.stream(indices).boxed().map(getter.compose(students::get)).collect(Collectors.toList());
 	}
 	
-	private List<String> indexedGet(Collection<Student> students, int[] indices, Function<Student, String> get) {
-		return indexedGet(new ArrayList<>(students), indices, get);
+	private List<String> indexedGet(Collection<Student> students, int[] indices, Function<Student, String> getter) {
+		return indexedGet(new ArrayList<>(students), indices, getter);
 	}
 	
 	@Override
