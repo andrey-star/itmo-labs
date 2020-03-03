@@ -69,7 +69,7 @@ public class Implementor implements Impler {
 		}
 	}
 	
-	String getClass(Class<?> token) throws ImplerException {
+	private String getClass(Class<?> token) throws ImplerException {
 		return joinBlocks(getPackage(token), getSource(token));
 	}
 	
@@ -99,14 +99,12 @@ public class Implementor implements Impler {
 		if (token.isInterface()) {
 			return "";
 		}
-		List<Constructor<?>> publicConstructors = Arrays.stream(token.getDeclaredConstructors())
-		                                                .filter(c -> !Modifier.isPrivate(c.getModifiers()))
-		                                                .collect(Collectors.toList());
-		if (publicConstructors.isEmpty()) {
-			throw new ImplerException("Cannot implement abstract class with no public constructors");
-		}
-		return joinBlocks(publicConstructors, this::getConstructor);
-}
+		return Arrays.stream(token.getDeclaredConstructors())
+		             .filter(c -> !Modifier.isPrivate(c.getModifiers()))
+		             .findAny()
+		             .map(this::getConstructor)
+		             .orElseThrow(() -> new ImplerException("Cannot implement abstract class with no public constructors"));
+	}
 	
 	private String getConstructor(Constructor<?> constructor) {
 		Parameter[] parameters = constructor.getParameters();
