@@ -21,7 +21,8 @@ public class StudentDB implements AdvancedStudentGroupQuery {
 	private <T, C extends Collection<T>, V> C mapToCollection(
 			Collection<V> values,
 			Function<V, T> mapper,
-			Supplier<C> collectionFactory) {
+			Supplier<C> collectionFactory
+	) {
 		return values.stream().map(mapper).collect(Collectors.toCollection(collectionFactory));
 	}
 	
@@ -226,12 +227,8 @@ public class StudentDB implements AdvancedStudentGroupQuery {
 				.orElse("");
 	}
 	
-	private List<String> indexedGet(List<Student> students, int[] indices, Function<Student, String> getter) {
-		return Arrays.stream(indices).boxed().map(getter.compose(students::get)).collect(Collectors.toList());
-	}
-	
 	private List<String> indexedGet(Collection<Student> students, int[] indices, Function<Student, String> getter) {
-		return indexedGet(new ArrayList<>(students), indices, getter);
+		return Arrays.stream(indices).mapToObj(List.copyOf(students)::get).map(getter).collect(Collectors.toList());
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package ru.ifmo.rain.starodubtsev.implementor;
 import info.kgeorgiy.java.advanced.implementor.Impler;
 import info.kgeorgiy.java.advanced.implementor.ImplerException;
 
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.File;
 import java.io.BufferedWriter;
@@ -25,6 +26,24 @@ public class Implementor implements Impler {
 	private static final String COMMA = ",";
 	private static final String SPACE = " ";
 	private static final String CLASS_SUFFIX = "Impl";
+	
+	public static void main(String[] args) {
+		if (Objects.requireNonNull(args).length != 2) {
+			System.out.println(("Invalid argument(s)"));
+			return;
+		}
+		Objects.requireNonNull(args[0]);
+		Objects.requireNonNull(args[1]);
+		try {
+			new Implementor().implement(Class.forName(args[0]), Paths.get(args[1]));
+		} catch (ClassNotFoundException e) {
+			System.out.println("Invalid class: " + e.getMessage());
+		} catch (InvalidPathException e) {
+			System.out.println("Invalid specified path: " + e.getMessage());
+		} catch (ImplerException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 	
 	@Override
 	public void implement(Class<?> token, Path root) throws ImplerException {
@@ -50,10 +69,8 @@ public class Implementor implements Impler {
 		}
 	}
 	
-	private String getClass(Class<?> token) throws ImplerException {
-		String packaj = getPackage(token);
-		String source = getSource(token);
-		return joinBlocks(packaj, source);
+	String getClass(Class<?> token) throws ImplerException {
+		return joinBlocks(getPackage(token), getSource(token));
 	}
 	
 	private String getPackage(Class<?> token) {
@@ -75,9 +92,7 @@ public class Implementor implements Impler {
 	}
 	
 	private String getBody(Class<?> token) throws ImplerException {
-		String constructors = getConstructors(token);
-		String methods = getMethods(token);
-		return joinBlocks(constructors, methods);
+		return joinBlocks(getConstructors(token), getMethods(token));
 	}
 	
 	private String getConstructors(Class<?> token) throws ImplerException {
@@ -91,7 +106,7 @@ public class Implementor implements Impler {
 			throw new ImplerException("Cannot implement abstract class with no public constructors");
 		}
 		return joinBlocks(publicConstructors, this::getConstructor);
-	}
+}
 	
 	private String getConstructor(Constructor<?> constructor) {
 		Parameter[] parameters = constructor.getParameters();
@@ -111,13 +126,14 @@ public class Implementor implements Impler {
 	
 	private List<Method> getAbstractMethods(Class<?> token) {
 		Set<MethodSignature> abstractMethods = new HashSet<>();
-		Set<MethodSignature> concreteMethods = new HashSet<>();
-		processMethods(token.getMethods(), abstractMethods, concreteMethods);
+		processMethods(token.getMethods(), abstractMethods);
 		while (token != null) {
-			processMethods(token.getDeclaredMethods(), abstractMethods, concreteMethods);
+			processMethods(token.getDeclaredMethods(), abstractMethods);
 			token = token.getSuperclass();
 		}
-		return abstractMethods.stream().map(MethodSignature::getMethod).collect(Collectors.toList());
+		return abstractMethods.stream()
+		                      .map(MethodSignature::getMethod)
+		                      .collect(Collectors.toList());
 	}
 	
 	private String getMethod(Method method) {
@@ -170,16 +186,11 @@ public class Implementor implements Impler {
 		return join(exceptionTypes, Class::getCanonicalName, COMMA + SPACE);
 	}
 	
-	private void processMethods(Method[] methods, Set<MethodSignature> abstractMethods,
-	                            Set<MethodSignature> concreteMethods) {
-		for (Method method : methods) {
-			MethodSignature methodSignature = new MethodSignature(method);
-			if (!Modifier.isAbstract(method.getModifiers())) {
-				concreteMethods.add(methodSignature);
-			} else if (!concreteMethods.contains(methodSignature)) {
-				abstractMethods.add(methodSignature);
-			}
-		}
+	private void processMethods(Method[] methods, Set<MethodSignature> abstractMethods) {
+		Arrays.stream(methods)
+		      .filter(m -> Modifier.isAbstract(m.getModifiers()))
+		      .map(MethodSignature::new)
+		      .collect(Collectors.toCollection(() -> abstractMethods));
 	}
 	
 	private String getPackageDir(Class<?> token) {
@@ -217,9 +228,11 @@ public class Implementor implements Impler {
 	}
 	
 	private boolean unimplementable(Class<?> token) {
+		int modifiers = token.getModifiers();
 		return token.isPrimitive()
 				|| token.isArray()
-				|| Modifier.isFinal(token.getModifiers())
+				|| Modifier.isFinal(modifiers)
+				|| Modifier.isPrivate(modifiers)
 				|| token == Enum.class;
 	}
 	
