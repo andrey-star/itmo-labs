@@ -4,7 +4,9 @@ import ru.ifmo.rain.starodubtsev.walk.exception.RecursiveWalkException;
 import ru.ifmo.rain.starodubtsev.walk.hasher.FnvFileHasher;
 import ru.ifmo.rain.starodubtsev.walk.visitor.HashingFileVisitor;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -26,7 +28,7 @@ public class RecursiveWalk {
 				Path outputFile = Paths.get(args[1]);
 				Path parent = outputFile.getParent();
 				if (parent != null) {
-					Files.createDirectory(parent);
+					Files.createDirectories(parent);
 				}
 				run(inputFile, outputFile);
 			} catch (InvalidPathException e) {
