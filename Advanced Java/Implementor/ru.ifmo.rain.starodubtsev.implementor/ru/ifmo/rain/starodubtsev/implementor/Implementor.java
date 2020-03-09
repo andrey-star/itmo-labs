@@ -4,7 +4,6 @@ import info.kgeorgiy.java.advanced.implementor.Impler;
 import info.kgeorgiy.java.advanced.implementor.JarImpler;
 import info.kgeorgiy.java.advanced.implementor.ImplerException;
 
-import java.net.URL;
 import java.util.*;
 import java.util.function.Function;
 import java.util.jar.Attributes;
@@ -19,13 +18,14 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.net.URL;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import java.security.CodeSource;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
+import java.security.CodeSource;
 
 /**
  * Code generating implementation of the {@code Impler} and {@code JarImpler} interfaces.
@@ -36,6 +36,7 @@ import javax.tools.ToolProvider;
  * @see Impler
  * @see JarImpler
  * @see java.lang.reflect
+ * @see ImplementorUtils
  */
 public class Implementor implements Impler, JarImpler {
 	
@@ -82,9 +83,9 @@ public class Implementor implements Impler, JarImpler {
 	 * Main method. A command line utility for {@code Implementor}.
 	 * Supports two modes
 	 * <ol>
-	 *     <li><b>java</b>: {@code &lt;className&gt; &lt;outputPath&gt;}.
+	 *     <li><b>java</b>: {@code <className> <outputPath>}.
 	 *     Creates a {@code .java} file by passing the arguments to {@link #implement(Class, Path)}.</li>
-	 *     <li><b>jar</b>: {@code -jar &lt;className&gt; &lt;outputPath&gt;}.
+	 *     <li><b>jar</b>: {@code -jar <className> <outputPath>}.
 	 *     Creates a {@code .jar} file by passing the arguments to {@link #implementJar(Class, Path)}.</li>
 	 * </ol>
 	 * If any arguments are invalid or an error occurs, execution is stopped
@@ -117,7 +118,7 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Produces code implementing class or interface specified by provided {@code token}.
+	 * Produces code implementing the class or interface specified by provided {@code token}.
 	 * The generated {@code .java} file location is specified by {@code root}.
 	 */
 	@Override
@@ -171,6 +172,7 @@ public class Implementor implements Impler, JarImpler {
 	 * @param token type token, the implementation of which is stored at {@code temp}
 	 * @param temp  working directory containing the source of {@code token} implementation
 	 * @throws ImplerException if an error occurs during compilation
+	 * @see JavaCompiler
 	 */
 	private void compile(Class<?> token, Path temp) throws ImplerException {
 		Path tokenClassPath;
@@ -187,7 +189,9 @@ public class Implementor implements Impler, JarImpler {
 			if (path.isEmpty()) {
 				throw new ImplerException("Invalid token CodeSource location path");
 			}
-			path = path.substring(1);
+			if (path.startsWith("/")) {
+				path = path.substring(1);
+			}
 			tokenClassPath = Path.of(path);
 		} catch (InvalidPathException | ImplerException e) {
 			throw new ImplerException("Cannot find token classpath", e);
@@ -197,7 +201,6 @@ public class Implementor implements Impler, JarImpler {
 		String[] args = {"-cp",
 				temp.toString() + File.pathSeparator + tokenClassPath.toString(),
 				getFullPath(temp, token).toString()};
-		
 		if (compiler == null || compiler.run(null, null, null, args) != 0) {
 			throw new ImplerException("Failed to compile class");
 		}
@@ -475,6 +478,7 @@ public class Implementor implements Impler, JarImpler {
 	 * @param parameters an array of {@code Parameter} objects
 	 * @param typed      true, if the resulting parameter list should be typed
 	 * @return a string representation of comma separated {@code parameters}
+	 * @see Parameter
 	 * @see #join(Object[], Function, String)
 	 */
 	private String getParameters(Parameter[] parameters, boolean typed) {
@@ -501,6 +505,7 @@ public class Implementor implements Impler, JarImpler {
 	 *
 	 * @param methods         an array of methods to be processed
 	 * @param abstractMethods a {@code Set} of {@code MethodSignature} objects to be populated
+	 * @see Method
 	 * @see MethodSignature
 	 */
 	private void processMethods(Method[] methods, Set<MethodSignature> abstractMethods) {
@@ -702,21 +707,27 @@ public class Implementor implements Impler, JarImpler {
 	 * @param separator the separator used between each element
 	 * @param <T>       the type of elements in {@code blocks} collection
 	 * @return the separated string
+	 * @see Collectors#joining(CharSequence)
 	 */
 	private <T> String join(Collection<T> blocks, Function<T, String> toString, String separator) {
 		return blocks.stream().map(toString).collect(Collectors.joining(separator));
 	}
 	
 	/**
-	 * Encodes the provided string, escaping all unicode characters in  {@code \\u} notation.
+	 * Encodes the provided string, escaping all unicode characters in {@code \\u} notation.
 	 *
 	 * @param s the string to be encoded
 	 * @return the encoded string
 	 */
 	private String encode(String s) {
 		StringBuilder sb = new StringBuilder();
-		for (char c : s.toCharArray()) {
-			sb.append(c < 128 ? String.valueOf(c) : String.format("\\u%04x", (int) c));
+		char[] charArray = s.toCharArray();
+		for (char c : charArray) {
+			if (c < 128) {
+				sb.append(c);
+			} else {
+				sb.append("\\u").append(String.format("%04x", (int) c));
+			}
 		}
 		return sb.toString();
 	}
@@ -781,6 +792,7 @@ public class Implementor implements Impler, JarImpler {
 		 * Returns a hashcode for this {@code MethodSignature}. The hashcode is computed
 		 * using the hashcodes for the wrapped {@link MethodSignature#method} name and parameter types.
 		 *
+		 * @return a hash code value for this object.
 		 * @see Objects#hashCode(Object)
 		 * @see Arrays#hashCode(Object[])
 		 */

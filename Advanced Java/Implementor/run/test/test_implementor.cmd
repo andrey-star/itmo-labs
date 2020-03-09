@@ -2,6 +2,6 @@
 
 SET task=implementor
 SET class=Implementor
-SET modification=jar-class
+SET modification=advanced
 
 CALL test %task% %class% %modification%
