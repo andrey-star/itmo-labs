@@ -16,10 +16,9 @@ SET run=%wd%\run\implementor
 SET mod_path=%wd%\artifacts;%wd%\lib;%run%
 
 @echo on
-javadoc -d javadoc -link https://docs.oracle.com/en/java/javase/11/docs/api --module-path %mod_path%^
- -private -author --module-source-path %wd%\modules;%wd%\my_modules; --module %mod_name% --module %k_implementor% --module %k_base%
-
-rem javadoc -d javadoc --module-path %mod_path% -private -author --module-source-path %wd%\modules;%wd%\my_modules^
- rem --module %mod_name% %k_impl_dir%\Impler.java %k_impl_dir%\JarImpler.java %k_impl_dir%\ImplerException.java
+"D:\jdk-13.0.2\bin\javadoc" -d javadoc -link https://docs.oracle.com/en/java/javase/11/docs/api^
+ --module-path %mod_path% -private -author^
+ --module-source-path %wd%\modules;%wd%\my_modules^
+ --module %mod_name% %k_impl_dir%\JarImpler.java %k_impl_dir%\ImplerException.java
 
 

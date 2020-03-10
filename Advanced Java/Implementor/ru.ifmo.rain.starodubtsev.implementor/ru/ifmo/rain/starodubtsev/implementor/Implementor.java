@@ -201,6 +201,7 @@ public class Implementor implements Impler, JarImpler {
 		String[] args = {"-cp",
 				temp.toString() + File.pathSeparator + tokenClassPath.toString(),
 				getFullPath(temp, token).toString()};
+		System.out.println(getFullPath(temp, token).toString());
 		if (compiler == null || compiler.run(null, null, null, args) != 0) {
 			throw new ImplerException("Failed to compile class");
 		}
@@ -219,7 +220,8 @@ public class Implementor implements Impler, JarImpler {
 		Attributes attributes = manifest.getMainAttributes();
 		attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
 		try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jarFile), manifest)) {
-			String localName = token.getName().replace('.', '/') + "Impl" + CLASS;
+			String localName = getPackageDir(token, "/") + "/" + getClassName(token) + CLASS;
+			System.out.println(localName);
 			out.putNextEntry(new ZipEntry(localName));
 			Files.copy(temp.resolve(localName), out);
 		} catch (IOException e) {
@@ -233,7 +235,7 @@ public class Implementor implements Impler, JarImpler {
 	 * ready to be exported to a {@code .java} file.
 	 *
 	 * @param token the type token to be implemented
-	 * @return a string representation of {@code token} implementation
+	 * @return a {@code String} representation of {@code token} implementation
 	 * @throws ImplerException if the implementation cannot be generated,
 	 *                         due to absence of non-private constructors of {@code token}
 	 * @see #getPackage(Class)
@@ -247,8 +249,8 @@ public class Implementor implements Impler, JarImpler {
 	 * Returns the package declaration for specified {@code token}.
 	 *
 	 * @param token the type token
-	 * @return a string representing the package declaration of provided {@code token},
-	 * or an empty string if the package is default.
+	 * @return a {@code String} representing the package declaration of provided {@code token},
+	 * or an empty {@code String} if the package is default.
 	 */
 	private String getPackage(Class<?> token) {
 		String packageName = token.getPackageName();
@@ -257,11 +259,11 @@ public class Implementor implements Impler, JarImpler {
 	
 	/**
 	 * Generates {@code token} implementation class content.
-	 * Returns a string representing the contents of {@code token} implementation,
+	 * Returns a {@code String} representing the contents of {@code token} implementation,
 	 * containing class declaration and body.
 	 *
 	 * @param token the type token to be implemented
-	 * @return a string representation of {@code token} implementation contents
+	 * @return a {@code String} representation of {@code token} implementation contents
 	 * @throws ImplerException if the content cannot be generated,
 	 *                         due to absence of non-private constructors of {@code token}
 	 * @see #getClassDeclaration(Class)
@@ -277,7 +279,7 @@ public class Implementor implements Impler, JarImpler {
 	 * and generates a correct declaration of the class, implementing {@code token}.
 	 *
 	 * @param token the type token
-	 * @return a string representation of {@code token} implementation class declaration
+	 * @return a {@code String} representation of {@code token} implementation class declaration
 	 * @see #getClassName(Class)
 	 */
 	private String getClassDeclaration(Class<?> token) {
@@ -289,7 +291,7 @@ public class Implementor implements Impler, JarImpler {
 	 * Returns the class body of {@code token} implementation.
 	 *
 	 * @param token the type token
-	 * @return a string representation of {@code token} implementation class body
+	 * @return a {@code String} representation of {@code token} implementation class body
 	 * @throws ImplerException if the body cannot be generated,
 	 *                         due to absence of non-private constructors of {@code token}
 	 * @see #getConstructor(Class)
@@ -302,13 +304,13 @@ public class Implementor implements Impler, JarImpler {
 	
 	/**
 	 * Generates a {@code token} implementation constructor.
-	 * If the {@code token} is an {@code interface}, returns an empty string.
+	 * If the {@code token} is an {@code interface}, returns an empty {@code String}.
 	 * Otherwise, generates a constructor based on an arbitrary non-private constructor of {@code token}.
 	 * The generated constructor immediately calls {@code super(...)}.
 	 *
 	 * @param token the type token
-	 * @return a string representation of an arbitrary {@code token} implementation constructor,
-	 * or an empty string, if the constructor is not required
+	 * @return a {@code String} representation of an arbitrary {@code token} implementation constructor,
+	 * or an empty {@code String}, if the constructor is not required
 	 * @throws ImplerException if a constructor is required, but no non-private constructors of {@code token} are found
 	 * @see #getConstructor(Constructor)
 	 */
@@ -324,13 +326,13 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Generates a string representation of the provided {@code constructor}.
+	 * Generates a {@code String} representation of the provided {@code constructor}.
 	 * Uses {@link Constructor#getModifiers()}, class name, {@link Constructor#getParameters()},
 	 * {@link Constructor#getExceptionTypes()}, and body to generate the constructor.
 	 * The default body immediately calls {@code super(...)}.
 	 *
 	 * @param constructor the constructor
-	 * @return a string representation of the provided {@code constructor}
+	 * @return a {@code String} representation of the provided {@code constructor}
 	 * @see #getParameters(Parameter[], boolean)
 	 * @see #getFunction(int, Parameter[], Class[], String, String...)
 	 */
@@ -350,7 +352,7 @@ public class Implementor implements Impler, JarImpler {
 	 * Finds all {@code abstract} methods, and provides a default implementation using {@link #getMethod(Method)}.
 	 *
 	 * @param token the type token
-	 * @return a string representation of generated {@code abstract} methods
+	 * @return a {@code String} representation of generated {@code abstract} methods
 	 * @see #getAbstractMethods(Class)
 	 * @see #getMethod(Method)
 	 */
@@ -365,7 +367,7 @@ public class Implementor implements Impler, JarImpler {
 	 * {@link Method#getParameters()}, and {@link #getDefaultValue(Class)} to generate the method.
 	 *
 	 * @param method the method
-	 * @return a string representation of the specified {@code method} implementation
+	 * @return a {@code String} representation of the specified {@code method} implementation
 	 * @see #getDefaultValue(Class)
 	 * @see #getFunction(int, Parameter[], String, String...)
 	 */
@@ -389,27 +391,29 @@ public class Implementor implements Impler, JarImpler {
 	/**
 	 * Returns a {@code List} of {@code abstract} methods of {@code token}. Scans the {@code token},
 	 * and its superclasses for available {@code abstract} methods.
+	 * Uses a {@code Set} of {@code MethodSignature} objects to avoid duplicate methods.
 	 *
 	 * @param token the type token
 	 * @return a {@code List} of available {@code abstract} methods
-	 * @implNote uses a {@code Set} of {@code MethodSignature} objects to avoid duplicate methods.
 	 * @see MethodSignature
-	 * @see #processMethods(Method[], Set)
+	 * @see #processMethods(Method[], Set, Set)
 	 */
 	private List<Method> getAbstractMethods(Class<?> token) {
 		Set<MethodSignature> abstractMethods = new HashSet<>();
-		processMethods(token.getMethods(), abstractMethods);
+		Set<MethodSignature> finalMethods = new HashSet<>();
+		processMethods(token.getMethods(), abstractMethods, finalMethods);
 		while (token != null) {
-			processMethods(token.getDeclaredMethods(), abstractMethods);
+			processMethods(token.getDeclaredMethods(), abstractMethods, finalMethods);
 			token = token.getSuperclass();
 		}
+		abstractMethods.removeAll(finalMethods);
 		return abstractMethods.stream()
 		                      .map(MethodSignature::getMethod)
 		                      .collect(Collectors.toList());
 	}
 	
 	/**
-	 * Generates a string representation of a function with no checked exceptions, using its modifiers,
+	 * Generates a {@code String} representation of a function with no checked exceptions, using its modifiers,
 	 * parameters, body, and additional qualifiers.
 	 *
 	 * @param modifiers  a set of modifiers
@@ -417,7 +421,7 @@ public class Implementor implements Impler, JarImpler {
 	 * @param body       the function body
 	 * @param tokens     additional qualifiers inserted before the parameters.
 	 *                   Usually contain the name and/or return type of the function.
-	 * @return a string representation of the function with no checked exceptions
+	 * @return a {@code String} representation of the function with no checked exceptions
 	 * @see #getFunction(int, Parameter[], Class[], String, String...)
 	 */
 	private String getFunction(int modifiers, Parameter[] parameters, String body, String... tokens) {
@@ -425,7 +429,7 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Generates a string representation of a function, using
+	 * Generates a {@code String} representation of a function, using
 	 * {@link #getFunctionDeclaration(int, Parameter[], Class[], String...)} and {@code body}.
 	 *
 	 * @param modifiers      a set of modifiers
@@ -434,7 +438,7 @@ public class Implementor implements Impler, JarImpler {
 	 * @param body           the function body
 	 * @param tokens         additional qualifiers inserted before the parameters.
 	 *                       Usually contain the name and/or return type of the function
-	 * @return a string representation of the function
+	 * @return a {@code String} representation of the function
 	 * @see #getFunctionDeclaration(int, Parameter[], Class[], String...)
 	 * @see #declAndBody(String, String)
 	 */
@@ -445,8 +449,9 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Generates a string representation of a function declaration, using {@link #getAccessModifier(int)},
+	 * Generates a {@code String} representation of a function declaration, using {@link #getAccessModifier(int)},
 	 * additional qualifiers specified by {@code tokens}, {@link #getParameters(Parameter[], boolean)},
+	 * <p>
 	 * and {@link #getExceptions(Class[])}.
 	 *
 	 * @param modifiers      a set of modifiers
@@ -454,7 +459,7 @@ public class Implementor implements Impler, JarImpler {
 	 * @param exceptionTypes an array of {@code Class} objects, describing exception types, thrown by the function
 	 * @param tokens         additional qualifiers inserted before the parameters.
 	 *                       Usually contains the name and/or return type of the function
-	 * @return a string representation of the function declaration
+	 * @return a {@code String} representation of the function declaration
 	 * @see #getParameters(Parameter[], boolean)
 	 * @see #getExceptions(Class[])
 	 */
@@ -477,7 +482,7 @@ public class Implementor implements Impler, JarImpler {
 	 *
 	 * @param parameters an array of {@code Parameter} objects
 	 * @param typed      true, if the resulting parameter list should be typed
-	 * @return a string representation of comma separated {@code parameters}
+	 * @return a {@code String} representation of comma separated {@code parameters}
 	 * @see Parameter
 	 * @see #join(Object[], Function, String)
 	 */
@@ -491,7 +496,7 @@ public class Implementor implements Impler, JarImpler {
 	 * Returns a comma separated list of {@code exceptions}.
 	 *
 	 * @param exceptionTypes an array of exception types
-	 * @return a string representation of comma separated {@code exceptions}
+	 * @return a {@code String} representation of comma separated {@code exceptions}
 	 * @see #join(Object[], Function, String)
 	 */
 	private String getExceptions(Class<?>[] exceptionTypes) {
@@ -499,16 +504,22 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Processes an array of methods, populating the provided {@code abstractMethods} set.
+	 * Processes an array of methods, populating the provided {@code abstractMethods} and populating
+	 * the provided {@code finalMethods} set.
 	 * Filters the {@code methods} array, leaving only abstract methods, and
-	 * wraps them in a {@code MethodSignature} object.
+	 * wraps them in a {@code MethodSignature} object. Same for final methods.
 	 *
 	 * @param methods         an array of methods to be processed
-	 * @param abstractMethods a {@code Set} of {@code MethodSignature} objects to be populated
+	 * @param abstractMethods a {@code Set} of {@code MethodSignature} objects to be populated by abstract methods
+	 * @param finalMethods    a {@code Set} of {@code MethodSignature} objects to be populated by final methods
 	 * @see Method
 	 * @see MethodSignature
 	 */
-	private void processMethods(Method[] methods, Set<MethodSignature> abstractMethods) {
+	private void processMethods(Method[] methods, Set<MethodSignature> abstractMethods, Set<MethodSignature> finalMethods) {
+		Arrays.stream(methods)
+		      .filter(m -> Modifier.isFinal(m.getModifiers()))
+		      .map(MethodSignature::new)
+		      .collect(Collectors.toCollection(() -> finalMethods));
 		Arrays.stream(methods)
 		      .filter(m -> Modifier.isAbstract(m.getModifiers()))
 		      .map(MethodSignature::new)
@@ -523,17 +534,17 @@ public class Implementor implements Impler, JarImpler {
 	 * @return the full path to {@code token} implementation file
 	 */
 	private Path getFullPath(Path root, Class<?> token) {
-		return root.resolve(Path.of(getPackageDir(token), getClassName(token) + JAVA));
+		return root.resolve(Path.of(getPackageDir(token, File.separator), getClassName(token) + JAVA));
 	}
 	
 	/**
 	 * Returns a directory, corresponding to the package of the provided {@code token}.
 	 *
 	 * @param token the type token
-	 * @return a string representation of the resulting directory
+	 * @return a {@code String} representation of the resulting directory
 	 */
-	private String getPackageDir(Class<?> token) {
-		return token.getPackageName().replace(".", File.separator);
+	private String getPackageDir(Class<?> token, String separator) {
+		return token.getPackageName().replace(".", separator);
 	}
 	
 	/**
@@ -552,7 +563,7 @@ public class Implementor implements Impler, JarImpler {
 	 *     <li>For non-primitive types the value is {@code null}</li>
 	 *     <li>For numerical primitives the value is {@code 0}</li>
 	 *     <li>For {@code boolean} the value is {@code false}</li>
-	 *     <li>For {@code void} the value is an empty string</li>
+	 *     <li>For {@code void} the value is an empty {@code String}</li>
 	 * </ul>
 	 *
 	 * @param token the type token
@@ -625,7 +636,7 @@ public class Implementor implements Impler, JarImpler {
 	 *
 	 * @param declaration the declaration used when formatting
 	 * @param body        the body used when formatting
-	 * @return the resulting formatted string
+	 * @return the resulting formatted {@code String}
 	 */
 	private String declAndBody(String declaration, String body) {
 		return String.format("%s {%s%s%s}", declaration, LINE_SEP, tabbed(body, 1), LINE_SEP);
@@ -634,9 +645,9 @@ public class Implementor implements Impler, JarImpler {
 	/**
 	 * Tabulates every line of {@code body} exactly {@code amount} number of times.
 	 *
-	 * @param body   the string to tabulate
+	 * @param body   the {@code String} to tabulate
 	 * @param amount number, specifying the amount of tabs
-	 * @return the tabbed string
+	 * @return the tabbed {@code String}
 	 */
 	private String tabbed(String body, int amount) {
 		var tabs = TAB.repeat(amount);
@@ -646,10 +657,10 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Returns a string, with {@code blocks} separated by one blank line.
+	 * Returns a {@code String}, with {@code blocks} separated by one blank line.
 	 *
-	 * @param blocks the strings to separate
-	 * @return the separated string
+	 * @param blocks the {@code String}s to separate
+	 * @return the separated {@code String}
 	 * @see #joinBlocks(Object[], Function)
 	 */
 	private String joinBlocks(String... blocks) {
@@ -657,13 +668,13 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Returns a string, with {@code blocks} separated by one blank line,
+	 * Returns a {@code String}, with {@code blocks} separated by one blank line,
 	 * applying the {@code toString} function beforehand.
 	 *
 	 * @param blocks   the objects to separate
 	 * @param toString mapping function for provided objects
 	 * @param <T>      the type of elements in {@code blocks} array
-	 * @return the separated string
+	 * @return the separated {@code String}
 	 * @see #joinBlocks(Collection, Function)
 	 */
 	private <T> String joinBlocks(T[] blocks, Function<T, String> toString) {
@@ -671,27 +682,27 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Returns a string, with {@code blocks} separated by one blank line,
+	 * Returns a {@code String}, with {@code blocks} separated by one blank line,
 	 * applying the {@code toString} function beforehand.
 	 *
 	 * @param blocks   the objects to separate
 	 * @param toString mapping function for provided objects
 	 * @param <T>      the type of elements in {@code blocks} collection
-	 * @return the separated string
+	 * @return the separated {@code String}
 	 */
 	private <T> String joinBlocks(Collection<T> blocks, Function<T, String> toString) {
 		return join(blocks, toString, LINE_SEP.repeat(2));
 	}
 	
 	/**
-	 * Returns a string, with {@code blocks} separated by {@code separator},
+	 * Returns a {@code String}, with {@code blocks} separated by {@code separator},
 	 * applying the {@code toString} function beforehand.
 	 *
 	 * @param blocks    the objects to separate
 	 * @param toString  mapping function for provided objects
 	 * @param separator the separator used between each element
 	 * @param <T>       the type of elements in {@code blocks} array
-	 * @return the separated string
+	 * @return the separated {@code String}
 	 * @see #join(Collection, Function, String)
 	 */
 	private <T> String join(T[] blocks, Function<T, String> toString, String separator) {
@@ -699,14 +710,14 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Returns a string, with {@code blocks} separated by {@code separator},
+	 * Returns a {@code String}, with {@code blocks} separated by {@code separator},
 	 * applying the {@code toString} function beforehand.
 	 *
 	 * @param blocks    the objects to separate
 	 * @param toString  mapping function for provided objects
 	 * @param separator the separator used between each element
 	 * @param <T>       the type of elements in {@code blocks} collection
-	 * @return the separated string
+	 * @return the separated {@code String}
 	 * @see Collectors#joining(CharSequence)
 	 */
 	private <T> String join(Collection<T> blocks, Function<T, String> toString, String separator) {
@@ -714,10 +725,10 @@ public class Implementor implements Impler, JarImpler {
 	}
 	
 	/**
-	 * Encodes the provided string, escaping all unicode characters in {@code \\u} notation.
+	 * Encodes the provided {@code String}, escaping all unicode characters in {@code \\u} notation.
 	 *
-	 * @param s the string to be encoded
-	 * @return the encoded string
+	 * @param s the {@code String} to be encoded
+	 * @return the encoded {@code String}
 	 */
 	private String encode(String s) {
 		StringBuilder sb = new StringBuilder();
