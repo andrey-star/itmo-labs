@@ -123,9 +123,8 @@ public class Implementor implements Impler, JarImpler {
 	 */
 	@Override
 	public void implement(Class<?> token, Path root) throws ImplerException {
-		if (token == null || root == null) {
-			throw new ImplerException("Invalid argument(s)");
-		}
+		Objects.requireNonNull(token);
+		Objects.requireNonNull(root);
 		if (unimplementable(token)) {
 			throw new ImplerException("Unable to implement desired token");
 		}
@@ -151,9 +150,9 @@ public class Implementor implements Impler, JarImpler {
 	 */
 	@Override
 	public void implementJar(Class<?> token, Path jarFile) throws ImplerException {
-		if (token == null || jarFile == null) {
-			throw new ImplerException("Invalid argument(s)");
-		}
+		Objects.requireNonNull(token);
+		Objects.requireNonNull(jarFile);
+		
 		ImplementorUtils.createDirectories(jarFile);
 		Path temp = ImplementorUtils.createTempDirectory(jarFile.toAbsolutePath().getParent());
 		try {
@@ -201,7 +200,6 @@ public class Implementor implements Impler, JarImpler {
 		String[] args = {"-cp",
 				temp.toString() + File.pathSeparator + tokenClassPath.toString(),
 				getFullPath(temp, token).toString()};
-		System.out.println(getFullPath(temp, token).toString());
 		if (compiler == null || compiler.run(null, null, null, args) != 0) {
 			throw new ImplerException("Failed to compile class");
 		}
@@ -221,7 +219,6 @@ public class Implementor implements Impler, JarImpler {
 		attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
 		try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jarFile), manifest)) {
 			String localName = getPackageDir(token, "/") + "/" + getClassName(token) + CLASS;
-			System.out.println(localName);
 			out.putNextEntry(new ZipEntry(localName));
 			Files.copy(temp.resolve(localName), out);
 		} catch (IOException e) {
