@@ -86,7 +86,7 @@ public class Implementor implements Impler, JarImpler {
 	 *     <li><b>java</b>: {@code <className> <outputPath>}.
 	 *     Creates a {@code .java} file by passing the arguments to {@link #implement(Class, Path)}.</li>
 	 *     <li><b>jar</b>: {@code -jar <className> <outputPath>}.
-	 *     Creates a {@code .jar} file by passing the arguments to {@link #implementJar(Class, Path)}.</li>
+	 *     Creates a {@code .jar} file by passing therguments to {@link #implementJar(Class, Path)}.</li>
 	 * </ol>
 	 * If any arguments are invalid or an error occurs, execution is stopped
 	 * and a message describing the issue is displayed.
@@ -538,6 +538,7 @@ public class Implementor implements Impler, JarImpler {
 	 * Returns a directory, corresponding to the package of the provided {@code token}.
 	 *
 	 * @param token the type token
+	 * @param separator the file separator
 	 * @return a {@code String} representation of the resulting directory
 	 */
 	private String getPackageDir(Class<?> token, String separator) {
