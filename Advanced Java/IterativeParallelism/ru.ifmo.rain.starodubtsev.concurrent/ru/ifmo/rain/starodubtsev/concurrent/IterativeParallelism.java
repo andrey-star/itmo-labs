@@ -1,5 +1,6 @@
 package ru.ifmo.rain.starodubtsev.concurrent;
 
+import info.kgeorgiy.java.advanced.concurrent.AdvancedIP;
 import info.kgeorgiy.java.advanced.concurrent.ListIP;
 
 import java.util.*;
@@ -16,19 +17,59 @@ import java.util.stream.Stream;
  * @see info.kgeorgiy.java.advanced.concurrent.ScalarIP
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent") // ok to throw NoSuchElementException
-public class IterativeParallelism implements ListIP {
+public class IterativeParallelism implements AdvancedIP {
 	
+	/**
+	 * Returns minimum value.
+	 *
+	 * @param threads    number or concurrent threads
+	 * @param values     values to get minimum of
+	 * @param comparator value comparator
+	 * @param <T>        value type
+	 * @return minimum of given values
+	 * @throws InterruptedException             if executing thread was interrupted
+	 * @throws java.util.NoSuchElementException if no values are given
+	 * @see #parallelReduce(int, List, Function, Function)
+	 * @see Stream#min(Comparator)
+	 */
 	@Override
 	public <T> T minimum(int threads, List<? extends T> values, Comparator<? super T> comparator) throws InterruptedException {
-		Function<Stream<? extends T>, ? extends T> min = stream -> stream.min(comparator).get();
-		return parallelReduce(threads, values, min, min);
+		return parallelReduce(threads, values,
+				stream -> stream.min(comparator).get(),
+				stream -> stream.min(comparator).get());
 	}
 	
+	/**
+	 * Returns maximum value.
+	 *
+	 * @param threads    number or concurrent threads
+	 * @param values     values to get maximum of
+	 * @param comparator value comparator
+	 * @param <T>        value type
+	 * @return maximum of given values
+	 * @throws InterruptedException             if executing thread was interrupted
+	 * @throws java.util.NoSuchElementException if no values are given
+	 * @see #parallelReduce(int, List, Function, Function)
+	 * @see #minimum(int, List, Comparator)
+	 * @see Collections#reverseOrder(Comparator)
+	 */
 	@Override
 	public <T> T maximum(int threads, List<? extends T> values, Comparator<? super T> comparator) throws InterruptedException {
 		return minimum(threads, values, Collections.reverseOrder(comparator));
 	}
 	
+	/**
+	 * Returns whether all values satisfy predicate.
+	 *
+	 * @param threads   number or concurrent threads
+	 * @param values    values to test
+	 * @param predicate test predicate
+	 * @param <T>       value type
+	 * @return whether all values satisfies predicate or {@code true}, if no values are given
+	 * @throws InterruptedException if executing thread was interrupted
+	 * @see #parallelReduce(int, List, Function, Function)
+	 * @see Stream#allMatch(Predicate)
+	 */
 	@Override
 	public <T> boolean all(int threads, List<? extends T> values, Predicate<? super T> predicate) throws InterruptedException {
 		return parallelReduce(threads, values,
@@ -36,6 +77,18 @@ public class IterativeParallelism implements ListIP {
 				stream -> stream.allMatch(Boolean::booleanValue));
 	}
 	
+	/**
+	 * Returns whether any value satisfies predicate.
+	 *
+	 * @param threads   number or concurrent threads
+	 * @param values    values to test
+	 * @param predicate test predicate
+	 * @param <T>       value type
+	 * @return whether any value satisfies predicate or {@code false}, if no values are given
+	 * @throws InterruptedException if executing thread was interrupted
+	 * @see #parallelReduce(int, List, Function, Function)
+	 * @see Stream#anyMatch(Predicate)
+	 */
 	@Override
 	public <T> boolean any(int threads, List<? extends T> values, Predicate<? super T> predicate) throws InterruptedException {
 		return parallelReduce(threads, values,
@@ -43,6 +96,19 @@ public class IterativeParallelism implements ListIP {
 				stream -> stream.anyMatch(Boolean::booleanValue));
 	}
 	
+	/**
+	 * Filters values by predicate.
+	 *
+	 * @param threads   number of concurrent threads
+	 * @param values    values to filter
+	 * @param predicate filter predicate
+	 * @param <T>       value type
+	 * @return list of values satisfying given predicated. Order of values is preserved
+	 * @throws InterruptedException if executing thread was interrupted
+	 * @see #parallelReduce(int, List, Function, Function)
+	 * @see Stream#filter(Predicate)
+	 * @see #collectToList(Stream)
+	 */
 	@Override
 	public <T> List<T> filter(int threads, List<? extends T> values, Predicate<? super T> predicate) throws InterruptedException {
 		return parallelReduce(threads, values,
@@ -50,6 +116,19 @@ public class IterativeParallelism implements ListIP {
 				this::collectToList);
 	}
 	
+	/**
+	 * Maps values.
+	 *
+	 * @param threads number of concurrent threads
+	 * @param values  values to filter
+	 * @param f       mapper function
+	 * @param <T>     value type
+	 * @return list of values mapped by given function
+	 * @throws InterruptedException if executing thread was interrupted
+	 * @see #parallelReduce(int, List, Function, Function)
+	 * @see Stream#map(Function)
+	 * @see #collectToList(Stream)
+	 */
 	@Override
 	public <T, U> List<U> map(int threads, List<? extends T> values, Function<? super T, ? extends U> f) throws InterruptedException {
 		return parallelReduce(threads, values,
@@ -57,11 +136,67 @@ public class IterativeParallelism implements ListIP {
 				this::collectToList);
 	}
 	
+	/**
+	 * Join values to string.
+	 *
+	 * @param threads number of concurrent threads
+	 * @param values  values to join
+	 * @return list of joined result of {@link #toString()} call on each value
+	 * @throws InterruptedException if executing thread was interrupted
+	 * @see #parallelReduce(int, List, Function, Function)
+	 * @see Stream#map(Function)
+	 * @see Collectors#joining()
+	 */
 	@Override
 	public String join(int threads, List<?> values) throws InterruptedException {
 		return parallelReduce(threads, values,
 				stream -> stream.map(Object::toString).collect(Collectors.joining()),
 				stream -> stream.collect(Collectors.joining()));
+	}
+	
+	/**
+	 * Reduces values using monoid.
+	 *
+	 * @param threads number of concurrent threads
+	 * @param values  values to reduce
+	 * @param monoid  monoid to use
+	 * @return values reduced by provided monoid or {@link Monoid#getIdentity() identity} if not values specified
+	 * @throws InterruptedException if executing thread was interrupted
+	 */
+	@Override
+	public <T> T reduce(int threads, List<T> values, Monoid<T> monoid) throws InterruptedException {
+		return parallelReduce(threads, values,
+				stream -> getReduce(stream, monoid),
+				stream -> getReduce(stream, monoid));
+	}
+	
+	/**
+	 * Gets the reducing function for provided {@code monoid}.
+	 *
+	 * @param stream the stream to apply on
+	 * @param monoid the monoid
+	 * @param <T>    value type
+	 * @return the reduce value
+	 */
+	private <T> T getReduce(Stream<T> stream, Monoid<T> monoid) {
+		return stream.reduce(monoid.getIdentity(), monoid.getOperator());
+	}
+	
+	/**
+	 * Maps and reduces values using monoid.
+	 *
+	 * @param threads number of concurrent threads
+	 * @param values  values to reduce
+	 * @param lift    mapping function
+	 * @param monoid  monoid to use
+	 * @return values reduced by provided monoid or {@link Monoid#getIdentity() identity} if not values specified
+	 * @throws InterruptedException if executing thread was interrupted
+	 */
+	@Override
+	public <T, R> R mapReduce(int threads, List<T> values, Function<T, R> lift, Monoid<R> monoid) throws InterruptedException {
+		return parallelReduce(threads, values,
+				stream -> stream.map(lift).reduce(monoid.getIdentity(), monoid.getOperator()),
+				stream -> getReduce(stream, monoid));
 	}
 	
 	/**
@@ -81,15 +216,15 @@ public class IterativeParallelism implements ListIP {
 	 * @throws InterruptedException if executing thread was interrupted
 	 * @see Thread
 	 */
-	public <T, R> R parallelReduce(int threadsCount, List<? extends T> values,
-	                               Function<Stream<? extends T>, ? extends R> threadReduce,
-	                               Function<Stream<? extends R>, ? extends R> resReduce) throws InterruptedException {
-		List<Stream<? extends T>> chunks = split(values, threadsCount);
+	public <T, M, R> R parallelReduce(int threadsCount, List<T> values,
+	                                  Function<Stream<T>, M> threadReduce,
+	                                  Function<Stream<M>, R> resReduce) throws InterruptedException {
+		List<Stream<T>> chunks = split(values, threadsCount);
 		List<Thread> threads = new ArrayList<>();
-		List<R> res = new ArrayList<>(Collections.nCopies(chunks.size(), null));
+		List<M> res = new ArrayList<>(Collections.nCopies(chunks.size(), null));
 		for (int i = 0; i < chunks.size(); i++) {
-			final int index = i;
-			Thread thread = new Thread(() -> res.set(index, threadReduce.apply(chunks.get(index))));
+			final int finalI = i;
+			Thread thread = new Thread(() -> res.set(finalI, threadReduce.apply(chunks.get(finalI))));
 			threads.add(thread);
 			thread.start();
 		}
@@ -97,29 +232,53 @@ public class IterativeParallelism implements ListIP {
 		return resReduce.apply(res.stream());
 	}
 	
+	private void joinThreads(List<Thread> threads) throws InterruptedException {
+		InterruptedException ie = null;
+		for (int i = 0; i < threads.size(); i++) {
+			Thread thread = threads.get(i);
+			if (ie != null) {
+				thread.interrupt();
+			}
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				if (ie == null) {
+					ie = new InterruptedException("Could not join thread because executing thread was interrupted");
+				}
+				ie.addSuppressed(e);
+				i--; // need to interrupt current thread
+			}
+		}
+		if (ie != null) {
+			throw ie;
+		}
+	}
+	
 	/**
 	 * Splits the given {@code values} into chunks. Returns a {@code List} with {@code blocks} amount of chunks,
-	 * or less, if {@code blocks} is greater than the amount elements in {@code values}.
+	 * or less, if {@code blocks} is greater than the amount of elements in {@code values}.
 	 *
 	 * @param values values to split
-	 * @param blocks amount of resulting blocks
+	 * @param blocks amount of resulting chunks
 	 * @param <T>    type of element in the {@code List}
 	 * @return a {@code List} of chunks, each one represented by a {@code Stream} of values
+	 * @see List#subList(int, int)
 	 */
-	private <T> List<Stream<? extends T>> split(List<? extends T> values, int blocks) {
+	private <T> List<Stream<T>> split(List<T> values, int blocks) {
 		int blockSize = values.size() / blocks;
 		int rest = values.size() % blocks;
 		
-		List<Stream<? extends T>> chunks = new ArrayList<>();
+		List<Stream<T>> chunks = new ArrayList<>();
 		int start = 0;
 		for (int i = 0; i < blocks; i++) {
 			int end = start + blockSize;
 			if (i < rest) {
 				end++;
 			}
-			if (start < end) {
-				chunks.add(values.subList(start, end).stream());
+			if (start == end) {
+				break;
 			}
+			chunks.add(values.subList(start, end).stream());
 			start = end;
 		}
 		return chunks;
@@ -129,24 +288,11 @@ public class IterativeParallelism implements ListIP {
 	 * Collects the provided {@code Stream} of {@code List}s into a single {@code List}.
 	 *
 	 * @param stream the {@code Stream} of {@code List}s
-	 * @param <T> the type of element in {@code List}
+	 * @param <T>    the type of element in {@code List}
 	 * @return the joined {@code List}
 	 * @see Stream#flatMap(Function)
 	 */
-	public <T> List<T> collectToList(Stream<? extends List<T>> stream) {
+	public <T> List<T> collectToList(Stream<? extends List<? extends T>> stream) {
 		return stream.flatMap(List::stream).collect(Collectors.toList());
-	}
-	
-	/**
-	 * Waits for all {@code Thread}s in {@code threads} to die.
-	 *
-	 * @param threads the threads to wait for
-	 * @throws InterruptedException if executing thread was interrupted
-	 * @see Thread#join()
-	 */
-	private void joinThreads(List<Thread> threads) throws InterruptedException {
-		for (Thread thread : threads) {
-			thread.join();
-		}
 	}
 }
