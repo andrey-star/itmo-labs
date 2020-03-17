@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * @see ListIP
  * @see info.kgeorgiy.java.advanced.concurrent.ScalarIP
  */
-@SuppressWarnings("OptionalGetWithoutIsPresent") // ok to throw NoSuchElementException
+@SuppressWarnings("OptionalGetWithoutIsPresent") // ok to throw NoSuchElementException.
 public class IterativeParallelism implements AdvancedIP {
 	
 	/**
@@ -29,15 +29,16 @@ public class IterativeParallelism implements AdvancedIP {
 	 * @return minimum of given values
 	 * @throws InterruptedException             if executing thread was interrupted
 	 * @throws java.util.NoSuchElementException if no values are given
+	 * @see #min(Stream, Comparator)
 	 * @see #parallelReduce(int, List, Function, Function)
-	 * @see Stream#min(Comparator)
 	 */
 	@Override
 	public <T> T minimum(int threads, List<? extends T> values, Comparator<? super T> comparator) throws InterruptedException {
 		return parallelReduce(threads, values,
-				stream -> stream.min(comparator).get(),
-				stream -> stream.min(comparator).get());
+				stream -> min(stream, comparator),
+				stream -> min(stream, comparator));
 	}
+	
 	
 	/**
 	 * Returns maximum value.
@@ -56,6 +57,20 @@ public class IterativeParallelism implements AdvancedIP {
 	@Override
 	public <T> T maximum(int threads, List<? extends T> values, Comparator<? super T> comparator) throws InterruptedException {
 		return minimum(threads, values, Collections.reverseOrder(comparator));
+	}
+	
+	/**
+	 * Returns min value of {@code stream} by provided {@code comparator}.
+	 *
+	 * @param stream     the stream of values
+	 * @param comparator the comparator
+	 * @param <T>        value type
+	 * @return minimum value
+	 * @throws NoSuchElementException if no values are given
+	 * @see Stream#min(Comparator)
+	 */
+	private <T> T min(Stream<T> stream, Comparator<? super T> comparator) {
+		return stream.min(comparator).get();
 	}
 	
 	/**
@@ -87,13 +102,11 @@ public class IterativeParallelism implements AdvancedIP {
 	 * @return whether any value satisfies predicate or {@code false}, if no values are given
 	 * @throws InterruptedException if executing thread was interrupted
 	 * @see #parallelReduce(int, List, Function, Function)
-	 * @see Stream#anyMatch(Predicate)
+	 * @see #all(int, List, Predicate)
 	 */
 	@Override
 	public <T> boolean any(int threads, List<? extends T> values, Predicate<? super T> predicate) throws InterruptedException {
-		return parallelReduce(threads, values,
-				stream -> stream.anyMatch(predicate),
-				stream -> stream.anyMatch(Boolean::booleanValue));
+		return !all(threads, values, predicate.negate());
 	}
 	
 	/**
@@ -171,18 +184,6 @@ public class IterativeParallelism implements AdvancedIP {
 	}
 	
 	/**
-	 * Gets the reducing function for provided {@code monoid}.
-	 *
-	 * @param stream the stream to apply on
-	 * @param monoid the monoid
-	 * @param <T>    value type
-	 * @return the reduce value
-	 */
-	private <T> T getReduce(Stream<T> stream, Monoid<T> monoid) {
-		return stream.reduce(monoid.getIdentity(), monoid.getOperator());
-	}
-	
-	/**
 	 * Maps and reduces values using monoid.
 	 *
 	 * @param threads number of concurrent threads
@@ -200,6 +201,18 @@ public class IterativeParallelism implements AdvancedIP {
 	}
 	
 	/**
+	 * Gets the reducing function for provided {@code monoid}.
+	 *
+	 * @param stream the stream to apply on
+	 * @param monoid the monoid
+	 * @param <T>    value type
+	 * @return the reduce value
+	 */
+	private <T> T getReduce(Stream<T> stream, Monoid<T> monoid) {
+		return stream.reduce(monoid.getIdentity(), monoid.getOperator());
+	}
+	
+	/**
 	 * Reduces the given values by provided reducing functions. Concurrently processes the provided
 	 * {@code values} by splitting them into several chunks, processing each in a separate {@code Thread},
 	 * and combining the result.
@@ -207,10 +220,11 @@ public class IterativeParallelism implements AdvancedIP {
 	 * @param threadsCount number of concurrent threads
 	 * @param values       values to reduce
 	 * @param threadReduce a {@code Function}, capable of reducing a {@code Stream} of values of type {@code T}
-	 *                     to a single value of type {@code U}
-	 * @param resReduce    a {@code Function}, capable of reducing a {@code Stream} of values of type {@code U}
-	 *                     to a single value of type {@code U}
+	 *                     to a single value of type {@code M}
+	 * @param resReduce    a {@code Function}, capable of reducing a {@code Stream} of values of type {@code M}
+	 *                     to a single value of type {@code R}
 	 * @param <T>          type of element in {@code values}
+	 * @param <M>          type of middle element
 	 * @param <R>          result type
 	 * @return the result of reducing
 	 * @throws InterruptedException if executing thread was interrupted
@@ -234,22 +248,28 @@ public class IterativeParallelism implements AdvancedIP {
 	
 	private void joinThreads(List<Thread> threads) throws InterruptedException {
 		InterruptedException ie = null;
-		for (int i = 0; i < threads.size(); i++) {
-			Thread thread = threads.get(i);
-			if (ie != null) {
-				thread.interrupt();
-			}
+		int i;
+		for (i = 0; i < threads.size(); i++) {
 			try {
-				thread.join();
+				threads.get(i).join();
 			} catch (InterruptedException e) {
-				if (ie == null) {
-					ie = new InterruptedException("Could not join thread because executing thread was interrupted");
-				}
+				ie = new InterruptedException("Could not join thread because executing thread was interrupted");
 				ie.addSuppressed(e);
-				i--; // need to interrupt current thread
+				break;
 			}
 		}
 		if (ie != null) {
+			for (int j = i; j < threads.size(); j++) {
+				threads.get(j).interrupt();
+			}
+			for (int j = i; j < threads.size(); j++) {
+				try {
+					threads.get(j).join();
+				} catch (InterruptedException e) {
+					ie.addSuppressed(e);
+					j--; // need to wait for current thread
+				}
+			}
 			throw ie;
 		}
 	}
