@@ -1,7 +1,6 @@
 package ru.ifmo.rain.starodubtsev.concurrent;
 
 import info.kgeorgiy.java.advanced.concurrent.AdvancedIP;
-import info.kgeorgiy.java.advanced.concurrent.ListIP;
 
 import java.util.*;
 import java.util.function.Function;
@@ -10,13 +9,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Implementation of the {@code ListIP} interface, providing methods for parallel data processing.
+ * Implementation of the {@code AdvancedIP} interface, providing methods for parallel data processing.
  *
  * @author Andrey Starodubtsev
- * @see ListIP
+ * @see AdvancedIP
+ * @see info.kgeorgiy.java.advanced.concurrent.ListIP
  * @see info.kgeorgiy.java.advanced.concurrent.ScalarIP
  */
-@SuppressWarnings("OptionalGetWithoutIsPresent") // ok to throw NoSuchElementException.
+@SuppressWarnings("OptionalGetWithoutIsPresent") // ok to throw NoSuchElementException
 public class IterativeParallelism implements AdvancedIP {
 	
 	/**
@@ -253,23 +253,17 @@ public class IterativeParallelism implements AdvancedIP {
 			try {
 				threads.get(i).join();
 			} catch (InterruptedException e) {
-				ie = new InterruptedException("Could not join thread because executing thread was interrupted");
+				if (ie == null) {
+					ie = new InterruptedException("Could not join thread because executing thread was interrupted");
+					for (int j = i; j < threads.size(); j++) {
+						threads.get(j).interrupt();
+					}
+				}
 				ie.addSuppressed(e);
-				break;
+				i--;
 			}
 		}
 		if (ie != null) {
-			for (int j = i; j < threads.size(); j++) {
-				threads.get(j).interrupt();
-			}
-			for (int j = i; j < threads.size(); j++) {
-				try {
-					threads.get(j).join();
-				} catch (InterruptedException e) {
-					ie.addSuppressed(e);
-					j--; // need to wait for current thread
-				}
-			}
 			throw ie;
 		}
 	}
@@ -295,7 +289,7 @@ public class IterativeParallelism implements AdvancedIP {
 			if (i < rest) {
 				end++;
 			}
-			if (start == end) {
+			if (start == end) { // no empty chunks are processed
 				break;
 			}
 			chunks.add(values.subList(start, end).stream());
