@@ -3,6 +3,7 @@
 SET task=%1
 SET class=%2
 SET modification=%3
+
 SET mod_name=ru.ifmo.rain.starodubtsev.%task%
 SET mod_dir=ru\ifmo\rain\starodubtsev\%task%
 
@@ -16,5 +17,5 @@ javac --module-path %mod_path% %src%\module-info.java %src%\%mod_dir%\*.java -d 
 
 set /P salt="Salt: "
 @echo on
-java --module-path %mod_path% --add-modules %mod_name% -m info.kgeorgiy.java.advanced.%task%/info.kgeorgiy.java.advanced.concurrent.Tester^
+java --module-path %mod_path% --add-modules %mod_name% -m info.kgeorgiy.java.advanced.%task%/info.kgeorgiy.java.advanced.%task%.Tester^
  %modification% %mod_name%.%class% %salt%

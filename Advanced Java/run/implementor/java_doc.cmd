@@ -15,7 +15,7 @@ SET src=%wd%\my_modules\%mod_name%
 SET out=%wd%\out\production\%mod_name%
 SET run=%wd%\run\implementor
 
-SET mod_path=%wd%\artifacts;%wd%\lib;%run%
+SET mod_path=%wd%\artifacts;%wd%\lib
 
 @echo on
 javadoc -d javadoc -link https://docs.oracle.com/en/java/javase/11/docs/api^

@@ -1,6 +1,7 @@
 package ru.ifmo.rain.starodubtsev.concurrent;
 
 import info.kgeorgiy.java.advanced.concurrent.AdvancedIP;
+import info.kgeorgiy.java.advanced.mapper.ParallelMapper;
 
 import java.util.*;
 import java.util.function.Function;
@@ -15,9 +16,29 @@ import java.util.stream.Stream;
  * @see AdvancedIP
  * @see info.kgeorgiy.java.advanced.concurrent.ListIP
  * @see info.kgeorgiy.java.advanced.concurrent.ScalarIP
+ * @see ParallelMapper
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent") // ok to throw NoSuchElementException
 public class IterativeParallelism implements AdvancedIP {
+	
+	private final ParallelMapper mapper;
+	
+	/**
+	 * Default constructor. Creates an instance of {@code IterativeParallelism}, doesn't use {@code ParallelMapper}.
+	 */
+	public IterativeParallelism() {
+		this.mapper = null;
+	}
+	
+	/**
+	 * Mapper constructor. Creates an instance of {@code IterativeParallelism}
+	 * with provided {@code ParallelMapper}, which is used for parallel processing.
+	 *
+	 * @param mapper the {@code ParallelMapper}
+	 */
+	public IterativeParallelism(ParallelMapper mapper) {
+		this.mapper = mapper;
+	}
 	
 	/**
 	 * Returns minimum value.
@@ -234,22 +255,26 @@ public class IterativeParallelism implements AdvancedIP {
 	                                  Function<Stream<T>, M> threadReduce,
 	                                  Function<Stream<M>, R> resReduce) throws InterruptedException {
 		List<Stream<T>> chunks = split(values, threadsCount);
-		List<Thread> threads = new ArrayList<>();
-		List<M> res = new ArrayList<>(Collections.nCopies(chunks.size(), null));
-		for (int i = 0; i < chunks.size(); i++) {
-			final int finalI = i;
-			Thread thread = new Thread(() -> res.set(finalI, threadReduce.apply(chunks.get(finalI))));
-			threads.add(thread);
-			thread.start();
+		List<M> res;
+		if (mapper == null) {
+			List<Thread> threads = new ArrayList<>();
+			res = new ArrayList<>(Collections.nCopies(chunks.size(), null));
+			for (int i = 0; i < chunks.size(); i++) {
+				final int finalI = i;
+				Thread thread = new Thread(() -> res.set(finalI, threadReduce.apply(chunks.get(finalI))));
+				threads.add(thread);
+				thread.start();
+			}
+			joinThreads(threads);
+		} else {
+			res = mapper.map(threadReduce, chunks);
 		}
-		joinThreads(threads);
 		return resReduce.apply(res.stream());
 	}
 	
 	private void joinThreads(List<Thread> threads) throws InterruptedException {
 		InterruptedException ie = null;
-		int i;
-		for (i = 0; i < threads.size(); i++) {
+		for (int i = 0; i < threads.size(); i++) {
 			try {
 				threads.get(i).join();
 			} catch (InterruptedException e) {
@@ -299,14 +324,4 @@ public class IterativeParallelism implements AdvancedIP {
 	}
 	
 	/**
-	 * Collects the provided {@code Stream} of {@code List}s into a single {@code List}.
-	 *
-	 * @param stream the {@code Stream} of {@code List}s
-	 * @param <T>    the type of element in {@code List}
-	 * @return the joined {@code List}
-	 * @see Stream#flatMap(Function)
-	 */
-	public <T> List<T> collectToList(Stream<? extends List<? extends T>> stream) {
-		return stream.flatMap(List::stream).collect(Collectors.toList());
-	}
-}
+	 * Collects the provided {@code Stream} of {@code List}s into a singl

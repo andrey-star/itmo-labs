@@ -4,8 +4,9 @@
  *
  * @author Andrey Starodubtsev
  */
+
 module ru.ifmo.rain.starodubtsev.concurrent {
 	requires info.kgeorgiy.java.advanced.concurrent;
+	requires info.kgeorgiy.java.advanced.mapper;
 	
-	exports ru.ifmo.rain.starodubtsev.concurrent;
-}
+	e
