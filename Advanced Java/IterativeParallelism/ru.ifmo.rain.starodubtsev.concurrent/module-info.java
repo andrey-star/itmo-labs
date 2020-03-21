@@ -9,4 +9,5 @@ module ru.ifmo.rain.starodubtsev.concurrent {
 	requires info.kgeorgiy.java.advanced.concurrent;
 	requires info.kgeorgiy.java.advanced.mapper;
 	
-	e
+	exports ru.ifmo.rain.starodubtsev.concurrent;
+}

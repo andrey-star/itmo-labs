@@ -324,4 +324,14 @@ public class IterativeParallelism implements AdvancedIP {
 	}
 	
 	/**
-	 * Collects the provided {@code Stream} of {@code List}s into a singl
+	 * Collects the provided {@code Stream} of {@code List}s into a single {@code List}.
+	 *
+	 * @param stream the {@code Stream} of {@code List}s
+	 * @param <T>    the type of element in {@code List}
+	 * @return the joined {@code List}
+	 * @see Stream#flatMap(Function)
+	 */
+	public <T> List<T> collectToList(Stream<? extends List<? extends T>> stream) {
+		return stream.flatMap(List::stream).collect(Collectors.toList());
+	}
+}

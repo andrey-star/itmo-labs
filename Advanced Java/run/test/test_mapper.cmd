@@ -18,4 +18,6 @@ set /P salt="Salt: "
 java --module-path %mod_path% --add-modules ru.ifmo.rain.starodubtsev.mapper^
  --add-modules ru.ifmo.rain.starodubtsev.concurrent^
  -m info.kgeorgiy.java.advanced.mapper/info.kgeorgiy.java.advanced.mapper.Tester %modification%^
- ru.ifmo.rain.starodubtsev.mapper.ParallelMapperImpl,ru.ifmo.rain.starodubtsev.concurrent.IterativeParallel
+ ru.ifmo.rain.starodubtsev.mapper.ParallelMapperImpl,ru.ifmo.rain.starodubtsev.concurrent.IterativeParallelism^
+ %salt%
+
