@@ -4,9 +4,11 @@ import info.kgeorgiy.java.advanced.mapper.ParallelMapper;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Implementation of the {@code ParallelMapper} interface. Capable of mapping values concurrently.
+ * Implementation of the {@code ParallelMapper} interface, capable of mapping values concurrently.
  *
  * @author Andrey Starodubtsev
  * @see ParallelMapper
@@ -15,7 +17,7 @@ public class ParallelMapperImpl implements ParallelMapper {
 	
 	private static final int MAX_TASKS = 1_000_000;
 	private final Queue<Runnable> tasks;
-	private final List<Thread> threads;
+	private final List<Worker> workers;
 	
 	/**
 	 * Thread count constructor. Creates an instance of {@code ParallelMapperImpl}
@@ -24,35 +26,19 @@ public class ParallelMapperImpl implements ParallelMapper {
 	 * @param threads the amount of threads
 	 */
 	public ParallelMapperImpl(int threads) {
-		this.threads = new ArrayList<>();
-		this.tasks = new ArrayDeque<>();
-		for (int i = 0; i < threads; i++) {
-			Runnable baseTask = baseTask();
-			this.threads.add(new Thread(baseTask));
-		}
-		this.threads.forEach(Thread::start);
+		tasks = new ArrayDeque<>();
+		workers = Stream.generate(Worker::new)
+		                .limit(threads)
+		                .collect(Collectors.toList());
+		workers.forEach(Worker::start);
 	}
-	
-	private Runnable baseTask() {
-		return () -> {
-			try {
-				while (!Thread.interrupted()) {
-					runTask();
-				}
-			} catch (InterruptedException ignored) {
-			} finally {
-				Thread.currentThread().interrupt();
-			}
-		};
-	}
-	
 	
 	/**
 	 * Maps function {@code f} over specified {@code args}.
 	 * Mapping for each element performs in parallel.
 	 *
 	 * @param f    the mapping function
-	 * @param args the elements to be process
+	 * @param args the elements to be processed
 	 * @param <T>  type of argument
 	 * @param <R>  type of resulting mapped arguments
 	 * @return a {@code List} of mapped arguments
@@ -61,7 +47,6 @@ public class ParallelMapperImpl implements ParallelMapper {
 	@Override
 	public <T, R> List<R> map(Function<? super T, ? extends R> f, List<? extends T> args) throws InterruptedException {
 		FutureList<R> futureList = new FutureList<>(args.size());
-		List<RuntimeException> exceptions = new ArrayList<>();
 		for (int i = 0; i < args.size(); i++) {
 			T value = args.get(i);
 			final int finalI = i;
@@ -69,20 +54,12 @@ public class ParallelMapperImpl implements ParallelMapper {
 				R mappedValue = null;
 				try {
 					mappedValue = f.apply(value);
-				} catch (RuntimeException e) {
-					synchronized (exceptions) {
-						exceptions.add(e);
-					}
+				} finally {
+					futureList.set(finalI, mappedValue);
 				}
-				futureList.set(finalI, mappedValue);
 			});
 		}
-		List<R> res = futureList.getList();
-		if (!exceptions.isEmpty()) {
-			exceptions.forEach(Exception::printStackTrace);
-			return null;
-		}
-		return res;
+		return futureList.get();
 	}
 	
 	private void addTask(Runnable task) throws InterruptedException {
@@ -112,10 +89,10 @@ public class ParallelMapperImpl implements ParallelMapper {
 	 */
 	@Override
 	public void close() {
-		threads.forEach(Thread::interrupt);
-		for (int i = 0; i < threads.size(); i++) {
+		workers.forEach(Thread::interrupt);
+		for (int i = 0; i < workers.size(); i++) {
 			try {
-				threads.get(i).join();
+				workers.get(i).join();
 			} catch (InterruptedException e) {
 				i--; // have to wait for current thread to finish
 			}
@@ -128,7 +105,7 @@ public class ParallelMapperImpl implements ParallelMapper {
 		private int set = 0;
 		
 		private FutureList(int size) {
-			this.result = new ArrayList<>(Collections.nCopies(size, null));
+			result = new ArrayList<>(Collections.nCopies(size, null));
 		}
 		
 		public synchronized void set(int index, R value) {
@@ -139,11 +116,30 @@ public class ParallelMapperImpl implements ParallelMapper {
 			}
 		}
 		
-		public synchronized List<R> getList() throws InterruptedException {
+		public synchronized List<R> get() throws InterruptedException {
 			while (set != result.size()) {
 				wait();
 			}
 			return result;
+		}
+	}
+	
+	private class Worker extends Thread {
+		@Override
+		public void run() {
+			try {
+				while (!Thread.interrupted()) {
+					runTask();
+				}
+			} catch (InterruptedException ignored) {
+			} finally {
+				Thread.currentThread().interrupt();
+			}
+		}
+		
+		@Override
+		public UncaughtExceptionHandler getUncaughtExceptionHandler() {
+			return (t, e) -> System.out.println("An exception occurred in thread " + t + ". " + e);
 		}
 	}
 }

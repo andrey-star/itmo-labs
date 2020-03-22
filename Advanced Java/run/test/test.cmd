@@ -17,5 +17,5 @@ javac --module-path %mod_path% %src%\module-info.java %src%\%mod_dir%\*.java -d 
 
 set /P salt="Salt: "
 @echo on
-java --module-path %mod_path% --add-modules %mod_name% -m info.kgeorgiy.java.advanced.%task%/info.kgeorgiy.java.advanced.%task%.Tester^
+java --module-path %mod_path% --add-modules %mod_name% -m info.kgeorgiy.java.advanced.%task%^
  %modification% %mod_name%.%class% %salt%
