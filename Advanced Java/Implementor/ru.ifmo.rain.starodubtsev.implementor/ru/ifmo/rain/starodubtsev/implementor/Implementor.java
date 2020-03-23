@@ -4,6 +4,7 @@ import info.kgeorgiy.java.advanced.implementor.Impler;
 import info.kgeorgiy.java.advanced.implementor.JarImpler;
 import info.kgeorgiy.java.advanced.implementor.ImplerException;
 
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.jar.Attributes;
@@ -18,14 +19,12 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.net.URL;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import java.security.CodeSource;
 
 /**
  * Code generating implementation of the {@code Impler} and {@code JarImpler} interfaces.
@@ -174,31 +173,10 @@ public class Implementor implements Impler, JarImpler {
 	 * @see JavaCompiler
 	 */
 	private void compile(Class<?> token, Path temp) throws ImplerException {
-		Path tokenClassPath;
-		try {
-			CodeSource codeSource = token.getProtectionDomain().getCodeSource();
-			if (codeSource == null) {
-				throw new ImplerException("Invalid token CodeSource");
-			}
-			URL url = codeSource.getLocation();
-			if (url == null) {
-				throw new ImplerException("Invalid token CodeSource location");
-			}
-			String path = url.getPath();
-			if (path.isEmpty()) {
-				throw new ImplerException("Invalid token CodeSource location path");
-			}
-			if (path.startsWith("/")) {
-				path = path.substring(1);
-			}
-			tokenClassPath = Path.of(path);
-		} catch (InvalidPathException | ImplerException e) {
-			throw new ImplerException("Cannot find token classpath", e);
-		}
-		
+		String tokenClassPath = getClassPath(token);
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		String[] args = {"-cp",
-				temp.toString() + File.pathSeparator + tokenClassPath.toString(),
+				temp.toString() + File.pathSeparator + tokenClassPath,
 				getFullPath(temp, token).toString()};
 		if (compiler == null || compiler.run(null, null, null, args) != 0) {
 			throw new ImplerException("Failed to compile class");
@@ -740,6 +718,15 @@ public class Implementor implements Impler, JarImpler {
 		}
 		return sb.toString();
 	}
+	
+	private static String getClassPath(Class<?> token) {
+		try {
+			return Path.of(token.getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
+		} catch (final URISyntaxException e) {
+			throw new AssertionError(e);
+		}
+	}
+	
 	
 	/**
 	 * A wrapper class for {@code Method} with custom hash. Contains a {@code Method} object and
