@@ -15,11 +15,9 @@ import java.util.stream.Stream;
  */
 public class ParallelMapperImpl implements ParallelMapper {
 	
-	private static final int MAX_TASKS = 1_000_000;
 	private final Queue<Runnable> tasks;
 	private final List<Thread> threads;
-	private final Set<FutureList<?>> active;
-	private volatile boolean closed = false;
+	private boolean closed = false;
 	
 	/**
 	 * Thread number constructor. Creates an instance of {@code ParallelMapperImpl}
@@ -28,7 +26,6 @@ public class ParallelMapperImpl implements ParallelMapper {
 	 * @param threads the amount of threads
 	 */
 	public ParallelMapperImpl(int threads) {
-		active = new HashSet<>();
 		tasks = new ArrayDeque<>();
 		Runnable runner = () -> {
 			try {
@@ -53,18 +50,14 @@ public class ParallelMapperImpl implements ParallelMapper {
 				tasks.wait();
 			}
 			task = tasks.poll();
-			tasks.notifyAll();
 		}
 		task.run();
 	}
 	
-	private void addTask(Runnable task) throws InterruptedException {
+	private void addTask(Runnable task) {
 		synchronized (tasks) {
-			while (tasks.size() > MAX_TASKS) {
-				tasks.wait();
-			}
 			tasks.add(task);
-			tasks.notifyAll();
+			tasks.notify();
 		}
 	}
 	
@@ -81,36 +74,24 @@ public class ParallelMapperImpl implements ParallelMapper {
 	 */
 	@Override
 	public <T, R> List<R> map(Function<? super T, ? extends R> f, List<? extends T> args) throws InterruptedException {
-		FutureList<R> futureList = new FutureList<>(args.size());
-		synchronized (active) {
-			active.add(futureList);
-		}
-		RuntimeException re = new RuntimeException("Runtime exception(s) occurred during execution");
+		FutureList<T, R> futureList = new FutureList<>(args.size(), f);
 		for (int i = 0; i < args.size(); i++) {
 			T value = args.get(i);
 			final int finalI = i;
-			addTask(() -> {
-				R mappedValue = null;
-				try {
-					mappedValue = f.apply(value);
-				} catch (RuntimeException e) {
-					synchronized (re) {
-						re.addSuppressed(e);
-					}
-					futureList.finish();
-				} finally {
-					futureList.set(finalI, mappedValue);
-				}
-			});
+			addTask(() -> futureList.set(finalI, value));
 		}
 		List<R> res = futureList.get();
-		if (re.getSuppressed().length != 0) {
+		processExceptions(futureList);
+		return res;
+	}
+	
+	private void processExceptions(FutureList<?, ?> futureList) {
+		List<RuntimeException> runtimeExceptions = futureList.getRuntimeExceptions();
+		if (!runtimeExceptions.isEmpty()) {
+			RuntimeException re = new RuntimeException("Runtime exception(s) occurred during execution");
+			runtimeExceptions.forEach(re::addSuppressed);
 			throw re;
 		}
-		synchronized (active) {
-			active.remove(futureList);
-		}
-		return res;
 	}
 	
 	/**
@@ -119,9 +100,6 @@ public class ParallelMapperImpl implements ParallelMapper {
 	@Override
 	public void close() {
 		closed = true;
-		synchronized (active) {
-			active.forEach(FutureList::finish);
-		}
 		threads.forEach(Thread::interrupt);
 		for (int i = 0; i < threads.size(); i++) {
 			try {
@@ -132,25 +110,40 @@ public class ParallelMapperImpl implements ParallelMapper {
 		}
 	}
 	
-	private class FutureList<T> {
+	private class FutureList<T, R> {
 		
-		private final List<T> result;
+		private final List<R> result;
+		private final Function<? super T, ? extends R> f;
+		private final List<RuntimeException> runtimeExceptions;
 		boolean finished = false;
 		private int set = 0;
 		
-		private FutureList(int size) {
+		public FutureList(int size, Function<? super T, ? extends R> f) {
 			result = new ArrayList<>(Collections.nCopies(size, null));
+			this.f = f;
+			runtimeExceptions = new ArrayList<>();
 		}
 		
-		public synchronized void set(int index, T value) {
-			result.set(index, value);
-			set++;
-			if (set == result.size()) {
-				finish();
+		public void set(int index, T value) {
+			R apply = null;
+			try {
+				apply = f.apply(value);
+			} catch (RuntimeException e) {
+				synchronized (runtimeExceptions) {
+					runtimeExceptions.add(e);
+				}
+			} finally {
+				synchronized (this) {
+					set++;
+					result.set(index, apply);
+					if (set == result.size()) {
+						finish();
+					}
+				}
 			}
 		}
 		
-		public synchronized List<T> get() throws InterruptedException {
+		public synchronized List<R> get() throws InterruptedException {
 			while (!finished && !closed) {
 				wait();
 			}
@@ -158,8 +151,15 @@ public class ParallelMapperImpl implements ParallelMapper {
 		}
 		
 		public synchronized void finish() {
+			if (finished) {
+				return;
+			}
 			finished = true;
 			notify();
+		}
+		
+		public List<RuntimeException> getRuntimeExceptions() {
+			return runtimeExceptions;
 		}
 	}
 }

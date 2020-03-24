@@ -2,7 +2,7 @@
 
 SET task=concurrent
 SET class=IterativeParallelism
-SET modification=scalar
+SET modification=advanced
 
 SET mod_name=ru.ifmo.rain.starodubtsev.%task%
 SET mod_dir=ru\ifmo\rain\starodubtsev\%task%
