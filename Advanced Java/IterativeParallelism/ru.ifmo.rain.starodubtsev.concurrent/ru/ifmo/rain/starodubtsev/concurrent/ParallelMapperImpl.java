@@ -66,19 +66,20 @@ public class ParallelMapperImpl implements ParallelMapper {
 	 */
 	@Override
 	public <T, R> List<R> map(final Function<? super T, ? extends R> f, final List<? extends T> args) throws InterruptedException {
+		if (args.isEmpty()) {
+			return List.of();
+		}
 		final Task<T, R> task = new Task<>(f, args.size());
 		tasks.add(task);
-		task.createSubTasks(args);
+		task.start(args);
 		task.await();
 		handleExceptions(task.getRuntimeExceptions());
 		return task.getList();
 	}
 	
-	private void handleExceptions(final List<RuntimeException> runtimeExceptions) {
-		if (!runtimeExceptions.isEmpty()) {
-			final var re = runtimeExceptions.get(0);
-			runtimeExceptions.subList(1, runtimeExceptions.size()).forEach(re::addSuppressed);
-			throw re;
+	private void handleExceptions(final RuntimeException runtimeExceptions) {
+		if (runtimeExceptions != null) {
+			throw runtimeExceptions;
 		}
 	}
 	
@@ -139,12 +140,9 @@ public class ParallelMapperImpl implements ParallelMapper {
 			subTasks = new ArrayDeque<>();
 			list = new ConcurrentMappingList(size, f);
 			notFinished = notStarted = size;
-			if (notFinished == 0) {
-				close();
-			}
 		}
 		
-		public synchronized void createSubTasks(final List<? extends T> args) {
+		public synchronized void start(final List<? extends T> args) {
 			for (int i = 0; i < args.size(); i++) {
 				addSubTask(args.get(i), i);
 			}
@@ -194,7 +192,7 @@ public class ParallelMapperImpl implements ParallelMapper {
 			return list.get();
 		}
 		
-		public synchronized List<RuntimeException> getRuntimeExceptions() {
+		public synchronized RuntimeException getRuntimeExceptions() {
 			return list.getRuntimeExceptions();
 		}
 		
@@ -202,7 +200,7 @@ public class ParallelMapperImpl implements ParallelMapper {
 			
 			private final List<R> result;
 			private final Function<? super T, ? extends R> f;
-			private final List<RuntimeException> runtimeExceptions = new ArrayList<>();
+			private RuntimeException re = null;
 			private volatile boolean closed = false;
 			
 			public ConcurrentMappingList(final int size, final Function<? super T, ? extends R> f) {
@@ -217,9 +215,7 @@ public class ParallelMapperImpl implements ParallelMapper {
 						apply = f.apply(value);
 					}
 				} catch (final RuntimeException e) {
-					synchronized (this) {
-						runtimeExceptions.add(e);
-					}
+					addException(e);
 				}
 				if (!closed) {
 					synchronized (this) {
@@ -230,12 +226,22 @@ public class ParallelMapperImpl implements ParallelMapper {
 				}
 			}
 			
+			private void addException(RuntimeException e) {
+				synchronized (this) {
+					if (re == null) {
+						re = e;
+					} else {
+						re.addSuppressed(e);
+					}
+				}
+			}
+			
 			public synchronized List<R> get() {
 				return result;
 			}
 			
-			public synchronized List<RuntimeException> getRuntimeExceptions() {
-				return runtimeExceptions;
+			public synchronized RuntimeException getRuntimeExceptions() {
+				return re;
 			}
 			
 			public void close() {
