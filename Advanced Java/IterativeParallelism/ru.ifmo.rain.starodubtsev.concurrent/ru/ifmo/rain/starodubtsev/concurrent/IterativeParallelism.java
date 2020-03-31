@@ -255,21 +255,23 @@ public class IterativeParallelism implements AdvancedIP {
 	                                  final Function<Stream<T>, M> threadReduce,
 	                                  final Function<Stream<M>, R> resReduce) throws InterruptedException {
 		final List<Stream<T>> chunks = split(values, threadsCount);
-		final List<M> res;
-		if (mapper == null) {
-			final List<Thread> threads = new ArrayList<>();
-			res = new ArrayList<>(Collections.nCopies(chunks.size(), null));
-			for (int i = 0; i < chunks.size(); i++) {
-				final int finalI = i;
-				final Thread thread = new Thread(() -> res.set(finalI, threadReduce.apply(chunks.get(finalI))));
-				threads.add(thread);
-				thread.start();
-			}
-			joinThreads(threads);
-		} else {
-			res = mapper.map(threadReduce, chunks);
-		}
+		final List<M> res = mapper == null
+				? defaultMap(threadReduce, chunks)
+				: mapper.map(threadReduce, chunks);
 		return resReduce.apply(res.stream());
+	}
+	
+	private <T, M> List<M> defaultMap(Function<Stream<T>, M> threadReduce, List<Stream<T>> chunks) throws InterruptedException {
+		final List<Thread> threads = new ArrayList<>();
+		List<M> res = new ArrayList<>(Collections.nCopies(chunks.size(), null));
+		for (int i = 0; i < chunks.size(); i++) {
+			final int finalI = i;
+			final Thread thread = new Thread(() -> res.set(finalI, threadReduce.apply(chunks.get(finalI))));
+			threads.add(thread);
+			thread.start();
+		}
+		joinThreads(threads);
+		return res;
 	}
 	
 	private void joinThreads(final List<Thread> threads) throws InterruptedException {
@@ -279,12 +281,13 @@ public class IterativeParallelism implements AdvancedIP {
 				threads.get(i).join();
 			} catch (final InterruptedException e) {
 				if (ie == null) {
-					ie = new InterruptedException("Could not join thread because executing thread was interrupted");
+					ie = e;
 					for (int j = i; j < threads.size(); j++) {
 						threads.get(j).interrupt();
 					}
+				} else {
+					ie.addSuppressed(e);
 				}
-				ie.addSuppressed(e);
 				i--;
 			}
 		}

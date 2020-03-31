@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -16,8 +17,11 @@ import java.util.stream.Stream;
  */
 public class ParallelMapperImpl implements ParallelMapper {
 	
-	private final SynchronizedQueue<Task<?, ?>> tasks;
+	private final boolean PRINT_STACK_TRACE = false;
+	
+	private final TaskQueue tasks;
 	private final List<Thread> threads;
+	private volatile boolean closed = false;
 	
 	/**
 	 * Thread number constructor. Creates an instance of {@code ParallelMapperImpl}
@@ -26,14 +30,16 @@ public class ParallelMapperImpl implements ParallelMapper {
 	 * @param threads the amount of threads
 	 */
 	public ParallelMapperImpl(final int threads) {
-		tasks = new SynchronizedQueue<>();
+		tasks = new TaskQueue();
 		final Runnable runner = () -> {
 			try {
 				while (!Thread.interrupted()) {
-					runTask();
+					tasks.nextSubTask().run();
 				}
 			} catch (final InterruptedException e) {
-//				e.printStackTrace();
+				if (PRINT_STACK_TRACE) {
+					e.printStackTrace();
+				}
 			} finally {
 				Thread.currentThread().interrupt();
 			}
@@ -42,15 +48,6 @@ public class ParallelMapperImpl implements ParallelMapper {
 		                     .limit(threads)
 		                     .collect(Collectors.toList());
 		this.threads.forEach(Thread::start);
-	}
-	
-	private void runTask() throws InterruptedException {
-		final var task = tasks.element();
-		final Runnable subTask = task.getSubTask();
-		if (subTask != null) {
-			subTask.run();
-			task.subTaskFinished();
-		}
 	}
 	
 	/**
@@ -69,18 +66,9 @@ public class ParallelMapperImpl implements ParallelMapper {
 		if (args.isEmpty()) {
 			return List.of();
 		}
-		final Task<T, R> task = new Task<>(f, args.size());
+		final Task<T, R> task = new Task<>(f, args);
 		tasks.add(task);
-		task.start(args);
-		task.await();
-		handleExceptions(task.getRuntimeExceptions());
-		return task.getList();
-	}
-	
-	private void handleExceptions(final RuntimeException runtimeExceptions) {
-		if (runtimeExceptions != null) {
-			throw runtimeExceptions;
-		}
+		return task.awaitResult();
 	}
 	
 	/**
@@ -88,82 +76,79 @@ public class ParallelMapperImpl implements ParallelMapper {
 	 */
 	@Override
 	public void close() {
+		closed = true;
 		threads.forEach(Thread::interrupt);
-		tasks.forEach(Task::close);
+		tasks.forEach(Task::terminate);
+		joinThreads();
+	}
+	
+	private void joinThreads() {
 		for (int i = 0; i < threads.size(); i++) {
 			try {
 				threads.get(i).join();
 			} catch (final InterruptedException e) {
+				if (PRINT_STACK_TRACE) {
+					e.printStackTrace();
+				}
 				i--; // have to wait for current thread to finish
 			}
 		}
 	}
 	
-	private static class SynchronizedQueue<T> {
+	private static class TaskQueue {
 		
-		private final Queue<T> queue;
+		private final Queue<Task<?, ?>> queue;
 		
-		public SynchronizedQueue() {
+		public TaskQueue() {
 			this.queue = new ArrayDeque<>();
 		}
 		
-		public synchronized T element() throws InterruptedException {
-			while (queue.isEmpty()) {
-				wait();
-			}
-			return queue.element();
-		}
-		
-		public synchronized void add(final T task) {
+		public synchronized void add(final Task<?, ?> task) {
 			queue.add(task);
 			notifyAll();
 		}
 		
-		public synchronized void forEach(final Consumer<? super T> action) {
+		public synchronized void forEach(final Consumer<? super Task<?, ?>> action) {
 			queue.forEach(action);
 		}
 		
 		public synchronized void remove() {
 			queue.remove();
 		}
+		
+		public synchronized Runnable nextSubTask() throws InterruptedException {
+			while (queue.isEmpty()) {
+				wait();
+			}
+			final Task<?, ?> task = queue.element();
+			return () -> {
+				task.getSubTask().run();
+				task.subTaskFinished();
+			};
+		}
 	}
 	
 	private class Task<T, R> {
 		
-		private final Queue<Runnable> subTasks;
+		public final Queue<Runnable> subTasks;
 		private final ConcurrentMappingList list;
-		private boolean closed = false;
+		private volatile boolean terminated = false;
 		private int notFinished;
 		private int notStarted;
 		
-		public Task(final Function<? super T, ? extends R> f, final int size) {
+		public Task(final Function<? super T, ? extends R> f, final List<? extends T> args) {
 			subTasks = new ArrayDeque<>();
-			list = new ConcurrentMappingList(size, f);
-			notFinished = notStarted = size;
+			list = new ConcurrentMappingList(args.size(), f);
+			notFinished = notStarted = args.size();
+			IntStream.range(0, args.size())
+			         .forEach(i -> subTasks.add(() -> list.set(i, args.get(i))));
 		}
 		
-		public synchronized void start(final List<? extends T> args) {
-			for (int i = 0; i < args.size(); i++) {
-				addSubTask(args.get(i), i);
-			}
-		}
-		
-		private synchronized void addSubTask(final T value, final int index) {
-			subTasks.add(() -> list.set(index, value));
-		}
-		
-		public Runnable getSubTask() {
-			Runnable subTask = null;
-			if (!subTasks.isEmpty()) {
-				synchronized (this) {
-					if (!subTasks.isEmpty()) {
-						subTask = subTasks.remove();
-						notStarted--;
-						if (notStarted == 0) {
-							tasks.remove();
-						}
-					}
-				}
+		public synchronized Runnable getSubTask() {
+			Runnable subTask = subTasks.remove();
+			notStarted--;
+			if (notStarted == 0) {
+				tasks.remove();
 			}
 			return subTask;
 		}
@@ -171,29 +156,23 @@ public class ParallelMapperImpl implements ParallelMapper {
 		public synchronized void subTaskFinished() {
 			notFinished--;
 			if (notFinished == 0) {
-				close();
+				terminate();
 			}
 		}
 		
-		public synchronized void await() throws InterruptedException {
-			while (!closed) {
+		public synchronized List<R> awaitResult() throws InterruptedException {
+			while (!terminated && !closed) {
 				wait();
 			}
-		}
-		
-		public synchronized void close() {
-			list.close();
-			subTasks.clear();
-			closed = true;
-			notify();
-		}
-		
-		public synchronized List<R> getList() {
+			if (!terminated) {
+				terminate();
+			}
 			return list.get();
 		}
 		
-		public synchronized RuntimeException getRuntimeExceptions() {
-			return list.getRuntimeExceptions();
+		public synchronized void terminate() {
+			terminated = true;
+			notify();
 		}
 		
 		private class ConcurrentMappingList {
@@ -201,7 +180,6 @@ public class ParallelMapperImpl implements ParallelMapper {
 			private final List<R> result;
 			private final Function<? super T, ? extends R> f;
 			private RuntimeException re = null;
-			private volatile boolean closed = false;
 			
 			public ConcurrentMappingList(final int size, final Function<? super T, ? extends R> f) {
 				result = new ArrayList<>(Collections.nCopies(size, null));
@@ -209,25 +187,15 @@ public class ParallelMapperImpl implements ParallelMapper {
 			}
 			
 			public void set(final int index, final T value) {
-				R apply = null;
 				try {
-					if (!closed) {
-						apply = f.apply(value);
-					}
+					setValue(index, f.apply(value));
 				} catch (final RuntimeException e) {
 					addException(e);
 				}
-				if (!closed) {
-					synchronized (this) {
-						if (!closed) {
-							result.set(index, apply);
-						}
-					}
-				}
 			}
 			
-			private void addException(RuntimeException e) {
-				synchronized (this) {
+			private synchronized void addException(RuntimeException e) {
+				if (!terminated) {
 					if (re == null) {
 						re = e;
 					} else {
@@ -236,18 +204,18 @@ public class ParallelMapperImpl implements ParallelMapper {
 				}
 			}
 			
+			private synchronized void setValue(int index, R value) {
+				if (!terminated) {
+					result.set(index, value);
+				}
+			}
+			
 			public synchronized List<R> get() {
+				if (re != null) {
+					throw re;
+				}
 				return result;
 			}
-			
-			public synchronized RuntimeException getRuntimeExceptions() {
-				return re;
-			}
-			
-			public void close() {
-				closed = true;
-			}
 		}
-		
 	}
 }
