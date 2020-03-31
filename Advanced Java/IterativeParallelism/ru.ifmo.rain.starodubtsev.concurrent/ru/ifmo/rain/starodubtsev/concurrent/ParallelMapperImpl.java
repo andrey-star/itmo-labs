@@ -121,8 +121,9 @@ public class ParallelMapperImpl implements ParallelMapper {
 				wait();
 			}
 			final Task<?, ?> task = queue.element();
+			Runnable subTask = task.getSubTask();
 			return () -> {
-				task.getSubTask().run();
+				subTask.run();
 				task.subTaskFinished();
 			};
 		}
