@@ -189,7 +189,9 @@ public class ParallelMapperImpl implements ParallelMapper {
 			
 			public void set(final int index, final T value) {
 				try {
-					setValue(index, f.apply(value));
+					if (!terminated) {
+						setValue(index, f.apply(value));
+					}
 				} catch (final RuntimeException e) {
 					addException(e);
 				}
