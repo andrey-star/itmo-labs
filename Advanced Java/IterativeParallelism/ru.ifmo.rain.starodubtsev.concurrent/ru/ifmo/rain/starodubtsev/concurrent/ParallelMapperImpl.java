@@ -19,7 +19,7 @@ public class ParallelMapperImpl implements ParallelMapper {
 	
 	private final boolean PRINT_STACK_TRACE = false;
 	
-	private final TaskQueue tasks;
+	private final TaskQueue tasks = new TaskQueue();
 	private final List<Thread> threads;
 	private volatile boolean closed = false;
 	
@@ -30,7 +30,6 @@ public class ParallelMapperImpl implements ParallelMapper {
 	 * @param threads the amount of threads
 	 */
 	public ParallelMapperImpl(final int threads) {
-		tasks = new TaskQueue();
 		final Runnable runner = () -> {
 			try {
 				while (!Thread.interrupted()) {
@@ -131,14 +130,13 @@ public class ParallelMapperImpl implements ParallelMapper {
 	
 	private class Task<T, R> {
 		
-		public final Queue<Runnable> subTasks;
+		public final Queue<Runnable> subTasks = new ArrayDeque<>();
 		private final ConcurrentMappingList list;
 		private volatile boolean terminated = false;
 		private int notFinished;
 		private int notStarted;
 		
 		public Task(final Function<? super T, ? extends R> f, final List<? extends T> args) {
-			subTasks = new ArrayDeque<>();
 			list = new ConcurrentMappingList(args.size(), f);
 			notFinished = notStarted = args.size();
 			IntStream.range(0, args.size())

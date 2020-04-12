@@ -5,4 +5,3 @@ SET class=WebCrawler
 SET modification=hard
 
 CALL test %task% %class% %modification%
-pause
