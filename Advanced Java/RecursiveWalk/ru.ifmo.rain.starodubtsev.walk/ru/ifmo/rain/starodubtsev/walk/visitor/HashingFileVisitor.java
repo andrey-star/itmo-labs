@@ -15,22 +15,22 @@ public class HashingFileVisitor extends SimpleFileVisitor<Path> {
 	
 	private final BufferedWriter out;
 	
-	public HashingFileVisitor(BufferedWriter out) {
+	public HashingFileVisitor(final BufferedWriter out) {
 		this.out = out;
 	}
 	
 	@Override
-	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+	public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
 		return writeHash(file, FnvFileHasher.hash(file));
 	}
 	
 	@Override
-	public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+	public FileVisitResult visitFileFailed(final Path file, final IOException exc) throws IOException {
 		error(exc, "Failed to access file/directory '" + file + "'");
 		return writeHash(file, 0);
 	}
 	
-	private FileVisitResult writeHash(Path file, int hash) throws IOException {
+	private FileVisitResult writeHash(final Path file, final int hash) throws IOException {
 		FnvFileHasher.writeHash(out, hash, file.toString());
 		return FileVisitResult.CONTINUE;
 	}

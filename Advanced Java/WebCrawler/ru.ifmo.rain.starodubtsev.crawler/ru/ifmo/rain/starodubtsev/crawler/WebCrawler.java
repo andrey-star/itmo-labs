@@ -9,6 +9,12 @@ import java.net.MalformedURLException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * An implementation of the {@code Crawler} interface. Capable of crawling and
+ * downloading websites to the specified depth.
+ *
+ * @see Crawler
+ */
 public class WebCrawler implements Crawler {
 	
 	private static final boolean PRINT_STACK_TRACE = false;
@@ -141,19 +147,18 @@ public class WebCrawler implements Crawler {
 		}
 		
 		public Result download(final int depth) {
-			downloadRecursively(depth - 1);
+			for (int i = depth - 1; i >= 0; i--) {
+				processLevel(i);
+			}
 			return new Result(List.copyOf(downloaded), Map.copyOf(failed));
 		}
 		
-		public void downloadRecursively(final int left) {
+		private void processLevel(final int left) {
 			final Queue<String> level = downloadQueue.removeAll();
 			level.stream()
 			     .filter(extracted::add)
 			     .forEach(url -> queueDownload(url, left > 0 ? this::queueExtraction : this::emptyConsumer));
 			phaser.arriveAndAwaitAdvance();
-			if (left > 0) {
-				downloadRecursively(left - 1);
-			}
 		}
 		
 		private void queueDownload(final String url, Consumer<Document> extractor) {

@@ -1,30 +1,32 @@
 package ru.ifmo.rain.starodubtsev.implementor;
 
 import info.kgeorgiy.java.advanced.implementor.Impler;
-import info.kgeorgiy.java.advanced.implementor.JarImpler;
 import info.kgeorgiy.java.advanced.implementor.ImplerException;
+import info.kgeorgiy.java.advanced.implementor.JarImpler;
 
-import java.net.URISyntaxException;
-import java.util.*;
-import java.util.function.Function;
-import java.util.jar.Attributes;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Manifest;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.function.Function;
+import java.util.jar.JarOutputStream;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+
+import static ru.ifmo.rain.starodubtsev.implementor.Logger.error;
+import static ru.ifmo.rain.starodubtsev.implementor.Logger.info;
+import static ru.ifmo.rain.starodubtsev.implementor.StringUtils.*;
 
 /**
  * Code generating implementation of the {@code Impler} and {@code JarImpler} interfaces.
@@ -39,6 +41,7 @@ import javax.tools.ToolProvider;
  */
 public class Implementor implements Impler, JarImpler {
 	
+	
 	/**
 	 * Extension for generated {@code .java} files.
 	 */
@@ -48,29 +51,20 @@ public class Implementor implements Impler, JarImpler {
 	 */
 	private static final String CLASS = ".class";
 	/**
-	 * System defined line separator for generated {@code .java} files.
-	 */
-	private static final String LINE_SEP = System.lineSeparator();
-	/**
-	 * Tab code indentation for generated {@code .java} files.
-	 */
-	private static final String TAB = "\t";
-	/**
-	 * Space code indentation for generated {@code .java} files.
-	 */
-	private static final String SPACE = " ";
-	/**
-	 * Comma separator for generated {@code .java} files.
-	 */
-	private static final String COMMA = ",";
-	/**
 	 * Suffix, defining the name of the resulting class.
 	 */
 	private static final String CLASS_SUFFIX = "Impl";
 	/**
 	 * Command line option. When present, runs the application in {@code jar} mode.
 	 */
-	private static final String JAR_MODE = "--jar";
+	private static final String JAR_MODE = "--jar"; // -jar is treated as VM argument, not program argument
+	/**
+	 * Application usage.
+	 */
+	private static final String USAGE = "Implementor <token> <root>\n" +
+			"Implementor --jar <token> <jarFile>";
+	
+	// for javadoc
 	
 	/**
 	 * Default constructor. Creates a new instance of {@code Implementor}.
@@ -84,7 +78,7 @@ public class Implementor implements Impler, JarImpler {
 	 * <ol>
 	 *     <li><b>java</b>: {@code <className> <outputPath>}.
 	 *     Creates a {@code .java} file by passing the arguments to {@link #implement(Class, Path)}.</li>
-	 *     <li><b>jar</b>: {@code -jar <className> <outputPath>}.
+	 *     <li><b>jar</b>: {@code --jar <className> <outputPath>}.
 	 *     Creates a {@code .jar} file by passing the arguments to {@link #implementJar(Class, Path)}.</li>
 	 * </ol>
 	 * If any arguments are invalid or an error occurs, execution is stopped
@@ -94,36 +88,45 @@ public class Implementor implements Impler, JarImpler {
 	 */
 	public static void main(String[] args) {
 		Objects.requireNonNull(args);
-		if (args.length < 2 || args.length > 3
-				|| (args.length == 3 && !JAR_MODE.equals(args[0]))) {
-			System.out.println(("Invalid argument(s)"));
+		if (args.length < 2 || args.length > 3 || (args.length == 3 && !JAR_MODE.equals(args[0]))) {
+			info(USAGE);
 			return;
 		}
-		Objects.requireNonNull(args[0]);
-		Objects.requireNonNull(args[1]);
+		requireNonNull(args[0], args[1]);
+		
 		try {
 			if (args.length == 2) {
 				new Implementor().implement(Class.forName(args[0]), Paths.get(args[1]));
 			} else {
+				requireNonNull(args[2]);
 				new Implementor().implementJar(Class.forName(args[1]), Paths.get(args[2]));
 			}
 		} catch (ClassNotFoundException e) {
-			System.out.println("Invalid class: " + e.getMessage());
+			error(e, "Invalid class: ");
 		} catch (InvalidPathException e) {
-			System.out.println("Invalid specified path: " + e.getMessage());
+			error(e, "Invalid specified path: ");
 		} catch (ImplerException e) {
-			System.out.println(e.getMessage());
+			error(e);
 		}
 	}
 	
-	/**
-	 * Produces code implementing the class or interface specified by provided {@code token}.
-	 * The generated {@code .java} file location is specified by {@code root}.
-	 */
+	private static String getClassPath(Class<?> token) {
+		try {
+			return Path.of(token.getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
+		} catch (URISyntaxException e) {
+			throw new AssertionError(e);
+		}
+	}
+	
+	private static void requireNonNull(Object... objects) {
+		for (Object object : objects) {
+			Objects.requireNonNull(object);
+		}
+	}
+	
 	@Override
 	public void implement(Class<?> token, Path root) throws ImplerException {
-		Objects.requireNonNull(token);
-		Objects.requireNonNull(root);
+		requireNonNull(token, root);
 		if (unimplementable(token)) {
 			throw new ImplerException("Unable to implement desired token");
 		}
@@ -143,14 +146,9 @@ public class Implementor implements Impler, JarImpler {
 		}
 	}
 	
-	/**
-	 * Produces {@code .jar} file implementing class or interface specified by provided {@code token}.
-	 * The generated {@code .jar} file location is specified by {@code jarFile}.
-	 */
 	@Override
 	public void implementJar(Class<?> token, Path jarFile) throws ImplerException {
-		Objects.requireNonNull(token);
-		Objects.requireNonNull(jarFile);
+		requireNonNull(token, jarFile);
 		
 		ImplementorUtils.createDirectories(jarFile);
 		Path temp = ImplementorUtils.createTempDirectory(jarFile.toAbsolutePath().getParent());
@@ -175,13 +173,15 @@ public class Implementor implements Impler, JarImpler {
 	private void compile(Class<?> token, Path temp) throws ImplerException {
 		String tokenClassPath = getClassPath(token);
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		String[] args = {"-cp",
-				temp.toString() + File.pathSeparator + tokenClassPath,
-				getFullPath(temp, token).toString()};
-		if (compiler == null || compiler.run(null, null, null, args) != 0) {
+		List<String> args = new ArrayList<>();
+		args.add(getFullPath(temp, token).toString());
+		args.add("-cp");
+		args.add(temp + File.pathSeparator + tokenClassPath);
+		if (compiler == null || compiler.run(null, null, null, args.toArray(String[]::new)) != 0) {
 			throw new ImplerException("Failed to compile class");
 		}
 	}
+	
 	
 	/**
 	 * Builds a {@code .jar} file containing compiled implementation of {@code token}.
@@ -192,10 +192,7 @@ public class Implementor implements Impler, JarImpler {
 	 * @throws ImplerException if en error occurs when working with {@code .jar} file
 	 */
 	private void buildJar(Class<?> token, Path jarFile, Path temp) throws ImplerException {
-		Manifest manifest = new Manifest();
-		Attributes attributes = manifest.getMainAttributes();
-		attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
-		try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jarFile), manifest)) {
+		try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jarFile))) {
 			String localName = getPackageDir(token, "/") + "/" + getClassName(token) + CLASS;
 			out.putNextEntry(new ZipEntry(localName));
 			Files.copy(temp.resolve(localName), out);
@@ -271,7 +268,7 @@ public class Implementor implements Impler, JarImpler {
 	 *                         due to absence of non-private constructors of {@code token}
 	 * @see #getConstructor(Class)
 	 * @see #getMethods(Class)
-	 * @see #joinBlocks(String...)
+	 * @see StringUtils#joinBlocks(String...)
 	 */
 	private String getBody(Class<?> token) throws ImplerException {
 		return joinBlocks(getConstructor(token), getMethods(token));
@@ -328,11 +325,11 @@ public class Implementor implements Impler, JarImpler {
 	 *
 	 * @param token the type token
 	 * @return a {@code String} representation of generated {@code abstract} methods
-	 * @see #getAbstractMethods(Class)
+	 * @see #getAbstractNonFinalMethods(Class)
 	 * @see #getMethod(Method)
 	 */
 	private String getMethods(Class<?> token) {
-		List<Method> abstractMethods = getAbstractMethods(token);
+		List<Method> abstractMethods = getAbstractNonFinalMethods(token);
 		return joinBlocks(abstractMethods, this::getMethod);
 	}
 	
@@ -351,7 +348,7 @@ public class Implementor implements Impler, JarImpler {
 		String returnValue = getDefaultValue(returnType);
 		StringBuilder body = new StringBuilder("return");
 		if (!returnValue.isEmpty()) {
-			body.append(SPACE).append(returnValue);
+			body.append(" ").append(returnValue);
 		}
 		body.append(";");
 		return getFunction(
@@ -373,7 +370,7 @@ public class Implementor implements Impler, JarImpler {
 	 * @see MethodSignature
 	 * @see #processMethods(Method[], Set, Set)
 	 */
-	private List<Method> getAbstractMethods(Class<?> token) {
+	private List<Method> getAbstractNonFinalMethods(Class<?> token) {
 		Set<MethodSignature> abstractMethods = new HashSet<>();
 		Set<MethodSignature> finalMethods = new HashSet<>();
 		processMethods(token.getMethods(), abstractMethods, finalMethods);
@@ -415,7 +412,7 @@ public class Implementor implements Impler, JarImpler {
 	 *                       Usually contain the name and/or return type of the function
 	 * @return a {@code String} representation of the function
 	 * @see #getFunctionDeclaration(int, Parameter[], Class[], String...)
-	 * @see #declAndBody(String, String)
+	 * @see StringUtils#declAndBody(String, String)
 	 */
 	private String getFunction(int modifiers, Parameter[] parameters, Class<?>[] exceptionTypes,
 	                           String body, String... tokens) {
@@ -442,7 +439,7 @@ public class Implementor implements Impler, JarImpler {
 	                                      String... tokens) {
 		int accessModifier = getAccessModifier(modifiers);
 		StringBuilder declaration = new StringBuilder(
-				String.join(SPACE, Modifier.toString(accessModifier), String.join(SPACE, tokens)));
+				String.join(" ", Modifier.toString(accessModifier), String.join(" ", tokens)));
 		declaration.append(String.format("(%s)", getParameters(parameters, true)));
 		String exceptions = getExceptions(exceptionTypes);
 		if (!exceptions.isEmpty()) {
@@ -459,12 +456,12 @@ public class Implementor implements Impler, JarImpler {
 	 * @param typed      true, if the resulting parameter list should be typed
 	 * @return a {@code String} representation of comma separated {@code parameters}
 	 * @see Parameter
-	 * @see #join(Object[], Function, String)
+	 * @see StringUtils#join(Object[], Function, String)
 	 */
 	private String getParameters(Parameter[] parameters, boolean typed) {
 		return join(parameters,
-				typed ? p -> String.join(SPACE, p.getType().getCanonicalName(), p.getName())
-						: Parameter::getName, COMMA + SPACE);
+				typed ? p -> String.join(" ", p.getType().getCanonicalName(), p.getName())
+						: Parameter::getName, " ," + " ");
 	}
 	
 	/**
@@ -472,10 +469,10 @@ public class Implementor implements Impler, JarImpler {
 	 *
 	 * @param exceptionTypes an array of exception types
 	 * @return a {@code String} representation of comma separated {@code exceptions}
-	 * @see #join(Object[], Function, String)
+	 * @see StringUtils#join(Object[], Function, String)
 	 */
 	private String getExceptions(Class<?>[] exceptionTypes) {
-		return join(exceptionTypes, Class::getCanonicalName, COMMA + SPACE);
+		return join(exceptionTypes, Class::getCanonicalName, " ," + " ");
 	}
 	
 	/**
@@ -515,7 +512,7 @@ public class Implementor implements Impler, JarImpler {
 	/**
 	 * Returns a directory, corresponding to the package of the provided {@code token}.
 	 *
-	 * @param token the type token
+	 * @param token     the type token
 	 * @param separator the file separator
 	 * @return a {@code String} representation of the resulting directory
 	 */
@@ -599,134 +596,6 @@ public class Implementor implements Impler, JarImpler {
 				|| Modifier.isPrivate(modifiers)
 				|| token == Enum.class;
 	}
-	
-	/**
-	 * Combines {@code declaration} and {@code body} into properly formatted {@code String}.
-	 * <p>
-	 * Resulting formatting:
-	 * <pre>
-	 *  declaration {
-	 *      body
-	 *  }
-	 * </pre>
-	 *
-	 * @param declaration the declaration used when formatting
-	 * @param body        the body used when formatting
-	 * @return the resulting formatted {@code String}
-	 */
-	private String declAndBody(String declaration, String body) {
-		return String.format("%s {%s%s%s}", declaration, LINE_SEP, tabbed(body, 1), LINE_SEP);
-	}
-	
-	/**
-	 * Tabulates every line of {@code body} exactly {@code amount} number of times.
-	 *
-	 * @param body   the {@code String} to tabulate
-	 * @param amount number, specifying the amount of tabs
-	 * @return the tabbed {@code String}
-	 */
-	private String tabbed(String body, int amount) {
-		var tabs = TAB.repeat(amount);
-		return body.lines()
-		           .map(l -> tabs + l)
-		           .collect(Collectors.joining(LINE_SEP));
-	}
-	
-	/**
-	 * Returns a {@code String}, with {@code blocks} separated by one blank line.
-	 *
-	 * @param blocks the {@code String}s to separate
-	 * @return the separated {@code String}
-	 * @see #joinBlocks(Object[], Function)
-	 */
-	private String joinBlocks(String... blocks) {
-		return joinBlocks(blocks, Function.identity());
-	}
-	
-	/**
-	 * Returns a {@code String}, with {@code blocks} separated by one blank line,
-	 * applying the {@code toString} function beforehand.
-	 *
-	 * @param blocks   the objects to separate
-	 * @param toString mapping function for provided objects
-	 * @param <T>      the type of elements in {@code blocks} array
-	 * @return the separated {@code String}
-	 * @see #joinBlocks(Collection, Function)
-	 */
-	private <T> String joinBlocks(T[] blocks, Function<T, String> toString) {
-		return joinBlocks(Arrays.asList(blocks), toString);
-	}
-	
-	/**
-	 * Returns a {@code String}, with {@code blocks} separated by one blank line,
-	 * applying the {@code toString} function beforehand.
-	 *
-	 * @param blocks   the objects to separate
-	 * @param toString mapping function for provided objects
-	 * @param <T>      the type of elements in {@code blocks} collection
-	 * @return the separated {@code String}
-	 */
-	private <T> String joinBlocks(Collection<T> blocks, Function<T, String> toString) {
-		return join(blocks, toString, LINE_SEP.repeat(2));
-	}
-	
-	/**
-	 * Returns a {@code String}, with {@code blocks} separated by {@code separator},
-	 * applying the {@code toString} function beforehand.
-	 *
-	 * @param blocks    the objects to separate
-	 * @param toString  mapping function for provided objects
-	 * @param separator the separator used between each element
-	 * @param <T>       the type of elements in {@code blocks} array
-	 * @return the separated {@code String}
-	 * @see #join(Collection, Function, String)
-	 */
-	private <T> String join(T[] blocks, Function<T, String> toString, String separator) {
-		return join(Arrays.asList(blocks), toString, separator);
-	}
-	
-	/**
-	 * Returns a {@code String}, with {@code blocks} separated by {@code separator},
-	 * applying the {@code toString} function beforehand.
-	 *
-	 * @param blocks    the objects to separate
-	 * @param toString  mapping function for provided objects
-	 * @param separator the separator used between each element
-	 * @param <T>       the type of elements in {@code blocks} collection
-	 * @return the separated {@code String}
-	 * @see Collectors#joining(CharSequence)
-	 */
-	private <T> String join(Collection<T> blocks, Function<T, String> toString, String separator) {
-		return blocks.stream().map(toString).collect(Collectors.joining(separator));
-	}
-	
-	/**
-	 * Encodes the provided {@code String}, escaping all unicode characters in {@code \\u} notation.
-	 *
-	 * @param s the {@code String} to be encoded
-	 * @return the encoded {@code String}
-	 */
-	private String encode(String s) {
-		StringBuilder sb = new StringBuilder();
-		char[] charArray = s.toCharArray();
-		for (char c : charArray) {
-			if (c < 128) {
-				sb.append(c);
-			} else {
-				sb.append("\\u").append(String.format("%04x", (int) c));
-			}
-		}
-		return sb.toString();
-	}
-	
-	private static String getClassPath(Class<?> token) {
-		try {
-			return Path.of(token.getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
-		} catch (final URISyntaxException e) {
-			throw new AssertionError(e);
-		}
-	}
-	
 	
 	/**
 	 * A wrapper class for {@code Method} with custom hash. Contains a {@code Method} object and

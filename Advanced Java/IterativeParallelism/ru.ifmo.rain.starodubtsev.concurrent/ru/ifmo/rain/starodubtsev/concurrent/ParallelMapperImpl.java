@@ -49,17 +49,6 @@ public class ParallelMapperImpl implements ParallelMapper {
 		this.threads.forEach(Thread::start);
 	}
 	
-	/**
-	 * Maps function {@code f} over specified {@code args}.
-	 * Mapping for each element performs in parallel.
-	 *
-	 * @param f    the mapping function
-	 * @param args the elements to be processed
-	 * @param <T>  type of argument
-	 * @param <R>  type of resulting mapped arguments
-	 * @return a {@code List} of mapped arguments
-	 * @throws InterruptedException if calling thread was interrupted
-	 */
 	@Override
 	public <T, R> List<R> map(final Function<? super T, ? extends R> f, final List<? extends T> args) throws InterruptedException {
 		if (args.isEmpty()) {
@@ -70,9 +59,6 @@ public class ParallelMapperImpl implements ParallelMapper {
 		return task.awaitResult();
 	}
 	
-	/**
-	 * Stops all threads. All unfinished mappings leave in undefined state.
-	 */
 	@Override
 	public void close() {
 		closed = true;

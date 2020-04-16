@@ -9,11 +9,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static ru.ifmo.rain.starodubtsev.hello.Logger.error;
-import static ru.ifmo.rain.starodubtsev.hello.Logger.log;
+import static ru.ifmo.rain.starodubtsev.hello.MainUtils.getArg;
+import static ru.ifmo.rain.starodubtsev.hello.MainUtils.getIntArg;
 
+/**
+ * An implementation of the {@code HelloClient} interface.
+ * Capable of sending requests to a server via UDP.
+ *
+ * @see HelloClient
+ */
 public class HelloUDPClient implements HelloClient {
 	
+	private static final int SO_TIMEOUT = 100;
+	
+	/**
+	 * Main method. Usage: {@code HelloUDPClient <host> <port> <prefix> <threads> <requests>}.
+	 * Creates and runs the {@code client} with the specified parameters.
+	 *
+	 * @param args program arguments
+	 * @see #run(String, int, String, int, int)
+	 */
 	public static void main(String[] args) {
 		Objects.requireNonNull(args);
 		if (args.length != 5) {
@@ -21,23 +36,23 @@ public class HelloUDPClient implements HelloClient {
 			return;
 		}
 		try {
-			String host = getArg(0, args);
-			int port = getIntArg(1, args);
-			String prefix = getArg(2, args);
-			int threads = getIntArg(3, args);
-			int requests = getIntArg(4, args);
+			final String host = getArg(0, args);
+			final int port = getIntArg(1, args);
+			final String prefix = getArg(2, args);
+			final int threads = getIntArg(3, args);
+			final int requests = getIntArg(4, args);
 			new HelloUDPClient().run(host, port, prefix, threads, requests);
 		} catch (NumberFormatException e) {
 			error(e, "Invalid argument(s)");
 		}
 	}
 	
-	private static String getArg(int i, String[] args) {
-		return Objects.requireNonNull(args[i]);
+	private static void error(Exception e, String message) {
+		Logger.error(e, "[Client]", message);
 	}
 	
-	private static int getIntArg(int i, String[] args) {
-		return Integer.parseInt(getArg(i, args));
+	private static void log(String message) {
+		Logger.log("[Client]", message);
 	}
 	
 	@Override
@@ -45,32 +60,38 @@ public class HelloUDPClient implements HelloClient {
 		final SocketAddress socketAddress = new InetSocketAddress(host, port);
 		final ExecutorService requestPool = Executors.newFixedThreadPool(threads);
 		for (int threadId = 0; threadId < threads; threadId++) {
-			final String requestPrefix = getRequestPrefix(prefix, threadId);
-			requestPool.submit(() -> processThread(requestPrefix, requests, socketAddress));
+			final int finalThreadId = threadId;
+			requestPool.submit(() -> processThread(prefix, finalThreadId, requests, socketAddress));
 		}
 		await(requestPool);
 	}
 	
-	private void await(ExecutorService executorService) {
-		executorService.shutdown();
-		try {
-			executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			error(e, "Executing thread was interrupted");
+	private void await(final ExecutorService executorService) {
+		while (true) {
+			executorService.shutdown();
+			try {
+				executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+				break;
+			} catch (InterruptedException e) {
+				error(e, "Executing thread was interrupted while waiting for termination");
+			}
 		}
 	}
 	
-	private void processThread(final String prefix, final int requests, final SocketAddress address) {
+	private void processThread(final String prefix, final int threadId, final int requests, final SocketAddress address) {
 		try (final DatagramSocket socket = new DatagramSocket()) {
-			socket.setSoTimeout(100);
+			socket.setSoTimeout(SO_TIMEOUT);
+			DatagramPacket packet = new DatagramPacket(new byte[0], 0);
 			for (int requestId = 0; requestId < requests; requestId++) {
-				final String request = prefix + requestId;
+				final String request = getRequest(prefix, threadId, requestId);
 				while (!socket.isClosed() && !Thread.interrupted()) {
 					try {
-						final String response = PacketUtils.request(request, socket, address);
-						if (isResponseValid(request, response)) {
+						final String response = DatagramUtils.request(request, packet, socket, address);
+						if (isResponseValid(response, threadId, requestId)) {
 							log(response);
 							break;
+						} else {
+							log("Received invalid response to request '" + request + "': " + response);
 						}
 					} catch (IOException e) {
 						error(e, "Error occurred during communication with the server");
@@ -82,11 +103,45 @@ public class HelloUDPClient implements HelloClient {
 		}
 	}
 	
-	private String getRequestPrefix(String prefix, int threadId) {
-		return String.format("%s%s_", prefix, threadId);
+	private boolean isResponseValid(final String response, final int threadId, final int requestId) {
+		int index = 0;
+		index = skipNonDigits(response, index);
+		int number = parseInt(response, index);
+		if (number != threadId) {
+			return false;
+		}
+		index += Integer.toString(number).length();
+		index = skipNonDigits(response, index);
+		number = parseInt(response, index);
+		if (number != requestId) {
+			return false;
+		}
+		index += Integer.toString(number).length();
+		index = skipNonDigits(response, index);
+		return index == response.length();
 	}
 	
-	private boolean isResponseValid(String request, String response) {
-		return response.contains(request);
+	private int skipNonDigits(String response, int index) {
+		while (index < response.length() && !Character.isDigit(response.charAt(index))) {
+			index++;
+		}
+		return index;
+	}
+	
+	private int parseInt(String response, int index) {
+		StringBuilder numberSb = new StringBuilder();
+		while (index < response.length() && Character.isDigit(response.charAt(index))) {
+			numberSb.append(response.charAt(index++));
+		}
+		try {
+			return Integer.parseInt(numberSb.toString());
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
+	
+	
+	private String getRequest(final String prefix, final int threadId, final int requestId) {
+		return String.format("%s%s_%s", prefix, threadId, requestId);
 	}
 }

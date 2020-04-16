@@ -1,11 +1,11 @@
 @echo off
 
-SET task=%1
+SET module=%1
 SET class=%2
 SET modification=%3
 
-SET mod_name=ru.ifmo.rain.starodubtsev.%task%
-SET mod_dir=ru\ifmo\rain\starodubtsev\%task%
+SET mod_name=ru.ifmo.rain.starodubtsev.%module%
+SET mod_dir=ru\ifmo\rain\starodubtsev\%module%
 
 SET wd=C:\Users\fastr\IdeaProjects\java-advanced-2020
 SET mod_path=%wd%\artifacts;%wd%\lib;%wd%\out\production\%mod_name%
@@ -17,5 +17,5 @@ javac --module-path %mod_path% %src%\module-info.java %src%\%mod_dir%\*.java -d 
 
 rem set /P salt="Salt: "
 @echo on
-java --module-path %mod_path% --add-modules %mod_name% -m info.kgeorgiy.java.advanced.%task%^
+java --module-path %mod_path% --add-modules %mod_name% -m info.kgeorgiy.java.advanced.%module%^
  %modification% %mod_name%.%class% %salt%

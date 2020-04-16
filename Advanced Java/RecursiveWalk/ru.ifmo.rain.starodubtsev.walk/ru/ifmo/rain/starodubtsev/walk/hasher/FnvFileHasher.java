@@ -16,10 +16,10 @@ public class FnvFileHasher {
 	private static final int FNV_X0 = 0x811c9dc5;
 	
 	private static final int BUF_SIZE = 0xffff;
-	private static byte[] buffer = new byte[BUF_SIZE];
+	private static final byte[] buffer = new byte[BUF_SIZE];
 	
-	public static int hash(Path path) {
-		try (InputStream inputStream = new BufferedInputStream(Files.newInputStream(path))) {
+	public static int hash(final Path path) {
+		try (final InputStream inputStream = new BufferedInputStream(Files.newInputStream(path))) {
 			int hash = FNV_X0;
 //			try {
 				int bytesRead = 0;
@@ -34,21 +34,21 @@ public class FnvFileHasher {
 //				hash = 0;
 //			}
 			return hash;
-		} catch (NoSuchFileException e) {
+		} catch (final NoSuchFileException e) {
 			hasherError(e, "No such file found '" + path + "'.");
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			hasherError(e, "Unable to access file '" + path + "'.");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			hasherError(e, "Error when reading input from file '" + path + "'.");
 		}
 		return 0;
 	}
 	
-	private static void hasherError(Exception e, String message) {
+	private static void hasherError(final Exception e, final String message) {
 		error(e, message + " hash set to default (0)");
 	}
 	
-	public static void writeHash(BufferedWriter out, int hash, String file) throws IOException {
+	public static void writeHash(final BufferedWriter out, final int hash, final String file) throws IOException {
 		out.write(String.format("%08x %s\n", hash, file));
 	}
 	
