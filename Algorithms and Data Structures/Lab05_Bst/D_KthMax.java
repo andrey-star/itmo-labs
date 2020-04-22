@@ -3,7 +3,7 @@ import java.util.*;
 
 public class D_KthMax {
 	
-	class Node {
+	static class Node {
 		int key;
 		long priority;
 		int size;
@@ -26,7 +26,7 @@ public class D_KthMax {
 	class Treap {
 		
 		Node root;
-		private Random random = new Random();
+		private final Random random = new Random();
 		
 		public Node[] split(int key) {
 			return split(root, key);

@@ -67,8 +67,8 @@ public class D_MultiMap {
 		private int size;
 		private List<Entry>[] el;
 		private int p;
-		private int[] r = new int[20];
-		private Random random;
+		private final int[] r = new int[20];
+		private final Random random;
 		
 		private Map() {
 			random = new Random(500);
@@ -224,12 +224,12 @@ public class D_MultiMap {
 		}
 	}
 	
-	private class Set {
+	private static class Set {
 		private int size;
 		private List<String>[] el;
 		private int p;
-		private Random random;
-		private int[] r = new int[20];
+		private final Random random;
+		private final int[] r = new int[20];
 		
 		private Set() {
 			random = new Random(500);
@@ -321,7 +321,7 @@ public class D_MultiMap {
 		}
 	}
 	
-	class FastScanner {
+	static class FastScanner {
 		BufferedReader br;
 		StringTokenizer st;
 		

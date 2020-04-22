@@ -144,9 +144,9 @@ public class E_Refrain {
 	
 	private static class DSU {
 		
-		private int[] parent;
-		private int[] size;
-		private int[] start;
+		private final int[] parent;
+		private final int[] size;
+		private final int[] start;
 		
 		private DSU(int n) {
 			parent = new int[n];

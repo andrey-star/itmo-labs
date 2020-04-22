@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.*;
 
 public class I_CodeLock {
@@ -32,6 +29,7 @@ public class I_CodeLock {
 		for (int i = 0; i < l; i++) {
 			n *= d;
 		}
+		//noinspection unchecked
 		List<Edge>[] g = new ArrayList[n];
 		for (int i = 0; i < n; i++) {
 			g[i] = new ArrayList<>();

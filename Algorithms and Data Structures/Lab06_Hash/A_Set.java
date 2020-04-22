@@ -7,7 +7,7 @@ public class A_Set {
 	private int size;
 	private List<Integer>[] el;
 	private int a, b, p;
-	private Random r;
+	private final Random r;
 	private FastScanner in;
 	private PrintWriter out;
 	
@@ -60,10 +60,6 @@ public class A_Set {
 	}
 	
 	private void remove(int key) {
-		StringBuilder s = new StringBuilder();
-		for (int i = 0; i < 5; i++) {
-			s.insert(0, '1');
-		}
 		int hash = hash(key);
 		if (el[hash] == null) {
 			return;
@@ -128,7 +124,7 @@ public class A_Set {
 		System.out.println("Total: " + (System.currentTimeMillis() - start) / 1000.0 + " s");
 	}
 	
-	class FastScanner {
+	static class FastScanner {
 		BufferedReader br;
 		StringTokenizer st;
 		

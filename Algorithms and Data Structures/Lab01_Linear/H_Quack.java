@@ -6,8 +6,8 @@ public class H_Quack {
 	private static final int MAX = 0xffff;
 	
 	static class QueueVector {
-		private StackVector toPush;
-		private StackVector toPop;
+		private final StackVector toPush;
+		private final StackVector toPop;
 		
 		QueueVector() {
 			toPush = new StackVector();
@@ -29,7 +29,7 @@ public class H_Quack {
 			return toPop.pop();
 		}
 		
-		class StackVector {
+		static class StackVector {
 			private int capacity;
 			private int[] elements;
 			private int size;

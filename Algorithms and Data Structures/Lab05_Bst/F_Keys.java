@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class F_Keys {
 	
-	class Node {
+	static class Node {
 		long priority;
 		int size;
 		int value;
@@ -30,7 +30,7 @@ public class F_Keys {
 	class ImplicitTreap {
 		
 		Node root;
-		private Random random = new Random(2);
+		private final Random random = new Random(2);
 		
 		public Node[] split(int amount) {
 			return split(root, amount);

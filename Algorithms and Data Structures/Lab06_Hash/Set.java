@@ -8,8 +8,8 @@ public class Set {
 	private int size;
 	private List<String>[] el;
 	private int p;
-	private Random random;
-	private int[] r;
+	private final Random random;
+	private final int[] r;
 	
 	private Set(int maxLength) {
 		random = new Random(500);

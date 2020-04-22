@@ -4,9 +4,9 @@ public class H_BipartiteGraph {
 	
 	private static class DSU {
 		
-		private int[] parent;
-		private int[] rank;
-		private boolean[] inv;
+		private final int[] parent;
+		private final int[] rank;
+		private final boolean[] inv;
 		
 		private DSU(int n) {
 			parent = new int[n];

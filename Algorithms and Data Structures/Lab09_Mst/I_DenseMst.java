@@ -1,9 +1,8 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -67,8 +66,8 @@ public class I_DenseMst {
 	
 	static private class DSU {
 		
-		private int[] parent;
-		private int[] root;
+		private final int[] parent;
+		private final int[] root;
 		private int comps = 0;
 		
 		private DSU(int n) {
@@ -108,9 +107,7 @@ public class I_DenseMst {
 		}
 		
 		private void clear() {
-			for (int i = 0; i < root.length; i++) {
-				root[i] = 0;
-			}
+			Arrays.fill(root, 0);
 			for (int i = 0; i < parent.length; i++) {
 				parent[i] = i;
 				comps = parent.length;

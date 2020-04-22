@@ -39,6 +39,7 @@ public class Q_Truth {
 			st[i] = new Statement(a, b, c);
 		}
 		
+		//noinspection unchecked
 		List<Integer>[] g = new ArrayList[2 * n];
 		boolean[] used = new boolean[2 * n];
 		int[] comp = new int[2 * n];

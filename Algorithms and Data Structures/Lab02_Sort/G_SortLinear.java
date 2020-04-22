@@ -2,9 +2,9 @@ import java.util.*;
 
 public class G_SortLinear {
 	
-	private static int base = 10;
+	private static final int base = 10;
 	
-	private static void countSort(int arr[], int n, int div) {
+	private static void countSort(int[] arr, int n, int div) {
 		int[] stage = new int[n];
 		int[] freq = new int[base];
 		
@@ -26,7 +26,7 @@ public class G_SortLinear {
 		}
 	}
 	
-	static void radixsort(int arr[], int n) {
+	static void radixsort(int[] arr, int n) {
 		int max = arr[0];
 		for (int i = 1; i < n; i++) {
 			if (arr[i] > max) {
@@ -48,7 +48,7 @@ public class G_SortLinear {
 	
 	
 	public static void main(String[] args) {
-		int a[] = {170, 45, 75, 90, 802, 24, 2, 66};
+		int[] a = {170, 45, 75, 90, 802, 24, 2, 66};
 		int n = a.length;
 		radixsort(a, n);
 		System.out.println(Arrays.toString(a));

@@ -28,6 +28,7 @@ public class C_VertexCover {
 		String[] line = in.readLine().trim().split(" +");
 		int left = Integer.parseInt(line[0]);
 		int right = Integer.parseInt(line[1]);
+		//noinspection unchecked
 		List<Integer>[] g = new ArrayList[left];
 		for (int i = 0; i < left; i++) {
 			g[i] = new ArrayList<>();

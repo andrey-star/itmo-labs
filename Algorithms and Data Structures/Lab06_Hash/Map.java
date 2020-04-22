@@ -9,8 +9,8 @@ public class Map {
 	private int size;
 	private List<Entry>[] el;
 	private int p;
-	private int[] r;
-	private Random random;
+	private final int[] r;
+	private final Random random;
 	
 	private Map(int maxLength) {
 		random = new Random(500);
@@ -129,7 +129,7 @@ public class Map {
 		return Arrays.toString(el);
 	}
 	
-	class Entry {
+	static class Entry {
 		String key;
 		String value;
 		

@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class H_EdgePaths {
 	
@@ -40,6 +39,7 @@ public class H_EdgePaths {
 		String[] line = in.readLine().trim().split(" +");
 		int n = Integer.parseInt(line[0]);
 		int m = Integer.parseInt(line[1]);
+		//noinspection unchecked
 		List<Integer>[] g = new ArrayList[n];
 		List<Edge> edges = new ArrayList<>();
 		for (int i = 0; i < n; i++) {
@@ -57,7 +57,7 @@ public class H_EdgePaths {
 		
 		
 		int oddOne = -1;
-		int oddTwo = -1;
+		int oddTwo;
 		Map<Integer, Integer> odd = new HashMap<>();
 		for (int i = 0; i < n; i++) {
 			if (g[i].size() % 2 == 1) {
@@ -68,7 +68,6 @@ public class H_EdgePaths {
 					odd.put(oddOne, oddTwo);
 					odd.put(oddTwo, oddOne);
 					oddOne = -1;
-					oddTwo = -1;
 				}
 			}
 		}

@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ public class A_Matching {
 		int n = Integer.parseInt(line[0]); // left
 		int m = Integer.parseInt(line[1]); // right
 		int k = Integer.parseInt(line[2]);
+		//noinspection unchecked
 		List<Integer>[] g = new ArrayList[n];
 		for (int i = 0; i < n; i++) {
 			g[i] = new ArrayList<>();
@@ -42,7 +42,7 @@ public class A_Matching {
 		}
 		boolean[] used = new boolean[n];
 		int[] matching = new int[m];
-		Arrays.fill(matching, -1);;
+		Arrays.fill(matching, -1);
 		for (int i = 0; i < n; i++) {
 			Arrays.fill(used, false);
 			dfs(i, g, used, matching);

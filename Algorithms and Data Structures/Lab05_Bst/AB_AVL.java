@@ -161,13 +161,12 @@ public class AB_AVL {
 						Node next = next(a);
 						a.value = next.value;
 						deleteNode(next);
-						return;
 					} else {
 						Node prev = prev(a);
 						a.value = prev.value;
 						deleteNode(prev);
-						return;
 					}
+					return;
 				}
 				String whichChild = whichChild(a);
 				if (whichChild.equals("null")) {
@@ -175,11 +174,9 @@ public class AB_AVL {
 				} else if (whichChild.equals("right")) {
 					a.parent.right = null;
 					fixDeleteNode(a.parent, "right");
-					a = null;
 				} else {
 					a.parent.left = null;
 					fixDeleteNode(a.parent, "left");
-					a = null;
 				}
 			}
 		}

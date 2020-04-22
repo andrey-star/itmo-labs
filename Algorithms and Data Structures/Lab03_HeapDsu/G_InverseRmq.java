@@ -17,8 +17,8 @@ public class G_InverseRmq {
 		}
 		
 		private int size;
-		private Pair[] heap;
-		private int[] opNumToPosition;
+		private final Pair[] heap;
+		private final int[] opNumToPosition;
 		
 		private Heap() {
 			size = 0;

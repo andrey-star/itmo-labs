@@ -17,9 +17,9 @@ public class AllSortNet {
 		}
 	}
 	
-	private static int comps = 8;
-	private static int rows = 5;
-	private static Pair[] net = new Pair[comps];
+	private static final int comps = 8;
+	private static final int rows = 5;
+	private static final Pair[] net = new Pair[comps];
 	private static int amount = 0;
 	
 	private static void gen(int size) {

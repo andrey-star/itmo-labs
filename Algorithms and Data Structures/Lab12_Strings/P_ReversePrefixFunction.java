@@ -41,7 +41,6 @@ public class P_ReversePrefixFunction {
 						cur--;
 					}
 				}
-				;
 				res *= cur;
 				res %= MOD;
 			}

@@ -7,8 +7,8 @@ public class B_Map {
 	private int size;
 	private List<Entry>[] el;
 	private int p;
-	private int[] r = new int[20];
-	private Random random;
+	private final int[] r = new int[20];
+	private final Random random;
 	private FastScanner in;
 	private PrintWriter out;
 	
@@ -190,7 +190,7 @@ public class B_Map {
 //		System.out.println("Total: " + (System.currentTimeMillis() - start) / 1000.0 + " s");
 	}
 	
-	class Entry {
+	static class Entry {
 		String key;
 		String value;
 		
@@ -205,7 +205,7 @@ public class B_Map {
 		}
 	}
 	
-	class FastScanner {
+	static class FastScanner {
 		BufferedReader br;
 		StringTokenizer st;
 		

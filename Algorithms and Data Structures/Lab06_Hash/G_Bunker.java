@@ -121,11 +121,11 @@ public class G_Bunker {
 		out.close();
 	}
 	
-	class Map {
+	static class Map {
 		private int lastNotUsed;
 		private List<Entry>[] el;
 		private int a, b, p;
-		private Random random;
+		private final Random random;
 		private int size;
 		
 		private Map() {
@@ -227,7 +227,7 @@ public class G_Bunker {
 		}
 	}
 	
-	class FastScanner {
+	static class FastScanner {
 		BufferedReader br;
 		StringTokenizer st;
 		

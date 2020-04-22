@@ -2,7 +2,7 @@ import java.util.*;
 
 public class ImplicitTreap {
 	
-	class Node {
+	static class Node {
 		long priority;
 		int size;
 		int value;
@@ -22,7 +22,7 @@ public class ImplicitTreap {
 	}
 	
 	private Node root;
-	private Random random = new Random();
+	private final Random random = new Random();
 	
 	private Node[] split(int amount) {
 		return split(root, amount);

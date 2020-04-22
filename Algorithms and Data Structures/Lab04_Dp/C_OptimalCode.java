@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.Arrays;
-import java.util.Random;
 
 public class C_OptimalCode {
 	

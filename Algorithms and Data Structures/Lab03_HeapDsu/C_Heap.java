@@ -19,8 +19,8 @@ public class C_Heap {
 	}
 	
 	private int size;
-	private ArrayList<Pair> heap;
-	private ArrayList<Integer> opNumToPosition;
+	private final ArrayList<Pair> heap;
+	private final ArrayList<Integer> opNumToPosition;
 	
 	private C_Heap() {
 		size = 0;

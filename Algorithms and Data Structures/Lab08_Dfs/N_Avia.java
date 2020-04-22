@@ -42,7 +42,9 @@ public class N_Avia {
 		
 		int left = -1;
 		int right = maxEdge;
+		//noinspection unchecked
 		List<Integer>[] gg = new ArrayList[n];
+		//noinspection unchecked
 		List<Integer>[] r = new ArrayList[n];
 		List<Integer> comp = new ArrayList<>();
 		List<Integer> topSort = new ArrayList<>();

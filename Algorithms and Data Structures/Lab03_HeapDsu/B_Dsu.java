@@ -2,11 +2,11 @@ import java.io.*;
 
 public class B_Dsu {
 	
-	private int[] min;
-	private int[] max;
-	private int[] amount;
-	private int[] parent;
-	private int[] rank;
+	private final int[] min;
+	private final int[] max;
+	private final int[] amount;
+	private final int[] parent;
+	private final int[] rank;
 	
 	private B_Dsu(int n) {
 		min = new int[n];

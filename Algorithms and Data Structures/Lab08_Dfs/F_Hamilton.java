@@ -20,6 +20,7 @@ public class F_Hamilton {
 		String[] line = in.readLine().trim().split(" +");
 		int n = Integer.parseInt(line[0]);
 		int m = Integer.parseInt(line[1]);
+		//noinspection unchecked
 		List<Integer>[] g = new ArrayList[n];
 		for (int i = 0; i < n; i++) {
 			g[i] = new ArrayList<>();

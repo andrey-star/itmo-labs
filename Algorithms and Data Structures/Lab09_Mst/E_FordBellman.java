@@ -4,7 +4,7 @@ import java.util.List;
 
 public class E_FordBellman {
 	
-	private static long INF = Long.MAX_VALUE / 3 * 2;
+	private static final long INF = Long.MAX_VALUE / 3 * 2;
 	
 	private static void dfs(List<Integer>[] g, int u, boolean[] used, boolean[] noShortestPath) {
 		used[u] = true;
@@ -24,6 +24,7 @@ public class E_FordBellman {
 		int m = Integer.parseInt(line[1]);
 		int s = Integer.parseInt(line[2]) - 1;
 		Edge[] g = new Edge[m];
+		//noinspection unchecked
 		List<Integer>[] gg = new ArrayList[n];
 		for (int i = 0; i < n; i++) {
 			gg[i] = new ArrayList<>();

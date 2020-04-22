@@ -1,11 +1,9 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class C_MoveToFront {
 	
-	class Node {
+	static class Node {
 		long priority;
 		int size;
 		int value;
@@ -27,7 +25,7 @@ public class C_MoveToFront {
 	class ImplicitTreap {
 		
 		Node root;
-		private Random random = new Random();
+		private final Random random = new Random();
 		
 		public Node[] split(int amount) {
 			return split(root, amount);

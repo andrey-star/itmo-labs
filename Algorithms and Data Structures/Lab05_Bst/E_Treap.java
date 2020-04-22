@@ -3,7 +3,7 @@ import java.util.*;
 
 public class E_Treap {
 	
-	class Node {
+	static class Node {
 		int key;
 		int priority;
 		int startIndex;
@@ -16,7 +16,7 @@ public class E_Treap {
 		}
 	}
 	
-	class Triple {
+	static class Triple {
 		int parent;
 		int left;
 		int right;

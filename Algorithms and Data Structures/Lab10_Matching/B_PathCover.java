@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class B_PathCover {
 		String[] line = in.readLine().trim().split(" +");
 		int n = Integer.parseInt(line[0]);
 		int k = Integer.parseInt(line[1]);
+		//noinspection unchecked
 		List<Integer>[] g = new ArrayList[n];
 		for (int i = 0; i < n; i++) {
 			g[i] = new ArrayList<>();
@@ -57,8 +57,8 @@ public class B_PathCover {
 	
 	static private class DSU {
 		
-		private int[] parent;
-		private int[] root;
+		private final int[] parent;
+		private final int[] root;
 		private int comps = 0;
 		
 		private DSU(int n) {

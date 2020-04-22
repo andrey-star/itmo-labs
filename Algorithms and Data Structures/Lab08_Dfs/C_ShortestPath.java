@@ -33,6 +33,7 @@ public class C_ShortestPath {
 		int m = Integer.parseInt(line[1]);
 		int s = Integer.parseInt(line[2]) - 1;
 		int t = Integer.parseInt(line[3]) - 1;
+		//noinspection unchecked
 		List<Pair>[] g = new ArrayList[n];
 		for (int i = 0; i < n; i++) {
 			g[i] = new ArrayList<>();

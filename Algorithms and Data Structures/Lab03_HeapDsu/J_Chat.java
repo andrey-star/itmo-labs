@@ -4,10 +4,10 @@ public class J_Chat {
 	
 	private static class DSU {
 		
-		private int[] chat;
-		private int[] rank;
-		private int[] sentToChat;
-		private int[] readByPerson;
+		private final int[] chat;
+		private final int[] rank;
+		private final int[] sentToChat;
+		private final int[] readByPerson;
 		
 		private DSU(int n) {
 			sentToChat = new int[n];

@@ -1,20 +1,12 @@
-import sun.reflect.generics.tree.Tree;
-
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.function.BiFunction;
 
 public class SegmentTree {
 	
-	private BiFunction<Integer, Integer, Integer> f;
-	private Entry[] tree;
-	private int neutral;
-	
-	class Pair {}
+	private final BiFunction<Integer, Integer, Integer> f;
+	private final Entry[] tree;
+	private final int neutral;
 	
 	public SegmentTree(int[] a, int neutral, BiFunction<Integer, Integer, Integer> f) {
-		Set<Pair> ff = new TreeSet<>();
 		this.f = f;
 		this.neutral = neutral;
 		int n = 1 << (31 - Integer.numberOfLeadingZeros(a.length));
@@ -87,7 +79,7 @@ public class SegmentTree {
 		return (i - 1) / 2;
 	}
 	
-	private class Entry {
+	private static class Entry {
 		
 		int x;
 		

@@ -5,8 +5,8 @@ import java.util.Queue;
 
 public class G_AhoCorasick {
 	
-	private static int ALPHABET_SIZE = 26;
-	private static int MAX_STATES = (int) 2e6;
+	private static final int ALPHABET_SIZE = 26;
+	private static final int MAX_STATES = (int) 2e6;
 	private static int states = 1;
 	
 	public static void main(String[] args) throws IOException {

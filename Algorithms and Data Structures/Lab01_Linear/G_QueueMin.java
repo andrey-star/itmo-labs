@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.Arrays;
 
 public class G_QueueMin {
-	private StackVector toPush;
-	private StackVector toPop;
+	private final StackVector toPush;
+	private final StackVector toPop;
 
 	private G_QueueMin() {
 		toPush = new StackVector();

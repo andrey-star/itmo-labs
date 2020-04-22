@@ -39,6 +39,7 @@ public class G_EulerPath {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String[] line = in.readLine().trim().split(" +");
 		int n = Integer.parseInt(line[0]);
+		//noinspection unchecked
 		List<Integer>[] g = new ArrayList[n];
 		List<Edge> edges = new ArrayList<>();
 		for (int i = 0; i < n; i++) {

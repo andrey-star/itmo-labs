@@ -6,7 +6,7 @@ public class GraphCut {
 	
 	private static class DSU {
 		
-		private int[] parent;
+		private final int[] parent;
 		
 		private DSU(int n) {
 			parent = new int[n];

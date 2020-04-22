@@ -7,8 +7,8 @@ public class C_LinkedMap {
 	private int size;
 	private List<Entry>[] el;
 	private int p;
-	private int[] r = new int[20];
-	private Random random;
+	private final int[] r = new int[20];
+	private final Random random;
 	private FastScanner in;
 	private PrintWriter out;
 	private Entry first, last;
@@ -252,7 +252,7 @@ public class C_LinkedMap {
 		System.out.println("Total: " + (System.currentTimeMillis() - start) / 1000.0 + " s");
 	}
 	
-	class Entry {
+	static class Entry {
 		String key;
 		String value;
 		Entry prev;
@@ -269,7 +269,7 @@ public class C_LinkedMap {
 		}
 	}
 	
-	class FastScanner {
+	static class FastScanner {
 		BufferedReader br;
 		StringTokenizer st;
 		

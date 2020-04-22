@@ -3,9 +3,9 @@ import java.io.*;
 public class E_MultipleDsu {
 	
 	private static class DSU {
-		private int[] parent;
-		private int[] rank;
-		private int[] firstNextSet;
+		private final int[] parent;
+		private final int[] rank;
+		private final int[] firstNextSet;
 		
 		private DSU(int n) {
 			parent = new int[n];

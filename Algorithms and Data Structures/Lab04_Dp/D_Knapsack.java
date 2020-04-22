@@ -25,13 +25,11 @@ public class D_Knapsack {
 	
 	private static void rev(int[][] dp, int[] m, int n, int k) {
 		while (dp[n][k] != 0) {
-			if (dp[n][k] == dp[n - 1][k]) {
-				n--;
-			} else {
+			if (dp[n][k] != dp[n - 1][k]) {
 				a.add(n);
 				k -= m[n - 1];
-				n--;
 			}
+			n--;
 		}
 		Collections.reverse(a);
 	}
