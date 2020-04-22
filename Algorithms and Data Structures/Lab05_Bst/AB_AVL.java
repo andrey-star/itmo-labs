@@ -5,7 +5,7 @@ import java.util.NavigableSet;
 import java.util.Random;
 import java.util.TreeSet;
 
-public class B_AVL {
+public class AB_AVL {
 	
 	static class Node {
 		Node left;
@@ -79,7 +79,6 @@ public class B_AVL {
 			if (a.left == null && a.right == null) {
 				return;
 			}
-			
 			if (a.left != null) {
 				Node b = a.left;
 				if (a.diff == 2) {
