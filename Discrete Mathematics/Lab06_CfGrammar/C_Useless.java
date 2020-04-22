@@ -164,8 +164,8 @@ public class C_Useless {
 	}
 	
 	static class Pair {
-		char left;
-		String right;
+		final char left;
+		final String right;
 		
 		Pair(char a, String b) {
 			this.left = a;

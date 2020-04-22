@@ -29,17 +29,6 @@ public class B_Polynom2 {
 		});
 	}
 	
-	private static void print(long[] a) {
-		int power = 0;
-		for (int i = a.length - 1; i >= 0; i--) {
-			if (a[i] != 0) {
-				power = i;
-				break;
-			}
-		}
-		print(a, power + 1);
-	}
-	
 	private static void print(long[] a, int amount) {
 		for (int i = 0; i < amount; i++) {
 			System.out.print(get(i, a) + " ");

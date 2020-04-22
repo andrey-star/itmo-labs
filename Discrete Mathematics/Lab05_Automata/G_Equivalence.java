@@ -73,8 +73,8 @@ public class G_Equivalence {
 	}
 	
 	static class Pair {
-		int x;
-		int y;
+		final int x;
+		final int y;
 		
 		Pair(int x, int y) {
 			this.x = x;

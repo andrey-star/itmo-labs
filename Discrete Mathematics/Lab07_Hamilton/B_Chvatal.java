@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class B_Chvatal {

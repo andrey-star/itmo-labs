@@ -34,6 +34,7 @@ public class D_Nfc {
 				for (char right : toTerm.get(left)) {
 					if (right == c) {
 						d[left][i][i] = 1;
+						break;
 					}
 				}
 			}
@@ -63,7 +64,8 @@ public class D_Nfc {
 	}
 	
 	private static class Pair {
-		int a, b;
+		final int a;
+		final int b;
 		
 		Pair(int a, int b) {
 			this.a = a;

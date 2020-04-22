@@ -147,8 +147,8 @@ public class H_SlowMinimization {
 	}
 	
 	static class Pair {
-		int x;
-		int y;
+		final int x;
+		final int y;
 		
 		Pair(int x, int y) {
 			this.x = x;
@@ -163,8 +163,8 @@ public class H_SlowMinimization {
 	}
 	
 	static class Pair2 {
-		int[] x;
-		int y;
+		final int[] x;
+		final int y;
 		
 		Pair2(int[] x, int y) {
 			this.x = x;

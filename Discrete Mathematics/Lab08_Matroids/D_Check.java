@@ -109,22 +109,4 @@ public class D_Check {
 		}
 		return res;
 	}
-	
-	private static void gen() {
-		int n = 10;
-		for (int i = 0; i < (1 << n); i++) {
-			List<Integer> res = new ArrayList<>();
-			for (int j = 0; j < n; j++) {
-				boolean bit = ((i >> j) & 1) == 1;
-				if (bit) {
-					res.add(j + 1);
-				}
-			}
-			System.out.print(res.size() + " ");
-			for (Integer re : res) {
-				System.out.print(re + " ");
-			}
-			System.out.println();
-		}
-	}
 }

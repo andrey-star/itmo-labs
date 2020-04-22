@@ -39,8 +39,8 @@ public class A_Planning {
 	}
 	
 	private static class Task {
-		int d;
-		int w;
+		final int d;
+		final int w;
 		
 		Task(int d, int w) {
 			this.d = d;

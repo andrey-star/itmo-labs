@@ -60,8 +60,8 @@ public class E_Cycles {
 	
 	private static class Element {
 		
-		int index;
-		int w;
+		final int index;
+		final int w;
 		
 		Element(int index, int w) {
 			this.index = index;

@@ -4,17 +4,6 @@ import java.util.*;
 
 public class B_Epsilon2 {
 	
-	private static int nonTerminals(String s) {
-		int res = 0;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (Character.isUpperCase(c)) {
-				res++;
-			}
-		}
-		return res;
-	}
-	
 	private static boolean onlyLowerCase(String s) {
 		if (s.length() == 0) {
 			return false;
@@ -79,8 +68,8 @@ public class B_Epsilon2 {
 	}
 	
 	static class Pair {
-		char left;
-		String right;
+		final char left;
+		final String right;
 		
 		Pair(char a, String b) {
 			this.left = a;

@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class C_EasternTale {
 	private static Scanner in;

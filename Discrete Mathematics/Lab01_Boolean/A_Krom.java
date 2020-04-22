@@ -11,9 +11,7 @@ public class A_Krom {
 		int n = Integer.parseInt(line[0]);
 		int[][] g = new int[2*n][2*n];
 		for (int i = 0; i < g.length; i++) {
-			for (int j = 0; j < g[i].length; j++) {
-				g[i][j] = Integer.MAX_VALUE;
-			}
+			Arrays.fill(g[i], Integer.MAX_VALUE);
 			
 		}
 		int m = Integer.parseInt(line[1]);

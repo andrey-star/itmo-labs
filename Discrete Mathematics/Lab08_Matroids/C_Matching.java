@@ -69,8 +69,8 @@ public class C_Matching {
 	}
 	
 	private static class Vertex {
-		int index;
-		int w;
+		final int index;
+		final int w;
 		
 		Vertex(int index, int w) {
 			this.index = index;

@@ -19,6 +19,7 @@ public class D_TournamentCycle {
 	public static void main(String[] args) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream("guyaury.in")));
 		int n = Integer.parseInt(in.readLine());
+		//noinspection unchecked
 		List<Integer>[] g = new ArrayList[n];
 		for (int i = 0; i < n; i++) {
 			g[i] = new ArrayList<>();

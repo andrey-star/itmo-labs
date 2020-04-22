@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Task20_DoubleBracketSequenceToNumber {
 	
-	private static long[][] dp;
+	private static final long[][] dp;
 	
 	static {
 		dp = new long[50][50];

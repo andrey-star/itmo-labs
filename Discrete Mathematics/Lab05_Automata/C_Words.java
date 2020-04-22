@@ -2,27 +2,10 @@ import java.io.*;
 import java.util.*;
 
 public class C_Words {
-	
-	private static void test(int n) throws FileNotFoundException {
-		PrintWriter out = new PrintWriter(new File("problem3.in"));
-		out.println(n + " " + 2 * (n - 1) + " " + n);
-		for (int i = 0; i < n; i++) {
-			out.print(i + 1 + " ");
-		}
-		out.println();
-		for (int i = 0; i < n - 1; i++) {
-			out.println((i + 1) + " " + (i + 2) + " a");
-			out.println((i + 1) + " " + (i + 2) + " b");
-		}
-		out.close();
-	}
+
 	
 	public static void main(String[] args) throws IOException {
-//		int n = 50_000;
-//		test(n);
-//		long start = System.currentTimeMillis();
 		solve();
-//		System.out.println((System.currentTimeMillis() - start) / 1000.0);
 	}
 	
 	private static void solve() throws IOException {
@@ -48,7 +31,6 @@ public class C_Words {
 			line = in.readLine().trim().split(" +");
 			int a = Integer.parseInt(line[0]) - 1;
 			int b = Integer.parseInt(line[1]) - 1;
-			char c = line[2].charAt(0);
 			g[a].add(b);
 			gRev[b].add(a);
 		}
@@ -71,9 +53,9 @@ public class C_Words {
 			Collections.reverse(topSort);
 			int[] dp = new int[n];
 			dp[0] = 1;
-			for (int i = 0; i < topSort.size(); i++) {
-				for (int v : g[topSort.get(i)]) {
-					dp[v] += dp[topSort.get(i)];
+			for (int integer : topSort) {
+				for (int v : g[integer]) {
+					dp[v] += dp[integer];
 					dp[v] %= ((int) 1e9 + 7);
 				}
 			}

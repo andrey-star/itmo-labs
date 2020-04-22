@@ -75,8 +75,8 @@ public class B_Epsilon {
 	}
 	
 	private static class Pair {
-		char a;
-		String b;
+		final char a;
+		final String b;
 		
 		Pair(char a, String b) {
 			this.a = a;

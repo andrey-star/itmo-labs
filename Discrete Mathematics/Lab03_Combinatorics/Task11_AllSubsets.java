@@ -7,16 +7,15 @@ import java.util.TreeSet;
 
 public class Task11_AllSubsets {
 	
-	static class Vector implements Comparable {
-		int[] values;
+	static class Vector implements Comparable<Vector> {
+		final int[] values;
 		
 		private Vector(int[] a) {
 			values = Arrays.copyOf(a, a.length);
 		}
 		
 		@Override
-		public int compareTo(Object o) {
-			Vector v = (Vector) o;
+		public int compareTo(Vector v) {
 			for (int i = 0; i < values.length; i++) {
 				if (values[i] != v.values[i]) {
 					return values[i] - v.values[i];

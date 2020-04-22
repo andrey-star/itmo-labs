@@ -46,10 +46,10 @@ public class B_Destroy {
 	}
 	
 	private static class Edge {
-		int a;
-		int b;
-		long c;
-		int index;
+		final int a;
+		final int b;
+		final long c;
+		final int index;
 		
 		Edge(int a, int b, long c, int index) {
 			this.a = a;
@@ -61,8 +61,8 @@ public class B_Destroy {
 	
 	static private class DSU {
 		
-		private int[] parent;
-		private int[] root;
+		private final int[] parent;
+		private final int[] root;
 		private int comps = 0;
 		
 		private DSU(int n) {

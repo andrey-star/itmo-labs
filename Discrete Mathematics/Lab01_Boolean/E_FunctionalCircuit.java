@@ -10,7 +10,7 @@ public class E_FunctionalCircuit {
 		int[] inputs;
 		int[] table;
 		int result;
-		String type;
+		final String type;
 		int depth;
 		
 		Node() {
@@ -53,7 +53,7 @@ public class E_FunctionalCircuit {
 	
 	static class Circuit {
 		
-		ArrayList<Node> circuit;
+		final ArrayList<Node> circuit;
 		
 		Circuit() {
 			circuit = new ArrayList<>();
@@ -123,10 +123,8 @@ public class E_FunctionalCircuit {
 		System.out.println(depth);
 		for (int i = 0; i < (1 << arg); i++) {
 			int[] inputs = new int[arg];
-			StringBuilder s = new StringBuilder();
 			for (int j = 0; j < arg; j++) {
 				inputs[j] = (i >> (arg - j - 1)) & 1;
-				s.append(inputs[j]);
 			}
 			System.out.print(circuit.run(inputs));
 		}

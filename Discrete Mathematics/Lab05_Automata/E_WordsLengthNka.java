@@ -64,9 +64,7 @@ public class E_WordsLengthNka {
 		}
 		int[][] gNew = new int[n][26];
 		for (int i = 0; i < gNew.length; i++) {
-			for (int j = 0; j < gNew[i].length; j++) {
-				gNew[i][j] = -1;
-			}
+			Arrays.fill(gNew[i], -1);
 		}
 		for (BitSet2Int edge : deltaD) {
 			BitSet a = edge.a;
@@ -100,9 +98,9 @@ public class E_WordsLengthNka {
 	}
 	
 	static class BitSet2Int {
-		BitSet a;
-		BitSet b;
-		int letter;
+		final BitSet a;
+		final BitSet b;
+		final int letter;
 		
 		BitSet2Int(BitSet a, BitSet b, int index) {
 			this.a = a;

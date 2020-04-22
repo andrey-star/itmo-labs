@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Task27_NextBracketSequence {
-	private static String gen(int n, String s) {
+	private static String gen(String s) {
 		int open = 0;
 		int close = 0;
 		for (int i = s.length() - 1; i >= 0; i--) {
@@ -34,16 +34,14 @@ public class Task27_NextBracketSequence {
 			return s;
 		}
 		return "-";
-		
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		Scanner in = new Scanner(new File("nextbrackets.in"));
 		String seq = in.next();
-		int n = seq.length() / 2;
 		in.close();
 		PrintWriter out = new PrintWriter(new File("nextbrackets.out"));
-		out.println(gen(n, seq));
+		out.println(gen(seq));
 		out.close();
 	}
 	

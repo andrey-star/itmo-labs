@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class C_MoveToFront {
