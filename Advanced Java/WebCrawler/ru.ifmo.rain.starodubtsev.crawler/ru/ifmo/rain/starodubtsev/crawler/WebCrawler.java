@@ -17,8 +17,6 @@ import java.util.function.Supplier;
  */
 public class WebCrawler implements Crawler {
 	
-	private static final boolean PRINT_STACK_TRACE = false;
-	
 	private final Downloader downloader;
 	private final ExecutorService downloaders;
 	private final ExecutorService extractors;
@@ -95,9 +93,7 @@ public class WebCrawler implements Crawler {
 				extractors.awaitTermination(timeout, TimeUnit.MILLISECONDS);
 				break;
 			} catch (final InterruptedException e) {
-				if (PRINT_STACK_TRACE) {
-					e.printStackTrace();
-				}
+				Logger.error(e);
 			}
 		}
 	}

@@ -20,19 +20,21 @@ import static ru.ifmo.rain.starodubtsev.hello.MainUtils.getIntArg;
  */
 public class HelloUDPClient implements HelloClient {
 	
+	public static final long AWAIT_TERMINATION_MILLISECONDS = Long.MAX_VALUE;
 	private static final int SO_TIMEOUT = 100;
 	
 	/**
-	 * Main method. Usage: {@code HelloUDPClient <host> <port> <prefix> <threads> <requests>}.
+	 * Main method. A command line utility for {@code HelloUDPClient}.
+	 * Usage: {@code HelloUDPClient <host> <port> <prefix> <threads> <requests>}.
 	 * Creates and runs the {@code client} with the specified parameters.
 	 *
 	 * @param args program arguments
 	 * @see #run(String, int, String, int, int)
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		Objects.requireNonNull(args);
 		if (args.length != 5) {
-			System.out.println("Usage: HelloUDPClient <host> <port> <prefix> <threads> <requests>");
+			info("Usage: HelloUDPClient <host> <port> <prefix> <threads> <requests>");
 			return;
 		}
 		try {
@@ -42,21 +44,21 @@ public class HelloUDPClient implements HelloClient {
 			final int threads = getIntArg(3, args);
 			final int requests = getIntArg(4, args);
 			new HelloUDPClient().run(host, port, prefix, threads, requests);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			error(e, "Invalid argument(s)");
 		}
 	}
 	
-	private static void error(Exception e, String message) {
+	private static void error(final Exception e, final String message) {
 		Logger.error(e, "[Client]", message);
 	}
 	
-	private static void log(String message) {
-		Logger.log("[Client]", message);
+	private static void info(final String message) {
+		Logger.info("[Client]", message);
 	}
 	
 	@Override
-	public void run(String host, int port, String prefix, int threads, int requests) {
+	public void run(final String host, final int port, final String prefix, final int threads, final int requests) {
 		final SocketAddress socketAddress = new InetSocketAddress(host, port);
 		final ExecutorService requestPool = Executors.newFixedThreadPool(threads);
 		for (int threadId = 0; threadId < threads; threadId++) {
@@ -70,9 +72,9 @@ public class HelloUDPClient implements HelloClient {
 		while (true) {
 			executorService.shutdown();
 			try {
-				executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+				executorService.awaitTermination(AWAIT_TERMINATION_MILLISECONDS, TimeUnit.MILLISECONDS);
 				break;
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				error(e, "Executing thread was interrupted while waiting for termination");
 			}
 		}
@@ -81,67 +83,77 @@ public class HelloUDPClient implements HelloClient {
 	private void processThread(final String prefix, final int threadId, final int requests, final SocketAddress address) {
 		try (final DatagramSocket socket = new DatagramSocket()) {
 			socket.setSoTimeout(SO_TIMEOUT);
-			DatagramPacket packet = new DatagramPacket(new byte[0], 0);
+			final DatagramPacket packet = new DatagramPacket(new byte[0], 0, address);
+			final byte[] receive = new byte[socket.getReceiveBufferSize()];
 			for (int requestId = 0; requestId < requests; requestId++) {
 				final String request = getRequest(prefix, threadId, requestId);
 				while (!socket.isClosed() && !Thread.interrupted()) {
 					try {
-						final String response = DatagramUtils.request(request, packet, socket, address);
+						DatagramUtils.send(request, packet, socket);
+						final String response = DatagramUtils.setDataAndReceive(packet, receive, socket);
 						if (isResponseValid(response, threadId, requestId)) {
-							log(response);
+							info(response);
 							break;
 						} else {
-							log("Received invalid response to request '" + request + "': " + response);
+							info("Received invalid response to request '" + request + "': " + response);
 						}
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						error(e, "Error occurred during communication with the server");
 					}
 				}
 			}
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			error(e, "Error when creating socket");
 		}
 	}
 	
 	private boolean isResponseValid(final String response, final int threadId, final int requestId) {
-		int index = 0;
-		index = skipNonDigits(response, index);
-		int number = parseInt(response, index);
-		if (number != threadId) {
-			return false;
-		}
-		index += Integer.toString(number).length();
-		index = skipNonDigits(response, index);
-		number = parseInt(response, index);
-		if (number != requestId) {
-			return false;
-		}
-		index += Integer.toString(number).length();
-		index = skipNonDigits(response, index);
-		return index == response.length();
+		return new ResponseChecker().check(response, threadId, requestId);
 	}
-	
-	private int skipNonDigits(String response, int index) {
-		while (index < response.length() && !Character.isDigit(response.charAt(index))) {
-			index++;
-		}
-		return index;
-	}
-	
-	private int parseInt(String response, int index) {
-		StringBuilder numberSb = new StringBuilder();
-		while (index < response.length() && Character.isDigit(response.charAt(index))) {
-			numberSb.append(response.charAt(index++));
-		}
-		try {
-			return Integer.parseInt(numberSb.toString());
-		} catch (NumberFormatException e) {
-			return -1;
-		}
-	}
-	
 	
 	private String getRequest(final String prefix, final int threadId, final int requestId) {
 		return String.format("%s%s_%s", prefix, threadId, requestId);
+	}
+	
+	private static class ResponseChecker {
+		
+		private int index;
+		
+		boolean check(String response, int threadId, int requestId) {
+			if (!checkNumber(response, threadId) || !checkNumber(response, requestId)) {
+				return false;
+			}
+			index = skipNonDigits(response, index);
+			return index == response.length();
+		}
+		
+		private boolean checkNumber(String response, int requestId) {
+			index = skipNonDigits(response, index);
+			int number = parseInt(response, index);
+			if (number != requestId) {
+				return false;
+			}
+			index += Integer.toString(number).length();
+			return true;
+		}
+		
+		private int skipNonDigits(final String response, int index) {
+			while (index < response.length() && !Character.isDigit(response.charAt(index))) {
+				index++;
+			}
+			return index;
+		}
+		
+		private int parseInt(final String response, int index) {
+			final StringBuilder sb = new StringBuilder();
+			while (index < response.length() && Character.isDigit(response.charAt(index))) {
+				sb.append(response.charAt(index++));
+			}
+			try {
+				return Integer.parseInt(sb.toString());
+			} catch (final NumberFormatException e) {
+				return -1;
+			}
+		}
 	}
 }

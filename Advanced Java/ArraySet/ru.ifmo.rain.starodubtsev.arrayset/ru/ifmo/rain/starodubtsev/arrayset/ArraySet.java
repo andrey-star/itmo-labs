@@ -12,19 +12,19 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 		this.comparator = null;
 	}
 	
-	public ArraySet(final Collection<? extends E> elements) {
+	public ArraySet(Collection<? extends E> elements) {
 		this.elements = List.copyOf(new TreeSet<>(elements));
 		this.comparator = null;
 	}
 	
-	public ArraySet(final Collection<? extends E> elements, final Comparator<? super E> comparator) {
-		final Set<E> set = new TreeSet<>(comparator);
+	public ArraySet(Collection<? extends E> elements, Comparator<? super E> comparator) {
+		Set<E> set = new TreeSet<>(comparator);
 		set.addAll(elements);
 		this.elements = List.copyOf(set);
 		this.comparator = comparator;
 	}
 	
-	private ArraySet(final List<E> sortedElements, final Comparator<? super E> comparator) {
+	private ArraySet(List<E> sortedElements, Comparator<? super E> comparator) {
 		this.elements = sortedElements;
 		this.comparator = comparator;
 	}
@@ -33,25 +33,25 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 		return new UnsupportedOperationException();
 	}
 	
-	private E elementAt(final int index) {
+	private E elementAt(int index) {
 		if (index < 0 || index >= elements.size()) {
 			return null;
 		}
 		return elements.get(index);
 	}
 	
-	private int getIndex(final E e) {
+	private int getIndex(E e) {
 		return Collections.binarySearch(elements, e, comparator);
 	}
 	
 	@Override
-	public boolean contains(final Object o) {
-		@SuppressWarnings("unchecked") final E e = (E) o;
-		final int index = getIndex(e);
+	public boolean contains(Object o) {
+		@SuppressWarnings("unchecked") E e = (E) o;
+		int index = getIndex(e);
 		return index >= 0;
 	}
 	
-	private int lowerIndex(final E e, final boolean inclusive) {
+	private int lowerIndex(E e, boolean inclusive) {
 		int index = getIndex(e);
 		if (index < 0) {
 			index = -(index + 1) - 1;
@@ -61,7 +61,7 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 		return index;
 	}
 	
-	private int higherIndex(final E e, final boolean inclusive) {
+	private int higherIndex(E e, boolean inclusive) {
 		int index = getIndex(e);
 		if (index < 0) {
 			index = -(index + 1);
@@ -72,22 +72,22 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 	}
 	
 	@Override
-	public E lower(final E e) {
+	public E lower(E e) {
 		return elementAt(lowerIndex(e, false));
 	}
 	
 	@Override
-	public E floor(final E e) {
+	public E floor(E e) {
 		return elementAt(lowerIndex(e, true));
 	}
 	
 	@Override
-	public E ceiling(final E e) {
+	public E ceiling(E e) {
 		return elementAt(higherIndex(e, true));
 	}
 	
 	@Override
-	public E higher(final E e) {
+	public E higher(E e) {
 		return elementAt(higherIndex(e, false));
 	}
 	
@@ -116,9 +116,9 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 		return descendingSet().iterator();
 	}
 	
-	private NavigableSet<E> subSetNoThrow(final E fromElement, final boolean fromInclusive, final E toElement, final boolean toInclusive) {
-		final int fromIndex = higherIndex(fromElement, fromInclusive);
-		final int toIndex = lowerIndex(toElement, toInclusive);
+	private NavigableSet<E> subSetNoThrow(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
+		int fromIndex = higherIndex(fromElement, fromInclusive);
+		int toIndex = lowerIndex(toElement, toInclusive);
 		if (fromIndex > toIndex) {
 			return new ArraySet<>(Collections.emptyList(), comparator);
 		}
@@ -126,7 +126,7 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 	}
 	
 	@Override
-	public NavigableSet<E> subSet(final E fromElement, final boolean fromInclusive, final E toElement, final boolean toInclusive) {
+	public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
 		if (compare(fromElement, toElement) > 0) {
 			throw new IllegalArgumentException("fromKey > toKey");
 		}
@@ -134,7 +134,7 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 	}
 	
 	@Override
-	public NavigableSet<E> headSet(final E toElement, final boolean inclusive) {
+	public NavigableSet<E> headSet(E toElement, boolean inclusive) {
 		if (isEmpty()) {
 			return this;
 		}
@@ -142,7 +142,7 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 	}
 	
 	@Override
-	public NavigableSet<E> tailSet(final E fromElement, final boolean inclusive) {
+	public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
 		if (isEmpty()) {
 			return this;
 		}
@@ -158,23 +158,23 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 	}
 	
 	@Override
-	public SortedSet<E> subSet(final E fromElement, final E toElement) {
+	public SortedSet<E> subSet(E fromElement, E toElement) {
 		return subSet(fromElement, true, toElement, false);
 	}
 	
 	@Override
-	public SortedSet<E> headSet(final E toElement) {
+	public SortedSet<E> headSet(E toElement) {
 		return headSet(toElement, false);
 	}
 	
 	@Override
-	public SortedSet<E> tailSet(final E fromElement) {
+	public SortedSet<E> tailSet(E fromElement) {
 		return tailSet(fromElement, true);
 	}
 	
 	@Override
 	public E first() {
-		final E e = elementAt(0);
+		E e = elementAt(0);
 		if (e == null) {
 			throw new NoSuchElementException();
 		}
@@ -183,7 +183,7 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 	
 	@Override
 	public E last() {
-		final E e = elementAt(size() - 1);
+		E e = elementAt(size() - 1);
 		if (e == null) {
 			throw new NoSuchElementException();
 		}
@@ -196,7 +196,7 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	final int compare(final E e1, final E e2) {
+	final int compare(E e1, E e2) {
 		return comparator == null ? ((Comparable<? super E>) e1).compareTo(e2)
 				: comparator.compare(e1, e2);
 	}
@@ -211,9 +211,9 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 		private final List<E> elements;
 		private final boolean reversed;
 		
-		DescendingList(final List<E> elements) {
+		DescendingList(List<E> elements) {
 			if (elements.getClass() == DescendingList.class) { // to avoid stacking DescendingLists
-				final DescendingList<E> els = (DescendingList<E>) elements;
+				DescendingList<E> els = (DescendingList<E>) elements;
 				this.elements = els.elements;
 				this.reversed = !els.reversed;
 			} else {
@@ -223,7 +223,7 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 		}
 		
 		@Override
-		public E get(final int index) {
+		public E get(int index) {
 			if (reversed) {
 				return elements.get(size() - index - 1);
 			}
@@ -236,3 +236,4 @@ public class ArraySet<E> extends AbstractSet<E> implements NavigableSet<E> {
 		}
 	}
 }
+

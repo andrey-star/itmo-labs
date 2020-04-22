@@ -41,7 +41,6 @@ import static ru.ifmo.rain.starodubtsev.implementor.StringUtils.*;
  */
 public class Implementor implements Impler, JarImpler {
 	
-	
 	/**
 	 * Extension for generated {@code .java} files.
 	 */
@@ -174,14 +173,13 @@ public class Implementor implements Impler, JarImpler {
 		String tokenClassPath = getClassPath(token);
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		List<String> args = new ArrayList<>();
-		args.add(getFullPath(temp, token).toString());
 		args.add("-cp");
 		args.add(temp + File.pathSeparator + tokenClassPath);
+		args.add(getFullPath(temp, token).toString());
 		if (compiler == null || compiler.run(null, null, null, args.toArray(String[]::new)) != 0) {
 			throw new ImplerException("Failed to compile class");
 		}
 	}
-	
 	
 	/**
 	 * Builds a {@code .jar} file containing compiled implementation of {@code token}.

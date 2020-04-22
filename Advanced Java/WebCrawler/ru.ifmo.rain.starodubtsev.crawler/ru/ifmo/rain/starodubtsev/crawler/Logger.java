@@ -1,4 +1,4 @@
-package ru.ifmo.rain.starodubtsev.hello;
+package ru.ifmo.rain.starodubtsev.crawler;
 
 import java.io.PrintStream;
 
