@@ -19,19 +19,19 @@ public class I_Generator {
 		for (int i = 0; i < k; i++) {
 			c[i] = Integer.parseInt(line[i]);
 		}
+		in.close();
+		
 		long[] q = new long[k + 1];
 		q[0] = 1;
 		for (int i = 1; i <= k; i++) {
 			q[i] = -c[i - 1];
 		}
-		in.close();
-		
 		long[] p = p(a, c);
+		
 		while (n != 0) {
-			long[] negate = negate(q);
-			q = prod(q, negate);
+			long[] negate = negateOdd(q);
+			q = even(prod(q, negate));
 			p = prod(p, negate);
-			q = even(q);
 			if (n % 2 == 0) {
 				p = even(p);
 			} else {
@@ -42,23 +42,38 @@ public class I_Generator {
 		System.out.println(mod(get(p, 0)));
 	}
 	
-	private static long[] even(long[] a) {
-		long[] b = new long[a.length / 2];
-		for (int i = 0; i < b.length; i++) {
-			b[i] = get(a, 2 * i);
+	private static long[] p(long[] a, long[] c) {
+		int n = a.length;
+		long[] p = new long[n];
+		for (int k = 0; k < n; k++) {
+			long actual = 0;
+			for (int i = 1; i <= n; i++) {
+				actual += get(c, i - 1) * get(a, k - i);
+				actual = mod(actual);
+			}
+			p[k] = mod(a[k] - actual);
 		}
-		return b;
+		return p;
+	}
+	
+	private static long[] even(long[] a) {
+		return evenOdd(a, true);
 	}
 	
 	private static long[] odd(long[] a) {
+		return evenOdd(a, false);
+	}
+	
+	private static long[] evenOdd(long[] a, boolean even) {
 		long[] b = new long[a.length / 2];
 		for (int i = 0; i < b.length; i++) {
-			b[i] = get(a, 2 * i + 1);
+			b[i] = get(a, 2 * i + (even ? 0 : 1));
 		}
 		return b;
 	}
 	
-	private static long[] negate(long[] a) {
+	
+	private static long[] negateOdd(long[] a) {
 		int n = a.length;
 		long[] res = new long[n];
 		System.arraycopy(a, 0, res, 0, n);
@@ -90,21 +105,6 @@ public class I_Generator {
 			a += MOD;
 		}
 		return a;
-	}
-	
-	private static long[] p(long[] a, long[] c) {
-		int n = a.length;
-		long[] p = new long[n];
-		for (int k = 0; k < n; k++) {
-			long actual = 0;
-			for (int i = 1; i <= n; i++) {
-				actual += get(c, i - 1) * get(a, k - i);
-				actual = mod(actual);
-			}
-			p[k] = a[k] - actual;
-			p[k] = mod(p[k]);
-		}
-		return p;
 	}
 	
 	private static long get(long[] a, int i) {

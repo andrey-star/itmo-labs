@@ -17,27 +17,28 @@ public class C_RationalGF {
 		for (int i = 0; i < k; i++) {
 			c[i] = Integer.parseInt(line[i]);
 		}
+		in.close();
+		
 		long[] q = new long[k + 1];
 		q[0] = 1;
 		for (int i = 1; i < q.length; i++) {
 			q[i] = -c[i - 1];
 		}
-		long[] p = new long[k];
-		for (int i = 0; i < k; i++) {
-			p[i] = a[i] - val(a, c, i);
-		}
-		print(p);
+		print(p(a, c));
 		print(q);
-		in.close();
 	}
 	
-	private static long val(long[] a, int[] c, int n) {
-		long res = 0;
-		int k = c.length;
-		for (int i = 1; i <= k; i++) {
-			res += c[i - 1] * get(n - i, a);
+	private static long[] p(long[] a, int[] c) {
+		int n = a.length;
+		long[] p = new long[n];
+		for (int k = 0; k < n; k++) {
+			long actual = 0;
+			for (int i = 1; i <= n; i++) {
+				actual += c[i - 1] * get(k - i, a);
+			}
+			p[k] = a[k] - actual;
 		}
-		return res;
+		return p;
 	}
 	
 	private static long get(int i, long[] a) {

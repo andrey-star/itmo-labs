@@ -18,15 +18,16 @@ public class E_QuasiPolynom {
 			a[i] = Integer.parseInt(line[i]);
 		}
 		in.close();
-		long[] oneMinusS = new long[2];
-		oneMinusS[0] = 1;
-		oneMinusS[1] = -1;
-		long[] oneMinusSPow = oneMinusS;
+		
+		long[] odinMinusS = new long[2];
+		odinMinusS[0] = 1;
+		odinMinusS[1] = -1;
+		long[] odinMinusSPow = odinMinusS;
 		long[] p = new long[1];
 		p[0] = a[0];
 		for (int i = 1; i < d; i++) {
-			p = sum(prod(p, oneMinusS), prod(p(i), a[i]));
-			oneMinusSPow = prod(oneMinusS, oneMinusSPow);
+			p = sum(prod(p, odinMinusS), prod(p(i), a[i]));
+			odinMinusSPow = prod(odinMinusS, odinMinusSPow);
 		}
 		long rPow = 1;
 		for (int i = 0; i < p.length; i++) {
@@ -34,12 +35,12 @@ public class E_QuasiPolynom {
 			rPow *= r;
 		}
 		rPow = 1;
-		for (int i = 0; i < oneMinusSPow.length; i++) {
-			oneMinusSPow[i] *= rPow;
+		for (int i = 0; i < odinMinusSPow.length; i++) {
+			odinMinusSPow[i] *= rPow;
 			rPow *= r;
 		}
 		print(p);
-		print(oneMinusSPow);
+		print(odinMinusSPow);
 	}
 	
 	private static long[] p(int m) {
@@ -49,7 +50,6 @@ public class E_QuasiPolynom {
 		}
 		long[] p = new long[m + 1];
 		for (int k = 0; k < m + 1; k++) {
-			p[k] = a[k];
 			long actual = 0;
 			for (int i = 1; i <= m + 1; i++) {
 				int neg = (i + 1) % 2 == 0 ? 1 : -1;

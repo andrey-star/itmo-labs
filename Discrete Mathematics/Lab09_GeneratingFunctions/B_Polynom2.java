@@ -70,14 +70,6 @@ public class B_Polynom2 {
 		return div(mul(a, nom), den);
 	}
 	
-	private static long mul(long... n) {
-		long res = n[0];
-		for (int i = 1; i < n.length; i++) {
-			res = mod(res * n[i]);
-		}
-		return res;
-	}
-	
 	private static long[] e(long[] a, int n) {
 		return div(a, fact(n));
 	}
@@ -100,6 +92,14 @@ public class B_Polynom2 {
 			mul[i] = mod(a[i] * h);
 		}
 		return mul;
+	}
+	
+	private static long mul(long... n) {
+		long res = n[0];
+		for (int i = 1; i < n.length; i++) {
+			res = mod(res * n[i]);
+		}
+		return res;
 	}
 	
 	private static long[] sum(long[] p, long[] q) {
