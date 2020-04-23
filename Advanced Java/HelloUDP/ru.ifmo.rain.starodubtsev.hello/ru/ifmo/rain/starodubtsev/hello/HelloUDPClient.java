@@ -90,7 +90,7 @@ public class HelloUDPClient implements HelloClient {
 				while (!socket.isClosed() && !Thread.interrupted()) {
 					try {
 						DatagramUtils.send(request, packet, socket);
-						final String response = DatagramUtils.setDataAndReceive(packet, receive, socket);
+						final String response = DatagramUtils.setDataAndReceive(receive, packet, socket);
 						if (isResponseValid(response, threadId, requestId)) {
 							info(response);
 							break;

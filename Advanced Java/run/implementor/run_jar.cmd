@@ -1,6 +1,8 @@
-@echo off
-SET wd=C:\Users\fastr\IdeaProjects\java-advanced-2020
+echo %~dp0..\..\
 
+@echo off
+
+SET wd=%~dp0..\..\
 SET run=%wd%\run\implementor
 SET mod_path=%run%;%wd%\artifacts;%wd%\lib
 

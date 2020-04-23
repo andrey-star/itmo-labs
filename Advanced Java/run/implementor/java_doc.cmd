@@ -1,15 +1,9 @@
 @echo off
 
-SET cd=%CD%
-
-SET wd=C:\Users\fastr\IdeaProjects\java-advanced-2020
-SET mod_dir=ru\ifmo\rain\starodubtsev\implementor
+SET wd=%~dp0..\..\
 SET mod_name=ru.ifmo.rain.starodubtsev.implementor
 
-SET k_mod=info.kgeorgiy.java.advanced
-SET k_implementor=%k_mod%.implementor
-SET k_base=%k_mod%.base
-SET k_impl_dir=%wd%\modules\%k_implementor%\info\kgeorgiy\java\advanced\implementor
+SET k_impl_dir=%wd%\modules\info.kgeorgiy.java.advanced.implementor\info\kgeorgiy\java\advanced\implementor
 
 SET src=%wd%\my_modules\%mod_name%
 SET out=%wd%\out\production\%mod_name%

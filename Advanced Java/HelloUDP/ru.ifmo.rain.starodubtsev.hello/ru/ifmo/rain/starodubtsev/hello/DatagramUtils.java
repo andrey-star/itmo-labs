@@ -26,7 +26,7 @@ public class DatagramUtils {
 		socket.send(packet);
 	}
 	
-	public static String setDataAndReceive(final DatagramPacket packet, byte[] receive, final DatagramSocket socket) throws IOException {
+	public static String setDataAndReceive(byte[] receive, final DatagramPacket packet, final DatagramSocket socket) throws IOException {
 		setData(packet, receive);
 		socket.receive(packet);
 		return getString(packet);

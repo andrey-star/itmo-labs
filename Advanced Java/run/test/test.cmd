@@ -7,7 +7,7 @@ SET modification=%3
 SET mod_name=ru.ifmo.rain.starodubtsev.%module%
 SET mod_dir=ru\ifmo\rain\starodubtsev\%module%
 
-SET wd=C:\Users\fastr\IdeaProjects\java-advanced-2020
+SET wd=%~dp0..\..\
 SET mod_path=%wd%\artifacts;%wd%\lib;%wd%\out\production\%mod_name%
 SET src=%wd%\my_modules\%mod_name%
 SET out=%wd%\out\production\%mod_name%

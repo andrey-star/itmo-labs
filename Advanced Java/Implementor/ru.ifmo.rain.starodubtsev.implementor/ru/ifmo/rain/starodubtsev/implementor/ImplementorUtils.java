@@ -16,7 +16,7 @@ public class ImplementorUtils {
 	/**
 	 * A {@code DeletingFileVisitor} object used to delete file trees.
 	 */
-	private static DeletingFileVisitor deletingFileVisitor = new DeletingFileVisitor();
+	private static final DeletingFileVisitor deletingFileVisitor = new DeletingFileVisitor();
 	
 	/**
 	 * Prevents this class from being instantiated.

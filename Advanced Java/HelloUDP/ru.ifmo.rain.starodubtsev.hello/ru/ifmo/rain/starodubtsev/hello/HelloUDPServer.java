@@ -85,7 +85,7 @@ public class HelloUDPServer implements HelloServer {
 			final byte[] receive = new byte[socket.getReceiveBufferSize()];
 			while (!socket.isClosed() && !Thread.interrupted()) {
 				try {
-					final String request = DatagramUtils.setDataAndReceive(packet, receive, socket);
+					final String request = DatagramUtils.setDataAndReceive(receive, packet, socket);
 					DatagramUtils.send(response(request), packet, socket);
 				} catch (final SocketTimeoutException ignored) {
 					info("Server did not receive any requests in given time");
