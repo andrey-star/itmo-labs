@@ -65,10 +65,11 @@ public class A_Polynom {
 	}
 	
 	private static long mod(long a) {
-		if (a >= 0) {
-			return a % MOD;
+		a %= MOD;
+		if (a < 0) {
+			a += MOD;
 		}
-		return a + MOD * (a / MOD + 1);
+		return a;
 	}
 	
 	private static long[] prod(long[] p, long[] q) {
