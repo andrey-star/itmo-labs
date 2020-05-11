@@ -1,6 +1,6 @@
 @echo off
 
-SET wd=%~dp0..\..\
+SET wd=%~dp0..\..
 SET mod_name=ru.ifmo.rain.starodubtsev.implementor
 
 SET k_impl_dir=%wd%\modules\info.kgeorgiy.java.advanced.implementor\info\kgeorgiy\java\advanced\implementor

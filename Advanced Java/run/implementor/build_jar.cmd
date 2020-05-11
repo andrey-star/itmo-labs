@@ -3,7 +3,7 @@
 SET mod_dir=ru\ifmo\rain\starodubtsev\implementor
 SET mod_name=ru.ifmo.rain.starodubtsev.implementor
 
-SET wd=%~dp0..\..\
+SET wd=%~dp0..\..
 SET mod_path=%wd%\artifacts;%wd%\lib
 
 SET src=%wd%\my_modules\%mod_name%
