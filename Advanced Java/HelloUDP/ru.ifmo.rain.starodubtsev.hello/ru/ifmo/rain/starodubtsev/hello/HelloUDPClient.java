@@ -108,7 +108,7 @@ public class HelloUDPClient implements HelloClient {
 	}
 	
 	private boolean isResponseValid(final String response, final int threadId, final int requestId) {
-		return new ResponseChecker().check(response, threadId, requestId);
+		return new ResponseChecker(threadId, requestId).check(response);
 	}
 	
 	private String getRequest(final String prefix, final int threadId, final int requestId) {
@@ -117,9 +117,18 @@ public class HelloUDPClient implements HelloClient {
 	
 	private static class ResponseChecker {
 		
+		private final int threadId;
+		private final int requestId;
 		private int index;
 		
-		boolean check(String response, int threadId, int requestId) {
+		private ResponseChecker(int threadId, int requestId) {
+			index = 0;
+			this.threadId = threadId;
+			this.requestId = requestId;
+		}
+		
+		
+		boolean check(String response) {
 			if (!checkNumber(response, threadId) || !checkNumber(response, requestId)) {
 				return false;
 			}
@@ -137,14 +146,14 @@ public class HelloUDPClient implements HelloClient {
 			return true;
 		}
 		
-		private int skipNonDigits(final String response, int index) {
+		private static int skipNonDigits(final String response, int index) {
 			while (index < response.length() && !Character.isDigit(response.charAt(index))) {
 				index++;
 			}
 			return index;
 		}
 		
-		private int parseInt(final String response, int index) {
+		private static int parseInt(final String response, int index) {
 			final StringBuilder sb = new StringBuilder();
 			while (index < response.length() && Character.isDigit(response.charAt(index))) {
 				sb.append(response.charAt(index++));

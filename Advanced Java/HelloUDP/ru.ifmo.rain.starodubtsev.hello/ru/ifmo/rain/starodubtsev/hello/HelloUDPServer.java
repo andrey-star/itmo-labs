@@ -81,8 +81,8 @@ public class HelloUDPServer implements HelloServer {
 	
 	private void processRequest() {
 		try {
-			final DatagramPacket packet = new DatagramPacket(new byte[0], 0);
 			final byte[] receive = new byte[socket.getReceiveBufferSize()];
+			final DatagramPacket packet = new DatagramPacket(receive, receive.length);
 			while (!socket.isClosed() && !Thread.interrupted()) {
 				try {
 					final String request = DatagramUtils.setDataAndReceive(receive, packet, socket);

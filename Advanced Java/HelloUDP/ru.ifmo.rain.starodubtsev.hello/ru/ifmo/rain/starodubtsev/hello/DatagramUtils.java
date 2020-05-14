@@ -18,7 +18,7 @@ public class DatagramUtils {
 	}
 	
 	public static void setString(final String string, final DatagramPacket packet) {
-		setData(packet, string.getBytes(CHARSET));
+		packet.setData(string.getBytes(CHARSET));
 	}
 	
 	public static void send(final String request, final DatagramPacket packet, final DatagramSocket socket) throws IOException {
@@ -26,13 +26,9 @@ public class DatagramUtils {
 		socket.send(packet);
 	}
 	
-	public static String setDataAndReceive(byte[] receive, final DatagramPacket packet, final DatagramSocket socket) throws IOException {
-		setData(packet, receive);
+	public static String setDataAndReceive(final byte[] receive, final DatagramPacket packet, final DatagramSocket socket) throws IOException {
+		packet.setData(receive);
 		socket.receive(packet);
 		return getString(packet);
-	}
-	
-	public static void setData(DatagramPacket packet, byte[] send) {
-		packet.setData(send);
 	}
 }

@@ -23,6 +23,6 @@ javac --module-path %mod_path% %wd%\modules\info.kgeorgiy.java.advanced.%module%
 rem set /P salt="Salt: "
 @echo on
 
-java --module-path %mod_path% --add-modules %mod_name% --add-modules %mod_name%^
+java --module-path %mod_path% --add-modules %mod_name%^
  -m info.kgeorgiy.java.advanced.%module%/info.kgeorgiy.java.advanced.%module%.Tester^
  %modification% %mod_name%.%class%
