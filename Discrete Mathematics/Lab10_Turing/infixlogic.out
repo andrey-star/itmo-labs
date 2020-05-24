@@ -1,0 +1,73 @@
+3
+S 1 _ _ -> S _ > _ ^ 1 >
+S 0 _ _ -> S _ > _ ^ 0 >
+S a _ _ -> add_and _ ^ _ < _ ^
+S o _ _ -> add_or _ ^ _ < _ ^
+S ( _ _ -> S _ > ( > _ ^
+S ) _ _ -> pop_close _ ^ _ < _ ^
+S _ _ _ -> pop_all _ ^ _ < _ ^
+
+add_and _ _ _ -> add_and2 _ ^ _ > _ ^
+add_and _ ( _ -> add_and2 _ ^ ( > _ ^
+add_and _ o _ -> add_and2 _ ^ o > _ ^
+add_and _ a _ -> pop_and _ ^ a ^ _ ^
+
+pop_and _ a _ -> pop_and _ ^ _ < a >
+pop_and _ o _ -> add_and2 _ ^ o > _ ^
+pop_and _ ( _ -> add_and2 _ ^ ( > _ ^
+pop_and _ _ _ -> add_and2 _ ^ _ > _ ^
+
+add_or _ _ _ -> add_or2 _ ^ _ > _ ^
+add_or _ ( _ -> add_or2 _ ^ ( > _ ^
+add_or _ o _ -> pop_or _ ^ o ^ _ ^
+add_or _ a _ -> pop_or _ ^ a ^ _ ^
+
+pop_or _ a _ -> pop_or _ ^ _ < a >
+pop_or _ o _ -> pop_or _ ^ _ < o >
+pop_or _ ( _ -> add_or2 _ ^ ( > _ ^
+pop_or _ _ _ -> add_or2 _ ^ _ > _ ^
+
+add_open _ _ _ ->  S _ > ( > _ ^
+
+pop_close _ ( _ -> S _ > _ ^ _ ^
+pop_close _ a _ -> pop_close _ ^ _ < a >
+pop_close _ o _ -> pop_close _ ^ _ < o >
+
+pop_all _ _ _ -> goto_start _ ^ _ ^ _ <
+pop_all _ a _ -> pop_all _ ^ _ < a >
+pop_all _ o _ -> pop_all _ ^ _ < o >
+
+add_and2 _ _ _ -> S _ > a > _ ^
+add_or2 _ _ _ -> S _ > o > _ ^
+
+goto_start _ _ _ -> s2 _ > _ ^ _ ^
+goto_start _ _ a -> goto_start a < _ ^ _ <
+goto_start _ _ o -> goto_start o < _ ^ _ <
+goto_start _ _ 0 -> goto_start 0 < _ ^ _ <
+goto_start _ _ 1 -> goto_start 1 < _ ^ _ <
+
+s2 1 _ _ -> s2 _ > 1 > _ ^
+s2 0 _ _ -> s2 _ > 0 > _ ^
+s2 a _ _ -> and _ ^ _ < _ ^
+s2 o _ _ -> or _ ^ _ < _ ^
+s2 _ _ _ -> ret _ ^ _ < _ ^
+
+and _ 0 _ -> set0 _ ^ _ < _ ^
+and _ 1 _ -> sec _ ^ _ < _ ^
+
+or _ 0 _ -> sec _ ^ _ < _ ^
+or _ 1 _ -> set1 _ ^ _ < _ ^
+
+sec _ 0 _ -> s2 _ > 0 > _ ^
+sec _ 1 _ -> s2 _ > 1 > _ ^
+sec _ 0 _ -> s2 _ > 0 > _ ^
+sec _ 1 _ -> s2 _ > 1 > _ ^
+
+set0 _ 0 _ -> s2 _ > 0 > _ ^
+set0 _ 1 _ -> s2 _ > 0 > _ ^
+
+set1 _ 0 _ -> s2 _ > 1 > _ ^
+set1 _ 1 _ -> s2 _ > 1 > _ ^
+
+ret _ 0 _ -> AC 0 ^ _ ^ _ ^
+ret _ 1 _ -> AC 1 ^ _ ^ _ ^

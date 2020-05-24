@@ -1,0 +1,261 @@
+start: s
+accept: ac
+reject: rj
+blank: _
+
+s _ -> goto_start_and_copy = <
+s 0 -> s 0 >
+s 1 -> s 1 >
+
+goto_start_and_copy _ -> copy= _ >
+goto_start_and_copy 0 -> goto_start_and_copy 0 <
+goto_start_and_copy 1 -> goto_start_and_copy 1 <
+
+copy= 0 -> copy=0 0' >
+copy= 1 -> copy=1 1' >
+copy= = -> sub1_2 = >
+
+copy=0 _ -> goto=_and_rightmost_not' 0 <
+copy=0 0 -> copy=0 0 >
+copy=0 1 -> copy=0 1 >
+copy=0 = -> copy=0 = >
+
+copy=1 _ -> goto=_and_rightmost_not' 1 <
+copy=1 0 -> copy=1 0 >
+copy=1 1 -> copy=1 1 >
+copy=1 = -> copy=1 = >
+
+goto=_and_rightmost_not' 0 -> goto=_and_rightmost_not' 0 <
+goto=_and_rightmost_not' 1 -> goto=_and_rightmost_not' 1 <
+goto=_and_rightmost_not' 0' -> copy= 0' >
+goto=_and_rightmost_not' 1' -> copy= 1' >
+goto=_and_rightmost_not' = -> goto=_and_rightmost_not' = <
+
+sub1_or_return_2 _ -> return _ <
+sub1_or_return_2 0 -> sub1_or_return_2 0 >
+sub1_or_return_2 1 -> sub1_2 1 ^
+
+sub1_2 _ -> first_not0_2 _ <
+sub1_2 0 -> sub1_2 0 >
+sub1_2 1 -> sub1_2 1 >
+
+first_not0_2 0 -> first_not0_2 0 <
+first_not0_2 1 -> replace_right_zeros_with_1_2 0 >
+
+replace_right_zeros_with_1_2 _ -> goto_start_clearing'_and_dup _ <
+replace_right_zeros_with_1_2 0 -> replace_right_zeros_with_1_2 1 >
+
+goto_start_clearing'_and_dup 0 -> goto_start_clearing'_and_dup 0 <
+goto_start_clearing'_and_dup 1 -> goto_start_clearing'_and_dup 1 <
+goto_start_clearing'_and_dup = -> goto_start_clearing'_and_dup = <
+goto_start_clearing'_and_dup 0' -> goto_start_clearing'_and_dup 0 <
+goto_start_clearing'_and_dup 1' -> goto_start_clearing'_and_dup 1 <
+goto_start_clearing'_and_dup _ -> goto=_and_dup _ >
+
+goto=_and_dup 0 -> goto=_and_dup 0 >
+goto=_and_dup 1 -> goto=_and_dup 1 >
+goto=_and_dup = -> dup = >
+
+goto=_and_dup2 0 -> goto=_and_dup2 0 <
+goto=_and_dup2 1 -> goto=_and_dup2 1 <
+goto=_and_dup2 = -> dup2 = >
+
+dup 0 -> check0 0 ^
+dup 1 -> check0 1 ^
+
+check0 _ -> return _ <
+check0 0 -> check0 0 >
+check0 1 -> check_ok 1 >
+
+check_ok _ -> goto=_and_dup2 | <
+check_ok 0 -> check_ok 0 >
+check_ok 1 -> check_ok 1 >
+
+dup2 0 -> dup2_0 0' >
+dup2 1 -> dup2_1 1' >
+dup2 | -> sub1_3 | >
+
+dup2_0 _ -> goto|_and_rightmost_not' 0 <
+dup2_0 0 -> dup2_0 0 >
+dup2_0 1 -> dup2_0 1 >
+dup2_0 | -> dup2_0 | >
+
+dup2_1 _ -> goto|_and_rightmost_not' 1 <
+dup2_1 0 -> dup2_1 0 >
+dup2_1 1 -> dup2_1 1 >
+dup2_1 | -> dup2_1 | >
+
+goto|_and_rightmost_not' 0 -> goto|_and_rightmost_not' 0 <
+goto|_and_rightmost_not' 1 -> goto|_and_rightmost_not' 1 <
+goto|_and_rightmost_not' 0' -> dup2 0' >
+goto|_and_rightmost_not' 1' -> dup2 1' >
+goto|_and_rightmost_not' | -> goto|_and_rightmost_not' | <
+
+sub1_3 _ -> first_not0_3 _ <
+sub1_3 0 -> sub1_3 0 >
+sub1_3 1 -> sub1_3 1 >
+
+first_not0_3 0 -> first_not0_3 0 <
+first_not0_3 1 -> replace_right_zeros_with_1_3 0 >
+
+replace_right_zeros_with_1_3 _ -> goto=_clearing'_and_shift _ <
+replace_right_zeros_with_1_3 0 -> replace_right_zeros_with_1_3 1 >
+
+goto=_clearing'_and_shift 0 -> goto=_clearing'_and_shift 0 <
+goto=_clearing'_and_shift 1 -> goto=_clearing'_and_shift 1 <
+goto=_clearing'_and_shift | -> goto=_clearing'_and_shift | <
+goto=_clearing'_and_shift 0' -> goto=_clearing'_and_shift 0 <
+goto=_clearing'_and_shift 1' -> goto=_clearing'_and_shift 1 <
+goto=_clearing'_and_shift = -> shift * <
+
+shift _ -> prepend0 = <
+shift 0 -> shift 0 <
+shift 1 -> shift 1 <
+
+prepend0 _ -> skip=_and_mul 0 >
+
+skip=_and_mul = -> mul = >
+
+repl 0 -> repl0 0' <
+repl 1 -> repl1 1' <
+
+repl0 0 -> repl0 0 <
+repl0 1 -> repl0 1 <
+repl0 = -> place0 = >
+repl0 0' -> repl0 0' <
+repl0 1' -> repl0 1' <
+repl0 | -> repl0_2 | <
+
+repl0_2 0 -> repl0_2 0 <
+repl0_2 1 -> repl0_2 1 <
+repl0_2 * -> repl0_2 * <
+repl0_2 = -> place0 = >
+repl0_2 0' -> place0 0' >
+repl0_2 1' -> place0 1' >
+
+place0 0 -> goto|_and_leftmost_not' 0' >
+place0 1 -> goto|_and_leftmost_not' 0' >
+
+repl1 0 -> repl1 0 <
+repl1 1 -> repl1 1 <
+repl1 = -> place1 = >
+repl1 0' -> repl1 0' <
+repl1 1' -> repl1 1' <
+repl1 | -> repl1_2 | <
+
+repl1_2 0 -> repl1_2 0 <
+repl1_2 1 -> repl1_2 1 <
+repl1_2 * -> repl1_2 * <
+repl1_2 = -> place1 = >
+repl1_2 0' -> place1 0' >
+repl1_2 1' -> place1 1' >
+
+place1 0 -> goto|_and_leftmost_not' 1' >
+place1 1 -> goto|_and_leftmost_not' 1' >
+
+goto|_and_leftmost_not' 0 -> goto|_and_leftmost_not' 0 >
+goto|_and_leftmost_not' 1 -> goto|_and_leftmost_not' 1 >
+goto|_and_leftmost_not' * -> goto|_and_leftmost_not' * >
+goto|_and_leftmost_not' | -> goto|_and_leftmost_not'2 | >
+
+goto|_and_leftmost_not'2 _ -> clear_repl _ <
+goto|_and_leftmost_not'2 0' -> goto|_and_leftmost_not'2 0' >
+goto|_and_leftmost_not'2 1' -> goto|_and_leftmost_not'2 1' >
+goto|_and_leftmost_not'2 0 -> repl 0 ^
+goto|_and_leftmost_not'2 1 -> repl 1 ^
+
+clear_repl 0' -> clear_repl _ <
+clear_repl 1' -> clear_repl _ <
+clear_repl | -> clear_repl2 _ <
+
+clear_repl2 0 -> clear_repl2 _ <
+clear_repl2 1 -> clear_repl2 _ <
+clear_repl2 * -> clear_repl2 _ <
+clear_repl2 0' -> clear_repl2 0 <
+clear_repl2 1' -> clear_repl2 1 <
+clear_repl2 = -> dup = >
+
+mul 0 -> mul 0 >
+mul 1 -> mul 1 >
+mul * -> sub1_or_return * >
+
+sub1_or_return | -> repl | >
+sub1_or_return 0 -> sub1_or_return 0 >
+sub1_or_return 1 -> sub1 1 ^
+
+sub1 | -> first_not0 | <
+sub1 0 -> sub1 0 >
+sub1 1 -> sub1 1 >
+
+first_not0 0 -> first_not0 0 <
+first_not0 1 -> replace_right_zeros_with_1 0 >
+
+replace_right_zeros_with_1 | -> go_left_to* | <
+replace_right_zeros_with_1 0 -> replace_right_zeros_with_1 1 >
+
+go_left_to* 0 -> go_left_to* 0 <
+go_left_to* 1 -> go_left_to* 1 <
+go_left_to* * -> rightmost_digit_before* * <
+
+go_right_to* * -> rightmost_digit_before* * <
+go_right_to* 0 -> go_right_to* 0 >
+go_right_to* 1 -> go_right_to* 1 >
+go_right_to* = -> go_right_to* = >
+go_right_to* 1' -> go_right_to* 1' >
+go_right_to* 0' -> go_right_to* 0' >
+
+rightmost_digit_before* 0 -> goto=_and_add0 0' <
+rightmost_digit_before* 1 -> goto=_and_add1 1' <
+rightmost_digit_before* = -> goto_*_and_clear'_before = ^
+rightmost_digit_before* 0' -> rightmost_digit_before* 0' <
+rightmost_digit_before* 1' -> rightmost_digit_before* 1' <
+
+goto=_and_add0 0 -> goto=_and_add0 0 <
+goto=_and_add0 1 -> goto=_and_add0 1 <
+goto=_and_add0 = -> add0 = <
+
+add0 _ -> go_right_to* 0' ^
+add0 0 -> go_right_to* 0' ^
+add0 1 -> go_right_to* 1' ^
+add0 1' -> add0 1' <
+add0 0' -> add0 0' <
+
+goto=_and_add1 0 -> goto=_and_add1 0 <
+goto=_and_add1 1 -> goto=_and_add1 1 <
+goto=_and_add1 = -> add1 = <
+
+add1 _ -> go_right_to* 1' ^
+add1 0 -> go_right_to* 1' ^
+add1 1 -> add_carry 0' <
+add1 1' -> add1 1' <
+add1 0' -> add1 0' <
+
+add_carry _ -> go_right_to* 1 ^
+add_carry 0 -> go_right_to* 1 ^
+add_carry 1 -> add_carry 0 <
+
+goto_*_and_clear'_before = -> goto_*_and_clear'_before = >
+goto_*_and_clear'_before 0' -> goto_*_and_clear'_before 0' >
+goto_*_and_clear'_before 1' -> goto_*_and_clear'_before 1' >
+goto_*_and_clear'_before * -> clr'_before * <
+
+clr'_before _ -> goto_after= _ >
+clr'_before 0' -> clr'_before 0 <
+clr'_before 1' -> clr'_before 1 <
+clr'_before 0 -> clr'_before 0 <
+clr'_before 1 -> clr'_before 1 <
+clr'_before = -> clr'_before = <
+
+goto_after= 0 -> goto_after= 0 >
+goto_after= 1 -> goto_after= 1 >
+goto_after= = -> mul = >
+
+return 0 -> return _ <
+return 0' -> return _ <
+return 1' -> return _ <
+return 1 -> return _ <
+return = -> goto_first_left_blank _ <
+
+goto_first_left_blank _ -> ac _ >
+goto_first_left_blank 0 -> goto_first_left_blank 0 <
+goto_first_left_blank 1 -> goto_first_left_blank 1 <

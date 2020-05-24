@@ -1,0 +1,156 @@
+4
+S 0 _ _ _ -> prepend| 0 < _ ^ _ ^ _ ^
+S 1 _ _ _ -> prepend| 1 < _ ^ _ ^ _ ^
+
+prepend| _ _ _ _ -> append| | > _ ^ _ ^ _ ^
+
+append| 0 _ _ _ -> append| 0 > _ ^ _ ^ _ ^
+append| 1 _ _ _ -> append| 1 > _ ^ _ ^ _ ^
+append| | _ _ _ -> append| | > _ ^ _ ^ _ ^
+append| _ _ _ _ -> goto_start | ^ _ ^ _ ^ _ ^
+
+goto_start 0 _ _ _ -> goto_start 0 < _ ^ _ ^ _ ^
+goto_start 1 _ _ _ -> goto_start 1 < _ ^ _ ^ _ ^
+goto_start | _ _ _ -> goto_start | < _ ^ _ ^ _ ^
+goto_start _ _ _ _ -> set0 _ ^ _ ^ _ ^ _ <
+
+set0 _ _ _ _ -> skip1| _ > _ ^ _ ^ 0 >
+set0 _ _ _ 1 -> skip1| _ > _ ^ _ ^ 0 >
+
+skip1| | _ _ _ -> put1num | > _ ^ _ ^ _ ^
+
+put1num 0 _ _ _ -> put1num 0 > 0 > _ > _ ^
+put1num 1 _ _ _ -> put1num 1 > 1 > _ > _ ^
+put1num | _ _ _ -> next| | > _ ^ _ < _ ^
+
+next| 0 _ _ _ -> next| 0 > _ ^ _ ^ _ ^
+next| 1 _ _ _ -> next| 1 > _ ^ _ ^ _ ^
+next| | _ _ _ -> put2num | < _ ^ _ ^ _ ^
+next| _ _ _ _ -> arr_end _ < _ < _ ^ _ ^
+
+put2num 0 _ _ _ -> put2num 0 < _ ^ 0 < _ ^
+put2num 1 _ _ _ -> put2num 1 < _ ^ 1 < _ ^
+put2num | _ _ _ -> go_back3 | ^ _ ^ _ > _ ^
+
+go_back3 | _ _ _ -> go_front | ^ _ < _ < _ ^
+go_back3 | _ 0 _ -> go_back3 | ^ _ ^ 0 > _ ^
+go_back3 | _ 1 _ -> go_back3 | ^ _ ^ 1 > _ ^
+
+go_front | 0 0 _ -> go_front | ^ 0 < 0 < _ ^
+go_front | 0 1 _ -> go_front | ^ 0 < 1 < _ ^
+go_front | 1 0 _ -> go_front | ^ 1 < 0 < _ ^
+go_front | 1 1 _ -> go_front | ^ 1 < 1 < _ ^
+go_front | 0 _ _ -> go_front | ^ 0 < _ < _ ^
+go_front | _ 0 _ -> go_front | ^ _ < 0 < _ ^
+go_front | _ 1 _ -> go_front | ^ _ < 1 < _ ^
+go_front | 1 _ _ -> go_front | ^ 1 < _ < _ ^
+go_front | _ _ _ -> greater | ^ _ > _ > _ ^
+
+greater | 0 0 _ -> greater | ^ 0 > 0 > _ ^
+greater | 0 _ _ -> greater | ^ 0 > _ > _ ^
+greater | _ 0 _ -> greater | ^ _ > 0 > _ ^
+greater | 1 1 _ -> greater | ^ 1 > 1 > _ ^
+greater | 1 0 _ -> goto_digits_and_swap | ^ 1 ^ 0 ^ _ ^
+greater | 1 _ _ -> goto_digits_and_swap | ^ 1 ^ _ ^ _ ^
+greater | 0 1 _ -> goto_end1 | ^ 0 ^ 1 ^ _ ^
+greater | _ 1 _ -> goto_end1 | ^ _ ^ 1 ^ _ ^
+greater | _ _ _ -> clear23 | ^ _ < _ < _ ^
+
+goto_digits_and_swap | 0 _ _ -> goto_digits_and_swap | ^ 0 ^ _ > _ ^
+goto_digits_and_swap | 1 _ _ -> goto_digits_and_swap | ^ 1 ^ _ > _ ^
+goto_digits_and_swap | _ 0 _ -> goto_digits_and_swap | ^ _ > 0 ^ _ ^
+goto_digits_and_swap | _ 0 _ -> goto_digits_and_swap | ^ _ > 1 ^ _ ^
+goto_digits_and_swap | 0 0 _ -> move_to_starts_and_swap | ^ 0 ^ 0 ^ _ ^
+goto_digits_and_swap | 0 1 _ -> move_to_starts_and_swap | ^ 0 ^ 1 ^ _ ^
+goto_digits_and_swap | 1 0 _ -> move_to_starts_and_swap | ^ 1 ^ 0 ^ _ ^
+goto_digits_and_swap | 1 1 _ -> move_to_starts_and_swap | ^ 1 ^ 1 ^ _ ^
+
+move_to_starts_and_swap | 0 0 _ -> move_to_starts_and_swap | ^ 0 < 0 < _ ^
+move_to_starts_and_swap | 0 _ _ -> move_to_starts_and_swap | ^ 0 < _ ^ _ ^
+move_to_starts_and_swap | _ 0 _ -> move_to_starts_and_swap | ^ _ ^ 0 < _ ^
+move_to_starts_and_swap | 0 1 _ -> move_to_starts_and_swap | ^ 0 < 1 < _ ^
+move_to_starts_and_swap | _ 1 _ -> move_to_starts_and_swap | ^ _ ^ 1 < _ ^
+move_to_starts_and_swap | 1 0 _ -> move_to_starts_and_swap | ^ 1 < 0 < _ ^
+move_to_starts_and_swap | 1 _ _ -> move_to_starts_and_swap | ^ 1 < _ ^ _ ^
+move_to_starts_and_swap | 1 1 _ -> move_to_starts_and_swap | ^ 1 < 1 < _ ^
+move_to_starts_and_swap | _ _ _ -> set | ^ _ ^ _ ^ _ <
+
+set | _ _ 0 -> swap | < _ ^ _ ^ 1 >
+set | _ _ 1 -> swap | < _ ^ _ ^ 1 >
+
+swap 0 _ _ _ -> swap 0 < _ ^ _ ^ _ ^
+swap 1 _ _ _ -> swap 1 < _ ^ _ ^ _ ^
+swap | _ _ _ -> put2back | > _ ^ _ > _ ^
+
+put2back 0 _ 0 _ -> put2back 0 > _ ^ _ > _ ^
+put2back 0 _ 1 _ -> put2back 1 > _ ^ _ > _ ^
+put2back 1 _ 0 _ -> put2back 0 > _ ^ _ > _ ^
+put2back 1 _ 1 _ -> put2back 1 > _ ^ _ > _ ^
+put2back | _ _ _ -> put1back | > _ > _ ^ _ ^
+put2back | _ _ _ -> put1back | > _ > _ ^ _ ^
+put2back 0 _ _ _ -> put1back | > _ > _ ^ _ ^
+put2back 1 _ _ _ -> put1back | > _ > _ ^ _ ^
+
+put1back 0 0 _ _ -> put1back 0 > _ > _ ^ _ ^
+put1back 0 1 _ _ -> put1back 1 > _ > _ ^ _ ^
+put1back 1 0 _ _ -> put1back 0 > _ > _ ^ _ ^
+put1back 1 1 _ _ -> put1back 1 > _ > _ ^ _ ^
+put1back | 0 _ _ -> put1back 0 > _ > _ ^ _ ^
+put1back | 1 _ _ -> put1back 1 > _ > _ ^ _ ^
+put1back | _ _ _ -> prev| | < _ ^ _ ^ _ ^
+put1back | _ _ _ -> prev| | < _ ^ _ ^ _ ^
+
+prev| 0 _ _ _ -> prev| 0 < _ ^ _ ^ _ ^
+prev| 1 _ _ _ -> prev| 1 < _ ^ _ ^ _ ^
+prev| | _ _ _ -> put1num | > _ ^ _ ^ _ ^
+
+goto_end1 | _ _ _ -> goto_end1 | ^ _ > _ ^ _ ^
+goto_end1 | _ 0 _ -> goto_end1 | ^ _ > 0 ^ _ ^
+goto_end1 | _ 1 _ -> goto_end1 | ^ _ > 1 ^ _ ^
+goto_end1 | 0 _ _ -> goto_end1_ | ^ 0 > _ ^ _ ^
+goto_end1 | 0 0 _ -> goto_end1_ | ^ 0 > 0 ^ _ ^
+goto_end1 | 0 1 _ -> goto_end1_ | ^ 0 > 1 ^ _ ^
+goto_end1 | 1 _ _ -> goto_end1_ | ^ 1 > _ ^ _ ^
+goto_end1 | 1 0 _ -> goto_end1_ | ^ 1 > 0 ^ _ ^
+goto_end1 | 1 1 _ -> goto_end1_ | ^ 1 > 1 ^ _ ^
+
+goto_end1_ | _ _ _ -> goto_end2 | ^ _ ^ _ ^ _ ^
+goto_end1_ | _ 0 _ -> goto_end2 | ^ _ ^ 0 ^ _ ^
+goto_end1_ | _ 1 _ -> goto_end2 | ^ _ ^ 1 ^ _ ^
+goto_end1_ | 0 _ _ -> goto_end1_ | ^ 0 > _ ^ _ ^
+goto_end1_ | 0 0 _ -> goto_end1_ | ^ 0 > 0 ^ _ ^
+goto_end1_ | 0 1 _ -> goto_end1_ | ^ 0 > 1 ^ _ ^
+goto_end1_ | 1 _ _ -> goto_end1_ | ^ 1 > _ ^ _ ^
+goto_end1_ | 1 0 _ -> goto_end1_ | ^ 1 > 0 ^ _ ^
+goto_end1_ | 1 1 _ -> goto_end1_ | ^ 1 > 1 ^ _ ^
+
+goto_end2 | _ 0 _ -> goto_end2_ | ^ _ ^ 0 > _ ^
+goto_end2 | _ 1 _ -> goto_end2_ | ^ _ ^ 1 > _ ^
+
+goto_end2_ | _ _ _ -> clear23 | ^ _ < _ < _ ^
+goto_end2_ | _ 0 _ -> goto_end2_ | ^ _ ^ 0 > _ ^
+goto_end2_ | _ 1 _ -> goto_end2_ | ^ _ ^ 1 > _ ^
+
+clear23 | 0 0 _ -> clear23 | ^ _ < _ < _ ^
+clear23 | _ 0 _ -> clear23 | ^ _ ^ _ < _ ^
+clear23 | 0 _ _ -> clear23 | ^ _ < _ ^ _ ^
+clear23 | 0 1 _ -> clear23 | ^ _ < _ < _ ^
+clear23 | _ 1 _ -> clear23 | ^ _ ^ _ < _ ^
+clear23 | 1 0 _ -> clear23 | ^ _ < _ < _ ^
+clear23 | 1 _ _ -> clear23 | ^ _ < _ ^ _ ^
+clear23 | 1 1 _ -> clear23 | ^ _ < _ < _ ^
+clear23 | _ _ _ -> put1num | > _ ^ _ ^ _ ^
+
+arr_end | 0 _ _ -> arr_end | ^ _ < _ ^ _ ^
+arr_end | 1 _ _ -> arr_end | ^ _ < _ ^ _ ^
+arr_end | _ _ _ -> check4 | ^ _ ^ _ ^ _ <
+
+check4 | _ _ 1 -> goto_start | ^ _ ^ _ ^ 1 >
+check4 | _ _ 0 -> finish _ < _ ^ _ ^ _ ^
+
+finish 0 _ _ _ -> finish 0 < _ ^ _ ^ _ ^
+finish 1 _ _ _ -> finish 1 < _ ^ _ ^ _ ^
+finish | _ _ _ -> finish | < _ ^ _ ^ _ ^
+finish _ _ _ _ -> del| _ > _ ^ _ ^ _ ^
+
+del| | _ _ _ -> AC _ > _ ^ _ ^ _ ^
