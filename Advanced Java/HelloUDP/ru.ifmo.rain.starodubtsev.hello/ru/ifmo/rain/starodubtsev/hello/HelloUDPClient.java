@@ -4,13 +4,9 @@ import info.kgeorgiy.java.advanced.hello.HelloClient;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import static ru.ifmo.rain.starodubtsev.hello.MainUtils.getArg;
-import static ru.ifmo.rain.starodubtsev.hello.MainUtils.getIntArg;
 
 /**
  * An implementation of the {@code HelloClient} interface.
@@ -18,10 +14,7 @@ import static ru.ifmo.rain.starodubtsev.hello.MainUtils.getIntArg;
  *
  * @see HelloClient
  */
-public class HelloUDPClient implements HelloClient {
-	
-	public static final long AWAIT_TERMINATION_MILLISECONDS = Long.MAX_VALUE;
-	private static final int SO_TIMEOUT = 100;
+public class HelloUDPClient extends AbstractHelloClient implements HelloClient {
 	
 	/**
 	 * Main method. A command line utility for {@code HelloUDPClient}.
@@ -32,21 +25,7 @@ public class HelloUDPClient implements HelloClient {
 	 * @see #run(String, int, String, int, int)
 	 */
 	public static void main(final String[] args) {
-		Objects.requireNonNull(args);
-		if (args.length != 5) {
-			info("Usage: HelloUDPClient <host> <port> <prefix> <threads> <requests>");
-			return;
-		}
-		try {
-			final String host = getArg(0, args);
-			final int port = getIntArg(1, args);
-			final String prefix = getArg(2, args);
-			final int threads = getIntArg(3, args);
-			final int requests = getIntArg(4, args);
-			new HelloUDPClient().run(host, port, prefix, threads, requests);
-		} catch (final NumberFormatException e) {
-			error(e, "Invalid argument(s)");
-		}
+		launch(args, HelloUDPClient::new);
 	}
 	
 	private static void error(final Exception e, final String message) {
@@ -65,10 +44,10 @@ public class HelloUDPClient implements HelloClient {
 			final int finalThreadId = threadId;
 			requestPool.submit(() -> processThread(prefix, finalThreadId, requests, socketAddress));
 		}
-		await(requestPool);
+		waitFor(requestPool);
 	}
 	
-	private void await(final ExecutorService executorService) {
+	private void waitFor(final ExecutorService executorService) {
 		while (true) {
 			executorService.shutdown();
 			try {
@@ -107,62 +86,4 @@ public class HelloUDPClient implements HelloClient {
 		}
 	}
 	
-	private boolean isResponseValid(final String response, final int threadId, final int requestId) {
-		return new ResponseChecker(threadId, requestId).check(response);
-	}
-	
-	private String getRequest(final String prefix, final int threadId, final int requestId) {
-		return String.format("%s%s_%s", prefix, threadId, requestId);
-	}
-	
-	private static class ResponseChecker {
-		
-		private final int threadId;
-		private final int requestId;
-		private int index;
-		
-		private ResponseChecker(int threadId, int requestId) {
-			index = 0;
-			this.threadId = threadId;
-			this.requestId = requestId;
-		}
-		
-		
-		boolean check(String response) {
-			if (!checkNumber(response, threadId) || !checkNumber(response, requestId)) {
-				return false;
-			}
-			index = skipNonDigits(response, index);
-			return index == response.length();
-		}
-		
-		private boolean checkNumber(String response, int requestId) {
-			index = skipNonDigits(response, index);
-			int number = parseInt(response, index);
-			if (number != requestId) {
-				return false;
-			}
-			index += Integer.toString(number).length();
-			return true;
-		}
-		
-		private static int skipNonDigits(final String response, int index) {
-			while (index < response.length() && !Character.isDigit(response.charAt(index))) {
-				index++;
-			}
-			return index;
-		}
-		
-		private static int parseInt(final String response, int index) {
-			final StringBuilder sb = new StringBuilder();
-			while (index < response.length() && Character.isDigit(response.charAt(index))) {
-				sb.append(response.charAt(index++));
-			}
-			try {
-				return Integer.parseInt(sb.toString());
-			} catch (final NumberFormatException e) {
-				return -1;
-			}
-		}
-	}
 }

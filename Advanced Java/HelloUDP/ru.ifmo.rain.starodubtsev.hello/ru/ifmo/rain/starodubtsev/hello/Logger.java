@@ -20,7 +20,7 @@ public class Logger {
 	/**
 	 * Indicates whether the logger should print stack traces of occurring exceptions.
 	 */
-	private static final boolean PRINT_STACK_TRACE = false;
+	private static final boolean PRINT_STACK_TRACE = true;
 	/**
 	 * If true - silences the logger.
 	 */

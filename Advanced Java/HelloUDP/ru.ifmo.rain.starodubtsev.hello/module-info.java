@@ -6,6 +6,7 @@
  */
 module ru.ifmo.rain.starodubtsev.hello {
 	requires info.kgeorgiy.java.advanced.hello;
+	requires java.management;
 	
 	exports ru.ifmo.rain.starodubtsev.hello;
 }
