@@ -13,12 +13,12 @@ SET src=%wd%\my_modules\%mod_name%
 SET out=%wd%\out\production\%mod_name%
 
 echo Compiling...
-javac --module-path %mod_path% %src%\module-info.java %src%\%mod_dir%\*.java -d %out%
 
-javac --module-path %mod_path% %wd%\modules\info.kgeorgiy.java.advanced.%module%\module-info.java^
- %wd%\modules\info.kgeorgiy.java.advanced.%module%\info\kgeorgiy\java\advanced\%module%\*.java^
- -d %wd%\out\production\info.kgeorgiy.java.advanced.%module%
+rem javac --module-path %mod_path% %wd%\modules\info.kgeorgiy.java.advanced.%module%\module-info.java^
+rem %wd%\modules\info.kgeorgiy.java.advanced.%module%\info\kgeorgiy\java\advanced\%module%\*.java^
+rem -d %wd%\out\production\info.kgeorgiy.java.advanced.%module%
 
+javac --module-path %mod_path% %src%\module-info.java %src%\%mod_dir%\HelloNonblockingUDPServer.java -d %out%
 
 rem set /P salt="Salt: "
 @echo on
