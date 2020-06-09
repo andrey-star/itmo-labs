@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * An implementation of the {@code HelloClient} interface.
@@ -25,15 +24,7 @@ public class HelloUDPClient extends AbstractHelloClient implements HelloClient {
 	 * @see #run(String, int, String, int, int)
 	 */
 	public static void main(final String[] args) {
-		launch(args, HelloUDPClient::new);
-	}
-	
-	private static void error(final Exception e, final String message) {
-		Logger.error(e, "[Client]", message);
-	}
-	
-	private static void info(final String message) {
-		Logger.info("[Client]", message);
+		run(args, HelloUDPClient::new);
 	}
 	
 	@Override
@@ -44,19 +35,7 @@ public class HelloUDPClient extends AbstractHelloClient implements HelloClient {
 			final int finalThreadId = threadId;
 			requestPool.submit(() -> processThread(prefix, finalThreadId, requests, socketAddress));
 		}
-		waitFor(requestPool);
-	}
-	
-	private void waitFor(final ExecutorService executorService) {
-		while (true) {
-			executorService.shutdown();
-			try {
-				executorService.awaitTermination(AWAIT_TERMINATION_MILLISECONDS, TimeUnit.MILLISECONDS);
-				break;
-			} catch (final InterruptedException e) {
-				error(e, "Executing thread was interrupted while waiting for termination");
-			}
-		}
+		Utils.waitFor(requestPool, AbstractHelloClient::error);
 	}
 	
 	private void processThread(final String prefix, final int threadId, final int requests, final SocketAddress address) {

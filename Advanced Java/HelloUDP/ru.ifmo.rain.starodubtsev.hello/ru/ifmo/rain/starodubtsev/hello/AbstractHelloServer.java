@@ -5,8 +5,6 @@ import info.kgeorgiy.java.advanced.hello.HelloServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -14,9 +12,7 @@ import static ru.ifmo.rain.starodubtsev.hello.Utils.getIntArg;
 
 public abstract class AbstractHelloServer implements HelloServer {
 	
-	public static final Charset CHARSET = StandardCharsets.UTF_8;
-	
-	protected static void launch(String[] args, Supplier<HelloServer> serverSupplier) {
+	protected static void start(String[] args, Supplier<HelloServer> serverSupplier) {
 		Objects.requireNonNull(args);
 		if (args.length != 2) {
 			info("Usage: HelloServer <port> <threads>");

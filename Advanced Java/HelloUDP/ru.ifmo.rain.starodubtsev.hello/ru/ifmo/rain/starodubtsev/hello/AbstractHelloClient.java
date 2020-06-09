@@ -2,8 +2,6 @@ package ru.ifmo.rain.starodubtsev.hello;
 
 import info.kgeorgiy.java.advanced.hello.HelloClient;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -14,13 +12,11 @@ import static ru.ifmo.rain.starodubtsev.hello.Utils.getIntArg;
 
 public abstract class AbstractHelloClient implements HelloClient {
 	
-	public static final Charset CHARSET = StandardCharsets.UTF_8;
 	public static final int SO_TIMEOUT = 100;
-	public static final long AWAIT_TERMINATION_MILLISECONDS = Long.MAX_VALUE;
 	
 	private final Pattern RESPONSE_PATTERN = Pattern.compile("[\\D]*([\\d]+)[\\D]*([\\d]+)[\\D]*");
 	
-	public static void launch(final String[] args, Supplier<HelloClient> clientSupplier) {
+	public static void run(final String[] args, Supplier<HelloClient> clientSupplier) {
 		Objects.requireNonNull(args);
 		if (args.length != 5) {
 			info("Usage: HelloClient <host> <port> <prefix> <threads> <requests>");
@@ -38,11 +34,11 @@ public abstract class AbstractHelloClient implements HelloClient {
 		}
 	}
 	
-	private static void error(final Exception e, final String message) {
+	protected static void error(final Exception e, final String message) {
 		Logger.error(e, "[Client]", message);
 	}
 	
-	private static void info(final String message) {
+	protected static void info(final String message) {
 		Logger.info("[Client]", message);
 	}
 	

@@ -14,18 +14,20 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static ru.ifmo.rain.starodubtsev.hello.Utils.CHARSET;
 
 public class HelloUDPNonblockingServer extends AbstractHelloServer {
 	
-	private static DatagramChannel channel;
-	private static Selector selector;
-	private static ExecutorService pool;
-	private static int BUFFER_SIZE;
+	private ExecutorService pool;
+	private int bufSize;
+	private DatagramChannel channel;
+	private Selector selector;
 	
 	public static void main(final String[] args) {
-		launch(args, HelloUDPNonblockingServer::new);
+		start(args, HelloUDPNonblockingServer::new);
 	}
 	
 	public void run() {
@@ -36,12 +38,11 @@ public class HelloUDPNonblockingServer extends AbstractHelloServer {
 				while (iter.hasNext()) {
 					SelectionKey key = iter.next();
 					try {
-						Attachment attachment = (Attachment) key.attachment();
 						if (key.isReadable()) {
-							read(key, attachment);
+							read(key);
 						}
 						if (key.isWritable()) {
-							write(key, attachment);
+							write(key);
 						}
 					} finally {
 						iter.remove();
@@ -57,8 +58,9 @@ public class HelloUDPNonblockingServer extends AbstractHelloServer {
 		}
 	}
 	
-	private void read(SelectionKey key, Attachment attachment) {
+	private void read(SelectionKey key) {
 		try {
+			Attachment attachment = (Attachment) key.attachment();
 			var requestBuffer = attachment.requestBuffers.remove();
 			if (attachment.requestBuffers.isEmpty()) {
 				key.interestOpsAnd(~SelectionKey.OP_READ);
@@ -70,8 +72,10 @@ public class HelloUDPNonblockingServer extends AbstractHelloServer {
 				requestBuffer.send = ByteBuffer.wrap(response.getBytes(CHARSET));
 				synchronized (attachment.responseBuffers) {
 					attachment.responseBuffers.add(requestBuffer);
-					selector.wakeup();
-					key.interestOpsOr(SelectionKey.OP_WRITE);
+					if ((key.interestOps() & SelectionKey.OP_WRITE) == 0) {
+						key.interestOpsOr(SelectionKey.OP_WRITE);
+						selector.wakeup();
+					}
 				}
 			});
 		} catch (IOException e) {
@@ -80,8 +84,9 @@ public class HelloUDPNonblockingServer extends AbstractHelloServer {
 		}
 	}
 	
-	private void write(SelectionKey key, Attachment attachment) {
+	private void write(SelectionKey key) {
 		try {
+			Attachment attachment = (Attachment) key.attachment();
 			Attachment.BufferContext sendBuffer;
 			synchronized (attachment.responseBuffers) {
 				sendBuffer = attachment.responseBuffers.remove();
@@ -100,55 +105,59 @@ public class HelloUDPNonblockingServer extends AbstractHelloServer {
 	
 	@Override
 	public void start(int port, int threads) {
+		setup(port, threads);
+		new Thread(this::run).start();
+	}
+	
+	private void setup(int port, int threads) {
 		try {
-			setup(port, threads);
+			selector = Selector.open();
+			channel = DatagramChannel.open();
+			channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+			channel.configureBlocking(false);
+			bufSize = channel.socket().getReceiveBufferSize();
+			channel.register(selector, SelectionKey.OP_READ, new Attachment(threads));
+			channel.bind(new InetSocketAddress(port));
 			pool = Executors.newFixedThreadPool(threads);
-			new Thread(this::run).start();
 		} catch (IOException e) {
 			error(e, "Error occurred during server setup");
 		}
 	}
 	
-	private void setup(int port, int threads) throws IOException {
-		selector = Selector.open();
-		channel = DatagramChannel.open();
-		channel.bind(new InetSocketAddress(port));
-		channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-		channel.configureBlocking(false);
-		BUFFER_SIZE = channel.socket().getReceiveBufferSize();
-		channel.register(selector, SelectionKey.OP_READ, new Attachment(threads));
-	}
-	
 	@Override
 	public void close() {
 		try {
-			channel.close();
-			selector.close();
-			pool.shutdown();
+			if (channel != null) {
+				channel.close();
+			}
+			if (selector != null) {
+				selector.close();
+			}
 			Utils.waitFor(pool, AbstractHelloServer::error);
 		} catch (IOException e) {
 			error(e, "Error occurred when attempting to close resources");
 		}
 	}
 	
-	private static class Attachment {
+	private class Attachment {
 		private final Queue<BufferContext> requestBuffers;
 		private final Queue<BufferContext> responseBuffers;
 		
 		private Attachment(int threads) {
-			this.requestBuffers = new ArrayDeque<>(threads);
-			Stream.generate(BufferContext::new).limit(threads).forEach(requestBuffers::add);
+			this.requestBuffers = Stream.generate(BufferContext::new)
+					.limit(threads)
+					.collect(Collectors.toCollection(ArrayDeque::new));
 			this.responseBuffers = new ArrayDeque<>();
 			
 		}
 		
-		private static class BufferContext {
+		private class BufferContext {
 			ByteBuffer receive;
 			ByteBuffer send;
 			SocketAddress address;
 			
 			public BufferContext() {
-				receive = ByteBuffer.allocate(BUFFER_SIZE);
+				receive = ByteBuffer.allocate(bufSize);
 			}
 		}
 	}

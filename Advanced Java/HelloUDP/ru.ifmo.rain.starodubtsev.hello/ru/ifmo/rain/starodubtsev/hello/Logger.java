@@ -8,7 +8,6 @@ import java.io.PrintStream;
  * @author Andrey Starodubtsev
  */
 public class Logger {
-	
 	/**
 	 * Stream for errors.
 	 */
@@ -39,7 +38,7 @@ public class Logger {
 				e.printStackTrace();
 			}
 			String errorMessage = String.join(" ", message);
-			if (!errorMessage.isBlank()) {
+			if (!errorMessage.isEmpty()) {
 				errorMessage += ": ";
 			}
 			ERR_STREAM.println(errorMessage + e.getMessage());

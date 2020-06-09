@@ -30,7 +30,7 @@ public class HelloUDPServer extends AbstractHelloServer implements HelloServer {
 	 * @see #start(int, int)
 	 */
 	public static void main(final String[] args) {
-		launch(args, HelloUDPServer::new);
+		start(args, HelloUDPServer::new);
 	}
 	
 	@Override
@@ -68,7 +68,6 @@ public class HelloUDPServer extends AbstractHelloServer implements HelloServer {
 	@Override
 	public void close() {
 		socket.close();
-		serverPool.shutdown();
 		Utils.waitFor(serverPool, AbstractHelloServer::error);
 	}
 	

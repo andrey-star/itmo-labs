@@ -9,29 +9,33 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import static ru.ifmo.rain.starodubtsev.hello.Utils.CHARSET;
 
 public class HelloUDPNonblockingClient extends AbstractHelloClient implements HelloClient {
 	
-	private static int BUFFER_SIZE;
+	private int bufSize;
 	
 	public static void main(final String[] args) {
-		launch(args, HelloUDPNonblockingClient::new);
+		run(args, HelloUDPNonblockingClient::new);
 	}
 	
 	@Override
 	public void run(String host, int port, String prefix, int threads, int requests) {
-		try {
-			Selector selector = Selector.open();
+		List<DatagramChannel> channels = new ArrayList<>();
+		try (Selector selector = Selector.open()) {
 			SocketAddress address = new InetSocketAddress(host, port);
 			for (int i = 0; i < threads; i++) {
 				DatagramChannel channel = DatagramChannel.open();
 				channel.configureBlocking(false);
 				channel.connect(address);
-				BUFFER_SIZE = channel.socket().getReceiveBufferSize();
+				bufSize = channel.socket().getReceiveBufferSize();
 				channel.register(selector, SelectionKey.OP_WRITE, new Attachment(i));
+				channels.add(channel);
 			}
 			while (!Thread.interrupted() && !selector.keys().isEmpty()) {
 				selector.select(SO_TIMEOUT);
@@ -68,11 +72,19 @@ public class HelloUDPNonblockingClient extends AbstractHelloClient implements He
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			error(e, "Error occurred during communication with the server");
+		} finally {
+			for (DatagramChannel channel : channels) {
+				try {
+					channel.close();
+				} catch (IOException e) {
+					error(e, "Error occurred when trying to close channels");
+				}
+			}
 		}
 	}
 	
-	private static class Attachment {
+	private class Attachment {
 		
 		private final int threadId;
 		private final ByteBuffer buffer;
@@ -80,7 +92,7 @@ public class HelloUDPNonblockingClient extends AbstractHelloClient implements He
 		
 		public Attachment(int threadId) {
 			this.threadId = threadId;
-			buffer = ByteBuffer.allocate(BUFFER_SIZE);
+			buffer = ByteBuffer.allocate(bufSize);
 		}
 		
 	}
