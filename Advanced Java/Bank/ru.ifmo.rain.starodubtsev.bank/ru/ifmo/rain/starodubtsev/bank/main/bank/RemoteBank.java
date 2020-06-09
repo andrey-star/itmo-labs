@@ -6,7 +6,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -62,15 +61,11 @@ public class RemoteBank implements Bank {
 		return tryRemote(() -> map.computeIfAbsent(key, k -> tryExport(f.apply(k))));
 	}
 	
-	private <T> T tryRemote(Callable<T> exportTask) throws RemoteException {
+	private <T> T tryRemote(RemoteCallable<T> exportTask) throws RemoteException {
 		try {
 			return exportTask.call();
 		} catch (UncheckedIOException e) {
 			throw (RemoteException) e.getCause();
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new AssertionError(e);
 		}
 	}
 	
@@ -81,6 +76,10 @@ public class RemoteBank implements Bank {
 		} catch (RemoteException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	private interface RemoteCallable<T> {
+		T call() throws RemoteException;
 	}
 	
 }

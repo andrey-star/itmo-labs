@@ -39,7 +39,7 @@ public class Logger {
 				e.printStackTrace();
 			}
 			String errorMessage = String.join(" ", message);
-			if (!errorMessage.isBlank()) {
+			if (!errorMessage.isEmpty()) {
 				errorMessage += ": ";
 			}
 			ERR_STREAM.println(errorMessage + e.getMessage());
