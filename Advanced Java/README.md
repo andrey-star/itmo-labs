@@ -150,7 +150,7 @@ Changes to ```LocalPerson``` should only be applied locally to this ```LocalPers
     * Create a [script](https://github.com/andrey-star/itmo-labs/blob/master/Advanced%20Java/run/bank/junit_bank_tests.cmd) that runs the tests using the default approach for your framework.
     The status code should be the same as described previously.
 
-## 12. [HelloNonblockingUDP](https://github.com/andrey-star/itmo-labs/tree/master/Advanced%20Java/HelloUDP/ru.ifmo.rain.starodubtsev.hello) (Non-blocking IO, Asynchronous IO)
+## 12. [HelloNonblockingUDP](https://github.com/andrey-star/itmo-labs/tree/master/Advanced%20Java/HelloUDP/ru.ifmo.rain.starodubtsev.hello) (Non-blocking & Asynchronous IO)
 Create a client and a server communicating via UDP utilizing non-blocking IO.
 * ```HelloUDPNonblockingClient``` [class](https://github.com/andrey-star/itmo-labs/blob/master/Advanced%20Java/HelloUDP/ru.ifmo.rain.starodubtsev.hello/ru/ifmo/rain/starodubtsev/hello/HelloUDPNonblockingClient.java) should have the same functionality as ```HelloUDPClient```, but without creating new threads.
 * ```HelloUDPNonblockingServer``` [class](https://github.com/andrey-star/itmo-labs/blob/master/Advanced%20Java/HelloUDP/ru.ifmo.rain.starodubtsev.hello/ru/ifmo/rain/starodubtsev/hello/HelloUDPNonblockingServer.java) should have the same functionality as ```HelloUDPServer```, but all operations on the socket should be done in one thread.
