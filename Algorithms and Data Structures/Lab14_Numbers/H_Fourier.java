@@ -1,25 +1,15 @@
 import java.io.*;
-import java.math.BigInteger;
-import java.util.Random;
 
 public class H_Fourier {
 	
-	private static void test() throws FileNotFoundException {
-		Random random = new Random(4);
-		BigInteger a = new BigInteger(8000, random);
-		BigInteger b = new BigInteger(8000, random);
-		PrintWriter out = new PrintWriter(new File("test.in"));
-		out.println(a);
-		out.println(b);
-		out.close();
-	}
-	
 	public static void main(String[] args) throws IOException {
-//		test();
-//		System.exit(0);
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String a = in.readLine();
 		String b = in.readLine();
+		solve(a, b);
+	}
+	
+	private static void solve(String a, String b) {
 		int[] arr = new int[a.length()];
 		int[] brr = new int[b.length()];
 		int aShift = a.charAt(0) == '-' ? 1 : 0;
@@ -30,12 +20,13 @@ public class H_Fourier {
 		for (int i = 0; i < b.length() - bShift; i++) {
 			brr[i] = b.charAt(i + bShift) - '0';
 		}
-		solve(arr, brr, (aShift ^ bShift) == 1);
-		
+		boolean negative = ((aShift ^ bShift) == 1);
+		PrintWriter out = new PrintWriter(System.out);
+		out.println((negative ? "-" : "") + convert(multiply(arr, brr)));
+		out.close();
 	}
 	
-	private static void solve(int[] a, int[] b, boolean negative) {
-		PrintWriter out = new PrintWriter(System.out);
+	private static long[] multiply(int[] a, int[] b) {
 		int maxLength = Math.max(a.length, b.length);
 		int n = 1;
 		while (n < maxLength) {
@@ -57,9 +48,7 @@ public class H_Fourier {
 		for (int i = 0; i < ya.length; i++) {
 			yc[i] = ya[i].multiply(yb[i]);
 		}
-		long[] prod = reverseFft(yc, w);
-		out.println((negative ? "-" : "") + convert(prod));
-		out.close();
+		return reverseFft(yc, w);
 	}
 	
 	private static String convert(long[] a) {

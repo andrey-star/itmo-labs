@@ -4,7 +4,6 @@ import java.util.*;
 public class C_AllPrimes {
 	
 	public static void main(String[] args) throws IOException {
-		final long st = System.currentTimeMillis();
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String[] line = in.readLine().trim().split(" +");
 		int n = Integer.parseInt(line[0]);
@@ -46,7 +45,6 @@ public class C_AllPrimes {
 		
 		PrintWriter out = new PrintWriter(System.out);
 		out.println(h);
-//		out.println((System.currentTimeMillis() - st) / 1000.0);
 		out.close();
 	}
 	
