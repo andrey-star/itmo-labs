@@ -1,0 +1,103 @@
+@font-face {
+  font-display: swap;
+  font-family: 'Canterbury';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Canterbury'), url(font/Canterbury.woff2);
+}
+
+body {
+  background-color: #ded7d3;
+}
+
+.newspaper {
+  border: 2px solid black;
+
+  font: 20px 'Times New Roman', serif;
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  margin: 50px 0px;
+
+  font: normal 100px 'Canterbury', serif;
+}
+
+.header-info {
+  display: flex;
+  justify-content: space-around;
+
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.content {
+  position: relative;
+
+  padding: 10px 50px;
+
+  column-count: 4;
+  column-rule: 2px solid black;
+
+  hyphens: manual;
+  text-align: justify;
+  text-indent: 1em;
+}
+
+.content p::first-letter {
+  font-weight: bold;
+}
+
+.article-heading {
+  column-span: all;
+  text-align: center;
+}
+
+.article-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 20px 0 0 0;
+
+  column-span: all;
+  text-align: center;
+}
+
+.article-img {
+  width: 100%;
+
+  filter: grayscale(100%);
+}
+
+.article-figure-caption {
+  margin-top: 10px;
+
+  font-style: italic;
+  font-weight: bold;
+}
+
+.quote {
+  font-style: italic;
+}
+
+.quote::before,
+.quote::after {
+  content: '"';
+}
+
+.vertical-text {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+
+  color: gray;
+
+  font-family: 'Courier New', Courier, monospace;
+  text-orientation: upright;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}

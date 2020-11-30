@@ -1,0 +1,63 @@
+body {
+  font-family: sans-serif;
+}
+
+.mode-selector-label {
+  margin: 10px 0px 20px 10px;
+}
+
+.cat-card {
+  width: 500px;
+  margin: 10px;
+
+  border: 1px solid gray;
+  border-radius: 3px;
+}
+
+.cat-card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.cat-info-category:hover {
+  font-weight: bold;
+}
+
+.mode-selector:checked + .cats-container .cat-card {
+  display: inline-block;
+
+  width: 300px;
+}
+
+.cat-name-link:hover {
+  color: red;
+}
+
+.mode-selector:checked ~ .cats-container .cat-name {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cat-extra-info {
+  color: rgb(100, 100, 100);
+  font-size: 14px;
+}
+
+.mode-selector:checked ~ .cats-container .cat-card .cat-extra-info {
+  display: none;
+}
+
+.cat-img {
+  width: 100%;
+
+  opacity: 0.9;
+}
+
+.cat-card:hover .cat-img {
+  opacity: 1;
+}
+
+.cat-info {
+  margin: 20px;
+}

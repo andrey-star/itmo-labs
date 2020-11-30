@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>07-yandex-grid</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__city">
+        <object class="header__loc-icon" data="img/loc.svg" type="image/svg+xml"></object>
+        Екатеринбург
+      </div>
+      <div class="header__spacing"></div>
+      <div class="header__settings">Настройка</div>
+      <div class="header__account">
+        <p class="header__login">login</p>
+        <p class="header__mail">Почта <span class="header__unread">138</span></p>
+      </div>
+    </header>
+    <main class="main">
+      <section class="news">
+        <section class="news__container">
+          <div class="news__tabs">
+            <a href="#" class="news__tab-media">Сейчас в СМИ</a>
+            <a href="#" class="news__tab-city">в Екатеринбурге</a>
+            <span class="news__tab-date">13 ноября, понедельник 16:57</span>
+          </div>
+          <ul class="news__panels">
+            <li class="news__panel">
+              <a href="#" class="news__panel-link"
+                >Фильм Кончаловского о расстреле в Новочеркасске выдвинули на «Оскар»</a
+              >
+            </li>
+            <li class="news__panel">
+              <a href="#" class="news__panel-link"
+                >Число жертв землетрясения в Иране и Ираке превысило 350 человек</a
+              >
+            </li>
+            <li class="news__panel">
+              <a href="#" class="news__panel-link"
+                >Проезд в петербургском метро в 2021 году может подорожать до 60 рублей</a
+              >
+            </li>
+            <li class="news__panel">
+              <a href="#" class="news__panel-link"
+                >Netflix продлил сериал «Эмили в Париже» на второй сезон</a
+              >
+            </li>
+            <li class="news__panel">
+              <a href="#" class="news__panel-link"
+                >Чубайс считает, что нефтяная лошадь России «еще не сдохла»</a
+              >
+            </li>
+          </ul>
+          <ul class="news__stocks">
+            <li class="news__stock">
+              <span class="stock__name">USD ЦБ</span>
+              <span class="stock__value">59,18</span>
+              <span class="stock__change">-0,10</span>
+            </li>
+            <li class="news__stock">
+              <span class="stock__name">EUR ЦБ</span>
+              <span class="stock__value">68,92</span>
+              <span class="stock__change">-0,06</span>
+            </li>
+            <li class="news__stock">
+              <span class="stock__name">НЕФТЬ</span>
+              <span class="stock__value">63,44</span>
+              <span class="stock__change">-0,27%</span>
+            </li>
+            <li class="news__stock">
+              <span class="stock__more">···</span>
+            </li>
+          </ul>
+        </section>
+        <section class="news__ad">
+          <div class="ad__container">
+            <div class="ad__image-container">
+              <img
+                class="ad__image"
+                src="img/java-ad.png"
+                alt="Java webinar ad"
+                title="Бесплатный вебинар: Java-разработка"
+              />
+              <span class="ad__age-limit">18+</span>
+            </div>
+            <p class="ad__date">Акция до 31.12.2019</p>
+            <a href="#" class="ad__title">Бесплатный вебинар: Java-разработка</a>
+            <p class="ad__description">Java &mdash; круто</p>
+          </div>
+        </section>
+      </section>
+      <section class="search">
+        <img
+          class="search__logo"
+          src="img/yandex-logo.png"
+          alt="Логотип Яндекса"
+          title="Логотип Яндекса"
+        />
+        <div class="search__container">
+          <ul class="search__services">
+            <li class="search__service"><a href="#" class="search__service-link">Видео</a></li>
+            <li class="search__service"><a href="#" class="search__service-link">Картинки</a></li>
+            <li class="search__service"><a href="#" class="search__service-link">Новости</a></li>
+            <li class="search__service"><a href="#" class="search__service-link">Карты</a></li>
+            <li class="search__service"><a href="#" class="search__service-link">Маркет</a></li>
+            <li class="search__service"><a href="#" class="search__service-link">Переводчик</a></li>
+            <li class="search__service"><a href="#" class="search__service-link">Музыка</a></li>
+            <li class="search__service"><a href="#" class="search__service-link">ещё</a></li>
+          </ul>
+          <form class="search__form">
+            <img src="img/micro.svg" alt="Голосовой ввод" class="search__voice" />
+            <img src="img/keyboard.svg" alt="Экранная клавиатура" class="search__keyboard" />
+            <label for="search-field">
+              <input
+                class="search__input-text"
+                id="search-field"
+                type="text"
+                placeholder="Найдется все"
+              />
+            </label>
+            <input type="submit" class="search__input-submit" value="Найти" />
+          </form>
+          <p class="search__suggestion">
+            Найдется все. Например, <a href="#" class="search__example">выхожу один я на дорогу</a>
+          </p>
+        </div>
+      </section>
+      <section class="ad">
+        <a href="#" class="ad__link">
+          <img
+            class="ad__banner"
+            src="img/banner.png"
+            alt="Изображение с рекламой обучения программированию на Java"
+            title="Стань Java-разработчиком! Диплом по окончании."
+          />
+        </a>
+      </section>
+      <section class="widgets">
+        <div class="widgets__col">
+          <article class="widgets__widget">
+            <a href="#" class="widget__title">Посещаемое</a>
+            <ul class="widget__list">
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Маркет</span> &mdash; китайская распродажа
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Авто.ру</span> &mdash; Туссан третьей серии
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Недвижимость</span> &mdash; продажа студии
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Работа</span> &mdash; охранником
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Здоровье</span> &mdash; врач на связи
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Коллекции</span> &mdash; как мелировать волосы
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Авиабилеты</span> &mdash; из Екатеринбурга
+                </a>
+              </li>
+            </ul>
+          </article>
+          <article class="widgets__widget">
+            <a href="#" class="widget__title">Лучшие анекдоты</a>
+            <p class="widget__text">
+              Раздел: <a href="#">Медицинские.</a>
+              <br />
+              - Вас лечить хорошо или бесплатно?
+            </p>
+          </article>
+        </div>
+        <div class="widgets__col">
+          <article class="widgets__widget">
+            <a href="#" class="widget__title">
+              Телепрограмма <span class="widget__title-badge">ТВ Онлайн</span>
+            </a>
+            <ul class="widget__list">
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  16:00 Понять. Простить <span class="widget__item_muted">41 Домашний</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  16:30 Место встречи <span class="widget__item_muted">НТВ</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  16:30 Детективы <span class="widget__item_muted">5 канал</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  16:30 Новости <span class="widget__item_muted">РЕН ТВ</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  16:30 Гадалка <span class="widget__item_muted">ТВ-3</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  16:30 Реальные пацаны <span class="widget__item_muted">ТНТ</span>
+                </a>
+              </li>
+            </ul>
+          </article>
+          <article class="widgets__widget widget-scrollable">
+            <a href="#" class="widget__title">Автомобильные новости</a>
+            <div class="widget__list-container">
+              <ul class="widget__list widget__list_scrollable">
+                <li class="widget__item">
+                  <a href="#" class="widget__item-link">
+                    Правительство поддержало законопроект о регистрации машиномест
+                    <span class="widget__item_muted">12:19</span>
+                  </a>
+                </li>
+                <li class="widget__item">
+                  <a href="#" class="widget__item-link">
+                    Обзор нового Mitsubishi, за которым выстроилась очередь
+                    <span class="widget__item_muted">12:01</span>
+                  </a>
+                </li>
+                <li class="widget__item">
+                  <a href="#" class="widget__item-link">
+                    &laquo;Лады&raquo; оснастят системой управления со смартфона
+                    <span class="widget__item_muted">11:40</span>
+                  </a>
+                </li>
+                <li class="widget__item">
+                  <a href="#" class="widget__item-link">
+                    В Китае представили спорткар с двигателем от Focus RS
+                    <span class="widget__item_muted">11:30</span>
+                  </a>
+                </li>
+                <li class="widget__item">
+                  <a href="#" class="widget__item-link">
+                    Священник отчитал горожан, а они заставили его продать Porsche
+                    <span class="widget__item_muted">12/11</span>
+                  </a>
+                </li>
+                <li class="widget__item">
+                  <a href="#" class="widget__item-link">
+                    Священник отчитал горожан, а они заставили его продать Porsche
+                    <span class="widget__item_muted">12/11</span>
+                  </a>
+                </li>
+                <li class="widget__item">
+                  <a href="#" class="widget__item-link">
+                    Священник отчитал горожан, а они заставили его продать Porsche
+                    <span class="widget__item_muted">12/11</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </article>
+        </div>
+        <div class="widgets__col">
+          <article class="widgets__widget">
+            <a href="#" class="widget__title">
+              Погода
+              <img src="img/weather.svg" alt="Иконка облака" title="Погода" class="widget__icon" />
+              -3 °С
+            </a>
+            <p class="widget__text">Вечер -5, ночь -7</p>
+          </article>
+          <article class="widgets__widget">
+            <a href="#" class="widget__title">
+              Пробки
+              <img
+                src="img/traffic.svg"
+                alt="Иконка желтого светофора"
+                title="Пробки"
+                class="widget__icon"
+              />
+              4 балла
+            </a>
+            <p class="widget__text">Местами затруднения</p>
+          </article>
+          <article class="widgets__widget">
+            <a href="#" class="widget__title">
+              Карта Екатеринбурга
+            </a>
+            <ul class="widget__list">
+              <li class="widget_item widget__item_inline">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Такси</span>
+                </a>
+              </li>
+              <li class="widget_item widget__item_inline ">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Расписания</span>
+                </a>
+              </li>
+              <li class="widget_item widget__item_inline">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Международные автобусы</span>
+                </a>
+              </li>
+            </ul>
+          </article>
+          <article class="widgets__widget">
+            <a href="#" class="widget__title">Афиша</a>
+            <ul class="widget__list">
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  Субурбикон <span class="widget__item_muted">премьера в чт</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  Последний богатырь <span class="widget__item_muted">приключения</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  Фиксики: большой секрет <span class="widget__item_muted">мультфильм</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  Тор: Рагнарёк <span class="widget__item_muted">фэнтези</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  Убийство в восточном экспрессе <span class="widget__item_muted">драма</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  Убийство в восточном экспрессе <span class="widget__item_muted">драма</span>
+                </a>
+              </li>
+              <li class="widget__item">
+                <a href="#" class="widget__item-link">
+                  <span class="widget__item_bold">Концерты &mdash; Brainstorm</span>
+                </a>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

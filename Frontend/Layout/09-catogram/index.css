@@ -1,0 +1,252 @@
+.icon-sprites {
+  position: absolute;
+
+  visibility: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 720px;
+  margin: auto;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+
+  width: 400px;
+
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.control-icon {
+  width: 25px;
+  height: 25px;
+
+  fill: #444444;
+}
+
+.image {
+  position: relative;
+
+  overflow: hidden;
+
+  width: 400px;
+  height: 400px;
+
+  margin-bottom: 35px;
+}
+
+.preview-image,
+.original-image {
+  width: 400px;
+  height: 400px;
+
+  object-fit: contain;
+}
+
+.original-image {
+  display: none;
+}
+
+.preview-image,
+.original-image,
+.filter-image {
+  user-select: none;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 470px;
+}
+
+.scroll-icon {
+  width: 16px;
+  height: 24px;
+
+  fill: rgba(170, 170, 170, 0.8);
+}
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.filter-label {
+  margin-bottom: 5px;
+
+  color: #444444;
+  font-family: Helvetica, sans-serif;
+  font-size: 10px;
+}
+
+.filter-image {
+  width: 85px;
+  height: 85px;
+
+  object-fit: cover;
+}
+
+.scaler,
+.rotator,
+.preview-image {
+  transition: transform 200ms linear, filter 300ms ease-in-out;
+}
+
+.filter-piter .filter-image {
+  filter: grayscale(100%);
+}
+
+.filter-yalta .filter-image {
+  filter: sepia(100%);
+}
+
+.filter-ural-summer .filter-image {
+  filter: hue-rotate(0.5turn);
+}
+
+.checkbox-fill:checked ~ .controls .control-icon-fill,
+.checkbox-flip:checked ~ .controls .control-icon-flip {
+  fill: #111;
+}
+
+.checkbox-fill:checked ~ .image .preview-image {
+  object-fit: cover;
+}
+
+.radio-scale-100:checked ~ .image .scaler {
+  transform: scale(1);
+}
+
+.radio-scale-120:checked ~ .image .scaler {
+  transform: scale(1.2);
+}
+
+.radio-scale-150:checked ~ .image .scaler {
+  transform: scale(1.5);
+}
+
+.control-scale {
+  display: none;
+}
+
+.radio-scale-100:checked ~ .controls .control-scale-120,
+.radio-scale-120:checked ~ .controls .control-scale-150,
+.radio-scale-150:checked ~ .controls .control-scale-100 {
+  display: block;
+}
+
+.radio-rotate-0:checked ~ .image .rotator {
+  transform: rotate(0deg);
+}
+
+.radio-rotate-90:checked ~ .image .rotator {
+  transform: rotate(-90deg);
+}
+.radio-rotate-180:checked ~ .image .rotator {
+  transform: rotate(-180deg);
+}
+
+.radio-rotate-270:checked ~ .image .rotator {
+  transform: rotate(-270deg);
+}
+
+.control-rotate {
+  display: none;
+}
+
+.radio-rotate-0:checked ~ .controls .control-rotate-90,
+.radio-rotate-90:checked ~ .controls .control-rotate-180,
+.radio-rotate-180:checked ~ .controls .control-rotate-270,
+.radio-rotate-270:checked ~ .controls .control-rotate-0 {
+  display: block;
+}
+
+.checkbox-flip:checked ~ .image .preview-image {
+  transform: scale(-1, 1);
+}
+
+.filters,
+.control-icon {
+  transition: opacity 200ms ease-in-out;
+}
+
+.checkbox-logo:checked ~ .image .preview-image,
+.checkbox-logo:checked ~ .filters,
+.checkbox-logo:checked ~ .controls .control-scale .control-icon,
+.checkbox-logo:checked ~ .controls .control-rotate .control-icon,
+.checkbox-logo:checked ~ .controls .control-flip .control-icon,
+.checkbox-logo:checked ~ .controls .control-fill .control-icon {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkbox-logo:checked ~ .image .original-image {
+  display: block;
+}
+
+.hidden-control {
+  display: none;
+}
+
+.radio-filter-none:checked ~ .filters .filter-none .filter-label,
+.radio-filter-piter:checked ~ .filters .filter-piter .filter-label,
+.radio-filter-yalta:checked ~ .filters .filter-yalta .filter-label,
+.radio-filter-ural-summer:checked ~ .filters .filter-ural-summer .filter-label {
+  font-weight: 700;
+}
+
+.radio-filter-none:checked ~ .image .preview-image {
+  animation: filter-none 300ms ease-in-out forwards;
+}
+
+.radio-filter-piter:checked ~ .image .preview-image {
+  animation: filter-piter 300ms ease-in-out forwards;
+}
+
+.radio-filter-yalta:checked ~ .image .preview-image {
+  animation: filter-yalta 300ms ease-in-out forwards;
+}
+
+.radio-filter-ural-summer:checked ~ .image .preview-image {
+  animation: filter-ural-summer 300ms ease-in-out forwards;
+}
+
+@keyframes filter-node {
+  to {
+    filter: none;
+  }
+}
+
+@keyframes filter-piter {
+  to {
+    filter: grayscale(100%);
+  }
+}
+@keyframes filter-yalta {
+  to {
+    filter: sepia(100%);
+  }
+}
+
+@keyframes filter-ural-summer {
+  to {
+    filter: hue-rotate(0.5turn);
+  }
+}
+
+.r90 {
+  transform: rotate(90deg);
+}
+
+.r-90 {
+  transform: rotate(-90deg);
+}

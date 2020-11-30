@@ -1,0 +1,24 @@
+.ccontainer {
+  display: flex;
+  flex-direction: column;
+
+  width: 576px;
+  padding: 0px 20px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.age,
+.weight,
+.email,
+.phone {
+  margin: 0 5px;
+}
+
+.spam {
+  margin-bottom: 10px;
+}
