@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <form id="search-form" class="search-form">
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="Search for cities/airports"
+          autocomplete="off"
+          autofocus
+        />
+        <button type="submit" id="search-submit" class="search-submit">
+          Submit
+        </button>
+        <br>
+        <div id="search-sugs" class="search-sugs"></div>
+      </form>
+    </div>
+    <script type="text/javascript" src="script.js"></script>
+  </body>
+</html>
