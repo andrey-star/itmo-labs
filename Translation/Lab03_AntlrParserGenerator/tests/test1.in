@@ -1,0 +1,4 @@
+print((1 + 2) /2 - 50 + -10 / 20)
+print(faf(2))
+ab_09 = f(1) + g(2) + f(g(bb))
+a = int(input())

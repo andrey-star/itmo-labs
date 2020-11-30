@@ -1,0 +1,22 @@
+int f(int a, int b, int c);
+int g();
+
+int f(int a, int b, int c) {
+	int d = 5;
+	int e = a + c;
+	return a + b / -(d + e);
+}
+
+int g() {
+	int a = f(1, 2, 3);
+	int b;
+	scanf("%d", &b);
+	return a + b;
+}
+
+int main() {
+	int a = f(1, 2, 3);
+	int b = f(1, -2, 3);
+	int c__8908 = f(1, 2, -(3));
+	return 0;
+}

@@ -1,0 +1,20 @@
+int f(int a);
+int __g__(int b);
+
+int f(int a) {
+	return __g__(a);
+}
+
+int __g__(int b) {
+	return f(b);
+}
+
+int main() {
+	printf("%d\n", f(1));
+	printf("%d\n", __g__(2));
+	int bb;
+	scanf("%d", &bb);
+	int ab_09 = f(1) + __g__(2) + f(__g__(bb));
+	printf("%d\n", ab_09);
+	return 0;
+}

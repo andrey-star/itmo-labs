@@ -1,0 +1,12 @@
+def f(a):
+	return __g__(a)
+
+print(f(1))
+print(__g__(2))
+bb = int(input())
+
+def __g__(b):
+	return f(b)
+
+ab_09 = f(1) + __g__(2) + f(__g__(bb))
+print(ab_09)
