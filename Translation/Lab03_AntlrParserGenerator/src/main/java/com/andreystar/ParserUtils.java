@@ -24,20 +24,20 @@ public class ParserUtils {
 	}
 	
 	public static String parseFromStream(InputStream is) throws IOException {
-		ANTLRInputStream input = new ANTLRInputStream(is);
-		com.andreystar.Python2CLexer lexer = new com.andreystar.Python2CLexer(input);
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		com.andreystar.Python2CParser parser = new com.andreystar.Python2CParser(tokens);
-		return parser.program().value;
+		return getParser(is).program().value;
 	}
 	
 	public static String tree(String inputString) throws IOException {
-		ANTLRInputStream input = new ANTLRInputStream(new ByteArrayInputStream(inputString.getBytes()));
-		com.andreystar.Python2CLexer lexer = new com.andreystar.Python2CLexer(input);
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		com.andreystar.Python2CParser parser = new com.andreystar.Python2CParser(tokens);
+		com.andreystar.Python2CParser parser = getParser(new ByteArrayInputStream(inputString.getBytes()));
 		ParseTree tree = parser.program();
 		return tree.toStringTree(parser);
+	}
+	
+	private static com.andreystar.Python2CParser getParser(InputStream is) throws IOException {
+		ANTLRInputStream input = new ANTLRInputStream(is);
+		com.andreystar.Python2CLexer lexer = new com.andreystar.Python2CLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		return new com.andreystar.Python2CParser(tokens);
 	}
 	
 }
