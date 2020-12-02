@@ -1,0 +1,46 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 0c20d2ce2527db88da20ddadda13706c451b413ea3457ed7fe0546378e44b79c
+
+name:           hw1-andrey-star
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/fp-ctd-itmo/hw1-andrey-star#readme>
+
+homepage:       https://github.com/fp-ctd-itmo/hw1-andrey-star#readme
+bug-reports:    https://github.com/fp-ctd-itmo/hw1-andrey-star/issues
+author:         Andrey Starodubtsev
+maintainer:     andreystar2403@gmail.com
+copyright:      2020 Andrey Starodubtsev
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type:     git
+  location: https://github.com/fp-ctd-itmo/hw1-andrey-star
+
+library
+  hs-source-dirs:   src
+  exposed-modules:  Block1.DayOfWeekTask, Block1.NatTask, Block1.TreeTask,
+                    Block2.FoldableTreeTask, Block2.SplitOnTask,
+                    Block3.MaybeConcatTask, Block3.SemigroupTask
+  ghc-options:      -Wall
+  build-depends:    base >=4.9 && <5
+  default-language: Haskell2010
+
+test-suite hw1-andrey-star-test
+  type:             exitcode-stdio-1.0
+  main-is:          Spec.hs
+  other-modules:    Block1.DayOfWeekSpec, Block1.NatSpec, Block1.TreeSpec,
+                    Block2.FoldableTreeSpec, Block2.SplitOnSpec,
+                    Block3.MaybeConcatSpec, Block3.SemigroupSpec
+  hs-source-dirs:   test
+  ghc-options:      -threaded -rtsopts -with-rtsopts=-N
+  build-depends:    base >=4.9 && <5, hw1-andrey-star, hspec, QuickCheck
+  default-language: Haskell2010
