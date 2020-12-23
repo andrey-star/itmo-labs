@@ -1,0 +1,70 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 03ac4301a313ee9925a491d38189306c10bd1c0b2b0118a6e4f392944b9e07a4
+
+name:           hw3-andrey-star
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/fp-ctd-itmo/hw3-andrey-star#readme>
+
+homepage:       https://github.com/fp-ctd-itmo/hw3-andrey-star#readme
+bug-reports:    https://github.com/fp-ctd-itmo/hw3-andrey-star/issues
+author:         Andrey Starodubtsev
+maintainer:     andreystar2403@gmail.com
+copyright:      2020 Andrey Starodubtsev
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type:     git
+  location: https://github.com/fp-ctd-itmo/hw3-andrey-star
+
+library
+  hs-source-dirs:     src
+  exposed-modules:    FileManager
+                      CommandParser
+  ghc-options:        -Wall
+  build-depends:      base >=4.9 && <5
+                    , mtl
+                    , text
+                    , time
+                    , directory
+                    , filepath
+                    , strict
+                    , optparse-applicative
+                    , exceptions
+  default-language:   Haskell2010
+
+executable hw3-andrey-star-exe
+  hs-source-dirs:     app
+  main-is:            Main.hs
+  ghc-options:        -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
+  build-depends:      base >=4.9 && <5
+                    , hw3-andrey-star
+                    , mtl
+                    , text
+                    , time
+                    , directory
+                    , filepath
+                    , strict
+                    , split
+                    , exceptions
+  default-language:   Haskell2010
+
+test-suite hw3-andrey-star-test
+  type:               exitcode-stdio-1.0
+  main-is:            Spec.hs
+  other-modules:
+  hs-source-dirs:     test
+  ghc-options:        -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:      base >=4.9 && <5
+                    , hw3-andrey-star
+                    , hspec
+                    , QuickCheck
+  default-language:   Haskell2010
