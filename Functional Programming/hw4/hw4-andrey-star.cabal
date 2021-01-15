@@ -1,0 +1,76 @@
+cabal-version: 1.12
+
+name:           hw4-andrey-star
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/fp-ctd-itmo/hw4-andrey-star#readme>
+
+homepage:       https://github.com/fp-ctd-itmo/hw4-andrey-star#readme
+bug-reports:    https://github.com/fp-ctd-itmo/hw4-andrey-star/issues
+author:         Andrey Starodubtsev
+maintainer:     andreystar2403@gmail.com
+copyright:      2020 Andrey Starodubtseva
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type:     git
+  location: https://github.com/fp-ctd-itmo/hw4-andrey-star
+
+library
+  hs-source-dirs:     src
+  exposed-modules:    GeometryTask
+                    , ConcurrentHashTableTask
+                    , FileSystemLensTask
+                    , FileSystemTraversalTask
+                    , Comonad19Task
+                    , Grid
+                    , MonteCarloTask
+  ghc-options:        -Wall -Werror
+  build-depends:      base >=4.9 && <5
+                    , mtl
+                    , stm
+                    , vector
+                    , hashable
+                    , microlens
+                    , directory
+                    , filepath
+                    , comonad
+                    , random
+                    , parallel
+  default-language:   Haskell2010
+
+test-suite hw4-andrey-star-test
+  type:               exitcode-stdio-1.0
+  main-is:            Spec.hs
+  other-modules:      GeometrySpec
+                    , MonteCarloSpec
+                    , FileSystemLensSpec
+                    , FileSystemTraversalSpec
+                    , ConcurrentHashTableSpec
+  hs-source-dirs:     test
+  ghc-options:        -Wall -threaded -rtsopts -with-rtsopts=-N4
+  build-depends:      base >=4.9 && <5
+                    , hw4-andrey-star
+                    , mtl
+                    , hspec
+                    , QuickCheck
+                    , microlens
+                    , async
+  default-language:   Haskell2010
+
+benchmark hw4-andrey-star-benchmark
+  type:               exitcode-stdio-1.0
+  main-is:            Main.hs
+  other-modules:      GeometryBenchmark
+                    , MonteCarloBenchmark
+  hs-source-dirs:     benchmark
+  ghc-options:        -Wall -Werror -threaded -rtsopts -with-rtsopts=-N4
+  build-depends:      base >=4.9 && <5
+                    , hw4-andrey-star
+                    , criterion
+                    , QuickCheck
+                    , deepseq
+  default-language:   Haskell2010
