@@ -1,5 +1,0 @@
-add_executable(jni jni_JniExpNorm.cpp jni_JniExpNorm.h)
-include_directories($JAVA_HOME/include)
-include_directories($JAVA_HOME/include/win32)
-link_directories($JAVA_HOME/include)
-link_directories($JAVA_HOME/include/win32)
