@@ -1,0 +1,8 @@
+int main() {
+	printf("%d\n", (1 + 2) / 2 - 50 + -10 / 20);
+	printf("%d\n", faf(2));
+	int ab_09 = f(1) + g(2) + f(g(bb));
+	int a;
+	scanf("%d", &a);
+	return 0;
+}
