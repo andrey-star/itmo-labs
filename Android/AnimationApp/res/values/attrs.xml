@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoaderDrawAnimationView">
+        <attr name="rectShortSide" format="float"/>
+        <attr name="circleRadius" format="float"/>
+        <attr name="elementsMargin" format="float"/>
+        <attr name="animationDelay" format="integer"/>
+        <attr name="animationLength" format="integer"/>
+        <attr name="circleScaleFactor" format="float"/>
+        <attr name="color" format="color"/>
+    </declare-styleable>
+</resources>

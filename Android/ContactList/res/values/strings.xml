@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ContactList</string>
+    <plurals name="contacts_toast">
+        <item quantity="one">Found %d contact</item>
+        <item quantity="other">Found %d contacts</item>
+    </plurals>
+</resources>

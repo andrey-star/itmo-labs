@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="weather_text">Weather</string>
+    <string name="temp_template">%.1f°C</string>
+    <string name="st_petersburg_ru">St. Petersburg, RU</string>
+    <string name="rainstorm">Rainstorm</string>
+    <string name="rainstorm_icon">Rainstorm icon</string>
+    <string name="_78">78</string>
+    <string name="windflow">Windflow</string>
+    <string name="_56">56</string>
+    <string name="precipitation">Precipitation</string>
+    <string name="_75">75</string>
+    <string name="humidity">Humidity</string>
+    <string name="blowing_wind">Blowing wind</string>
+    <string name="precipitation_icon">Precipitation icon</string>
+    <string name="humidity_icon">Humidity icon</string>
+    <string name="windy">Windy</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunny">Sunny</string>
+    <string name="windy_weather_icon">Windy weather icon</string>
+    <string name="sunny_weather_icon">Sunny weather icon</string>
+    <string name="sunday">Sunday</string>
+    <string name="cloudy">Cloudy</string>
+    <string name="cloudy_weather_icon">Cloudy weather icon</string>
+    <string name="monday">Monday</string>
+    <string name="snowy">Snowy</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="snowy_weather_icon">Snowy weather icon</string>
+    <string name="light_mode">Light mode</string>
+    <string name="night_mode">Night mode</string>
+    <string name="moscow">Moscow</string>
+    <string name="minus">-</string>
+</resources>
