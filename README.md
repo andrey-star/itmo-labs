@@ -1,3 +1,5 @@
+# itmo-labs
+
 - [1 семестр](#1-семестр)
   - [Дискретная математика](#дискретная-математика)
   - [Алгоритмы и структуры данных](#алгоритмы-и-структуры-данных)
@@ -152,3 +154,5 @@
 - [Копия Яндекса](https://github.com/andrey-star/itmo-labs/tree/master/Frontend/Layout/07-yandex-grid)
 - [Анимации](https://github.com/andrey-star/itmo-labs/tree/master/Frontend/Layout/08-animation)
 - [Котограм](https://github.com/andrey-star/itmo-labs/tree/master/Frontend/Layout/09-catogram)
+
+© *Andrey Starodubtsev*, 2021
