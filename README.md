@@ -1,3 +1,29 @@
+- [1 семестр](#1-семестр)
+  - [Дискретная математика](#дискретная-математика)
+  - [Алгоритмы и структуры данных](#алгоритмы-и-структуры-данных)
+  - [Введение в программирование](#введение-в-программирование)
+- [2 семестр](#2-семестр)
+  - [Дискретная математика](#дискретная-математика-1)
+  - [Алгоритмы и структуры данных](#алгоритмы-и-структуры-данных-1)
+  - [Парадигмы программирования](#парадигмы-программирования)
+  - [С++](#c)
+- [3 семестр](#3-семестр)
+  - [Дискретная математика](#дискретная-математика-2)
+  - [Алгоритмы и структуры данных](#алгоритмы-и-структуры-данных-2)
+  - [Android](#android)
+  - [Операционные системы](#операционные-системы)
+- [4 семестр](#4-семестр)
+  - [Дискретная математика](#дискретная-математика-3)
+  - [Алгоритмы и структуры данных](#алгоритмы-и-структуры-данных-3)
+  - [Advanced Java](#advanced-java)
+  - [Математическая логика](#математическая-логика)
+- [5 семестр](#5-семестр)
+  - [Машинное обучение](#машинное-обучение)
+  - [Методы трансляции](#методы-трансляции)
+  - [Функциональное программирование](#функциональное-программирование)
+  - [JavaScript](#javascript)
+  - [Верстка](#верстка)
+
 # 1 семестр
 #### Дискретная математика
 - [Булевы функции](https://github.com/andrey-star/itmo-labs/tree/master/Discrete%20Mathematics/Lab01_Boolean)
@@ -58,7 +84,7 @@
 - [Изображения](https://github.com/andrey-star/itmo-labs/tree/master/Android/ImagesApp)
 - [Навигация](https://github.com/andrey-star/itmo-labs/tree/master/Android/NavigationApp)
 - [Анимации](https://github.com/andrey-star/itmo-labs/tree/master/Android/AnimationApp)
-#### ОС
+#### Операционные системы
 - [Основы](https://github.com/andrey-star/itmo-labs/tree/master/Operating%20Systems/lab1)
 - [Текстовые потоки](https://github.com/andrey-star/itmo-labs/tree/master/Operating%20Systems/lab2)
 - [Мониторинг процессов](https://github.com/andrey-star/itmo-labs/tree/master/Operating%20Systems/lab3)
@@ -98,6 +124,11 @@
 - [Дерево принятия решений](https://github.com/andrey-star/itmo-labs/tree/master/Machine%20Learning/Lab05_DecisionTree)
 - [AdaBoost](https://github.com/andrey-star/itmo-labs/tree/master/Machine%20Learning/Lab06_AdaBoost)
 - [Сверточная нейронная сеть](https://github.com/andrey-star/itmo-labs/tree/master/Machine%20Learning/Lab07_CNN)
+#### Методы трансляции
+- [Регулярные выражения (Perl)](https://github.com/andrey-star/itmo-labs/tree/master/Translation%20Methods/Lab01_Regex)
+- [Нисходящий парсер](https://github.com/andrey-star/itmo-labs/tree/master/Translation%20Methods/Lab02_TopDownParser)
+- [Генератор парсеров на ANTLR](https://github.com/andrey-star/itmo-labs/tree/master/Translation%20Methods/Lab03_AntlrParserGenerator)
+- [Генератор парсеров](https://github.com/andrey-star/itmo-labs/tree/master/Translation%20Methods/Lab04_ParserGenerator)
 #### Функциональное программирование
 - [Базовые конструкции](https://github.com/andrey-star/itmo-labs/tree/master/Functional%20Programming/hw1)
 - [Функторы и монады](https://github.com/andrey-star/itmo-labs/tree/master/Functional%20Programming/hw2)
