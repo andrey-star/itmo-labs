@@ -57,7 +57,7 @@ class ParserTest {
 		assertThrows(ParseException.class, () -> parse(input));
 	}
 	
-	private Tree parse(String input) throws ParseException {
+	private Node parse(String input) throws ParseException {
 		return new Parser().parse(input);
 	}
 	
