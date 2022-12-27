@@ -1,0 +1,5 @@
+pi{TeamName}(
+  Teams diff pi{TeamId, TeamName}(
+    sigma{ContestId = :ContestId}(Sessions nj Runs nj Teams)
+  )
+)

@@ -1,0 +1,10 @@
+existsAcceptedRun(SessionId, ContestId, Letter) :-
+  Runs(_, SessionId, Letter, _, 1),
+  Sessions(SessionId, _, ContestId, _).
+existsSessionWhichDidntSolve(ContestId, Letter) :-
+  Sessions(SessionId, _, ContestId, _),
+  Problems(ContestId, Letter, _),
+  not existsAcceptedRun(SessionId, ContestId, Letter).
+r(ContestId, Letter) :-
+  Problems(ContestId, Letter, _),
+  not existsSessionWhichDidntSolve(ContestId, Letter).

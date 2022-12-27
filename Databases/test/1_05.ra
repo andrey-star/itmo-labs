@@ -1,0 +1,5 @@
+pi{TeamName}(
+  pi{TeamId, TeamName, ContestId}(Teams cj Contests)
+  diff
+  pi{TeamId, TeamName, ContestId}(Teams nj Sessions nj Runs)
+)

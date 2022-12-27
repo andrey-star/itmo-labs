@@ -27,6 +27,8 @@
   - [Верстка](#верстка)
 - [6 семестр](#6-семестр)
   - [Биоинформатика](#биоинформатика)
+- [7 семестр](#7-семестр)
+  - [Базы данных](#базы-данных)
 
 # 1 семестр
 #### Дискретная математика
@@ -164,5 +166,18 @@
 - [Align Two Strings Using Affine Gap Penalties (ba5j)](https://github.com/andrey-star/itmo-labs/tree/master/Bioinformatics/Ba5j.java)
 - [Longest Repeat in a String (ba9d)](https://github.com/andrey-star/itmo-labs/tree/master/Bioinformatics/Ba9d.java)
 - [Viterbi Algorithm (ba10c)](https://github.com/andrey-star/itmo-labs/tree/master/Bioinformatics/Ba10c.java)
+
+# 7 семестр
+#### Базы данных
+- [Моделирование](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw02-modelling)
+- [Функциональные зависимости](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw03-func-deps)
+- [Нормализация](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw04-normalization)
+- [Реляционная алгебра](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw05-relational-algebra)
+- [Реляционное исчисление](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw06-relational-calculus)
+- [Изменение данных](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw07-data-modification)
+- [Индексирование](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw08-indices)
+- [Хранимые процедуры](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw09-procedures)
+- [Транзакции](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw10-transactions)
+- [Тест](https://github.com/andrey-star/itmo-labs/tree/master/Databases/test)
 
 © *Andrey Starodubtsev*, 2022

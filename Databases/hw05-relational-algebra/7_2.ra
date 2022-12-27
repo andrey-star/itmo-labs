@@ -1,0 +1,1 @@
+proj{StudentId, CourseName}(sigma{Mark >= 3}(Marks) nj Students nj Courses) gdiv proj{StudentId, GroupName}(Students nj Groups)

@@ -1,0 +1,7 @@
+q(StudentId, CourseId) :-
+  Marks(StudentId, CourseId, _).
+r(StudentName, CourseName) :-
+  Students(StudentId, StudentName, GroupId),
+  Plan(GroupId, CourseId, _),
+  Courses(CourseId, CourseName),
+  not q(StudentId, CourseId).

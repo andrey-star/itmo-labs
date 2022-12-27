@@ -1,0 +1,1 @@
+proj{StudentName, CourseName}(proj{StudentName, CourseName, StudentId}(Students nj Plan nj Courses) diff proj{StudentName, CourseName, StudentId}(sigma{Mark = 4 || Mark = 5}(Students nj Marks nj Courses)))

@@ -1,0 +1,7 @@
+pi{SessionId}(Sessions)
+diff
+pi{SessionId}(
+    pi{SessionId, Letter}(Sessions nj Problems)
+    diff
+    pi{SessionId, Letter}(sigma{Accepted = 1}(Runs))
+)
