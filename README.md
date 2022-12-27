@@ -25,6 +25,8 @@
   - [Функциональное программирование](#функциональное-программирование)
   - [JavaScript](#javascript)
   - [Верстка](#верстка)
+- [6 семестр](#6-семестр)
+  - [Биоинформатика](#биоинформатика)
 
 # 1 семестр
 #### Дискретная математика
@@ -155,4 +157,12 @@
 - [Анимации](https://github.com/andrey-star/itmo-labs/tree/master/Frontend/Layout/08-animation)
 - [Котограм](https://github.com/andrey-star/itmo-labs/tree/master/Frontend/Layout/09-catogram)
 
-© *Andrey Starodubtsev*, 2021
+# 6 семестр
+#### Биоинформатика
+- [Median String (ba2b)](https://github.com/andrey-star/itmo-labs/tree/master/Bioinformatics/Ba2b.java)
+- [String from its Paired Composition (ba3j)](https://github.com/andrey-star/itmo-labs/tree/master/Bioinformatics/Ba3j.java)
+- [Align Two Strings Using Affine Gap Penalties (ba5j)](https://github.com/andrey-star/itmo-labs/tree/master/Bioinformatics/Ba5j.java)
+- [Longest Repeat in a String (ba9d)](https://github.com/andrey-star/itmo-labs/tree/master/Bioinformatics/Ba9d.java)
+- [Viterbi Algorithm (ba10c)](https://github.com/andrey-star/itmo-labs/tree/master/Bioinformatics/Ba10c.java)
+
+© *Andrey Starodubtsev*, 2022
