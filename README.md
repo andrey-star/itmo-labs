@@ -29,8 +29,12 @@
   - [Биоинформатика](#биоинформатика)
 - [7 семестр](#7-семестр)
   - [Базы данных](#базы-данных)
+  - [Software Design](#software-design)
+  - [Теория информации](#теория-информации)
   - [Тестирование](https://github.com/andrey-star/software-testing)
-  - [Software Design](https://github.com/andrey-star/software-design)
+- [8 семестр](#8-семестр)
+  - [Теория игр](#теория-игр)
+  - [Software Design 2](#software-design-2)
 
 # 1 семестр
 #### Дискретная математика
@@ -182,6 +186,36 @@
 - [Транзакции](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw10-transactions)
 - [Тест](https://github.com/andrey-star/itmo-labs/tree/master/Databases/test)
 #### [Тестирование](https://github.com/andrey-star/software-testing)
-#### [Software Design](https://github.com/andrey-star/software-design)
+#### Software Design
+  - [LRU Cache](https://github.com/andrey-star/software-design/tree/master/hw01_LRUCache)
+  - [API](https://github.com/andrey-star/software-design/tree/master/hw02_API)
+  - [Refactoring](https://github.com/andrey-star/software-design/tree/master/hw03_Refactoring)
+  - [MVC](https://github.com/andrey-star/software-design/tree/master/hw04_MVC)
+  - [Bridge](https://github.com/andrey-star/software-design/tree/master/hw05_Bridge)
+  - [Parser](https://github.com/andrey-star/software-design/tree/master/hw06_Parser)
+  - [AOP](https://github.com/andrey-star/software-design/tree/master/hw07_AOP)
+  - [Clock](https://github.com/andrey-star/software-design/tree/master/hw08_Clock)
+#### Теория информации
+  - [Алгоритм Витерби мягкого декодирования линейных блоковых кодов](https://github.com/andrey-star/itmo-labs/tree/master/Information%20Theory/A.java)
+
+# 8 семестр
+#### Теория игр
+  - [Игра на графе](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/A_GraphGame.java)
+  - [Функция Гранди](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/C_Grundy.java)
+  - [Малыш и Карлсон](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/D_Karlsson.java)
+  - [Смит](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/E_Smith.java)
+  - [Snakes & Arrows](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/F_SnakesArrows.java)
+  - [Green Hackenbush](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/G_GreenHackenbush.java)
+  - [Root Nim](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/H_RootNim.java)
+  - [Распил шоколада](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/J_Chocoloate.java)
+  - [Hackenbush Hotchpotch](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/M_HackenbushHotchpotch.java)
+  - [Чистые стратегии](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/N_Saddle.java)
+  - [Равновесие по Нэшу](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/R_NashEquilibrium.java)
+  - [Парето](https://github.com/andrey-star/itmo-labs/tree/master/Game%20Theory/T_Pareto.java)
+#### Software Design 2
+  - [Actor](https://github.com/andrey-star/software-design/tree/master/hw09_Actor)
+  - [Reactive](https://github.com/andrey-star/software-design/tree/master/hw10_Reactive)
+  - [EventSourcing](https://github.com/andrey-star/software-design/tree/master/hw11_EventSourcing)
+  - [Docker](https://github.com/andrey-star/software-design/tree/master/hw12_Docker)
 
 © *Andrey Starodubtsev*, 2022
