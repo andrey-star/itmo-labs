@@ -29,6 +29,8 @@
   - [Биоинформатика](#биоинформатика)
 - [7 семестр](#7-семестр)
   - [Базы данных](#базы-данных)
+  - [Тестирование](https://github.com/andrey-star/software-testing)
+  - [Software Design](https://github.com/andrey-star/software-design)
 
 # 1 семестр
 #### Дискретная математика
@@ -179,5 +181,7 @@
 - [Хранимые процедуры](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw09-procedures)
 - [Транзакции](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw10-transactions)
 - [Тест](https://github.com/andrey-star/itmo-labs/tree/master/Databases/test)
+#### [Тестирование](https://github.com/andrey-star/software-testing)
+#### [Software Design](https://github.com/andrey-star/software-design)
 
 © *Andrey Starodubtsev*, 2022
