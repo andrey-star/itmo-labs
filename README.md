@@ -185,7 +185,6 @@
 - [Хранимые процедуры](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw09-procedures)
 - [Транзакции](https://github.com/andrey-star/itmo-labs/tree/master/Databases/hw10-transactions)
 - [Тест](https://github.com/andrey-star/itmo-labs/tree/master/Databases/test)
-#### [Тестирование](https://github.com/andrey-star/software-testing)
 #### Software Design
   - [LRU Cache](https://github.com/andrey-star/software-design/tree/master/hw01_LRUCache)
   - [API](https://github.com/andrey-star/software-design/tree/master/hw02_API)
@@ -197,6 +196,7 @@
   - [Clock](https://github.com/andrey-star/software-design/tree/master/hw08_Clock)
 #### Теория информации
   - [Алгоритм Витерби мягкого декодирования линейных блоковых кодов](https://github.com/andrey-star/itmo-labs/tree/master/Information%20Theory/A.java)
+#### [Тестирование](https://github.com/andrey-star/software-testing)
 
 # 8 семестр
 #### Теория игр
